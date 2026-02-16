@@ -10,6 +10,7 @@ class Profile extends Equatable {
   final String? phone;
   final String? city;
   final String? avatarUrl;
+  final String preferredLanguage; // 'fr' | 'ar'
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -20,6 +21,7 @@ class Profile extends Equatable {
     this.phone,
     this.city,
     this.avatarUrl,
+    this.preferredLanguage = 'fr',
     required this.createdAt,
     required this.updatedAt,
   });
@@ -41,6 +43,7 @@ class Profile extends Equatable {
       phone: json['phone'] as String?,
       city: json['city'] as String?,
       avatarUrl: json['avatar_url'] as String?,
+      preferredLanguage: json['preferred_language'] as String? ?? 'fr',
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
@@ -54,6 +57,7 @@ class Profile extends Equatable {
       'phone': phone,
       'city': city,
       'avatar_url': avatarUrl,
+      'preferred_language': preferredLanguage,
       // created_at and updated_at handled by DB
     };
   }
@@ -63,6 +67,7 @@ class Profile extends Equatable {
     String? phone,
     String? city,
     String? avatarUrl,
+    String? preferredLanguage,
   }) {
     return Profile(
       id: id,
@@ -71,11 +76,13 @@ class Profile extends Equatable {
       phone: phone ?? this.phone,
       city: city ?? this.city,
       avatarUrl: avatarUrl ?? this.avatarUrl,
+      preferredLanguage: preferredLanguage ?? this.preferredLanguage,
       createdAt: createdAt,
       updatedAt: DateTime.now(),
     );
   }
 
   @override
-  List<Object?> get props => [id, shopName, role, phone, city, avatarUrl];
+  List<Object?> get props =>
+      [id, shopName, role, phone, city, avatarUrl, preferredLanguage];
 }

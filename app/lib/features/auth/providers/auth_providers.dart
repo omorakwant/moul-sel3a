@@ -135,7 +135,8 @@ final sendOtpProvider =
 });
 
 /// Locale toggle provider — allows switching between FR and AR at app level.
-/// Used by the login screen's language toggle.
+/// Defaults to 'fr'. On app start, the splash screen reads the profile's
+/// `preferred_language` and overrides this value.
 final localeProvider = StateProvider<String>((ref) => 'fr');
 
 /// Derived Locale object for MaterialApp.
@@ -144,4 +145,14 @@ final selectedLocaleProvider = Provider<Locale>((ref) {
   final code = ref.watch(localeProvider);
   if (code == 'ar') return const Locale('ar', 'MA');
   return const Locale('fr');
+});
+
+/// Call this after toggling [localeProvider] to persist to Supabase.
+/// Fire-and-forget — UI stays responsive, DB update happens in background.
+final persistLocaleProvider =
+    FutureProvider.family<void, String>((ref, langCode) async {
+  final authService = ref.read(phoneAuthServiceProvider);
+  await authService.updatePreferredLanguage(langCode);
+  // Invalidate profile so it picks up the new preferred_language
+  ref.invalidate(currentProfileProvider);
 });

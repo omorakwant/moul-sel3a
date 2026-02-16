@@ -95,6 +95,7 @@ class PhoneAuthService {
     required String role,
     required String shopName,
     String? city,
+    String preferredLanguage = 'fr',
   }) async {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) throw Exception('Not authenticated');
@@ -103,7 +104,19 @@ class PhoneAuthService {
     await _client.from('profiles').update({
       'role': role,
       'shop_name': shopName,
+      'preferred_language': preferredLanguage,
       if (city != null) 'city': city,
+    }).eq('id', userId);
+  }
+
+  /// Persist the user's language preference to the profiles table.
+  /// Called whenever the FR/AR toggle is switched.
+  Future<void> updatePreferredLanguage(String langCode) async {
+    final userId = _client.auth.currentUser?.id;
+    if (userId == null) return; // silently skip if not logged in yet
+
+    await _client.from('profiles').update({
+      'preferred_language': langCode,
     }).eq('id', userId);
   }
 

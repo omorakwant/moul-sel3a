@@ -62,12 +62,14 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
 
     try {
       final authService = ref.read(phoneAuthServiceProvider);
+      final currentLang = ref.read(localeProvider);
       await authService.updateProfileAfterRoleSelection(
         role: _selectedRole!,
         shopName: shopName,
         city: _cityController.text.trim().isNotEmpty
             ? _cityController.text.trim()
             : null,
+        preferredLanguage: currentLang,
       );
 
       // Invalidate profile provider to re-fetch

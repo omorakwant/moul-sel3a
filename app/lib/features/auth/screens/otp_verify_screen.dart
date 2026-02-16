@@ -105,12 +105,14 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
       if (!mounted) return;
 
       if (isComplete) {
-        // Existing user → go to role-based dashboard
+        // Existing user → restore saved language, then go to dashboard
         final profile = await authService.getProfile();
         final role = profile?['role'] as String? ?? 'retailer';
+        final savedLang = profile?['preferred_language'] as String? ?? 'fr';
+        ref.read(localeProvider.notifier).state = savedLang;
         _navigateToDashboard(role);
       } else {
-        // New user → role selection
+        // New user → role selection (keeps the locale chosen on login screen)
         context.goNamed('role-selection');
       }
     } catch (e) {

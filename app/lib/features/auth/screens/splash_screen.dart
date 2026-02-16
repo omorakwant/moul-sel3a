@@ -45,11 +45,26 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         break;
 
       case AuthStatus.needsOnboarding:
-        if (mounted) context.goNamed('role-selection');
+        if (mounted) {
+          // Restore saved language even for incomplete profiles
+          final profile = ref.read(currentProfileProvider).valueOrNull;
+          if (profile != null) {
+            ref.read(localeProvider.notifier).state =
+                profile.preferredLanguage;
+          }
+          context.goNamed('role-selection');
+        }
         break;
 
       case AuthStatus.authenticated:
         if (mounted) {
+          // ── Restore saved language preference ──
+          final profile = ref.read(currentProfileProvider).valueOrNull;
+          if (profile != null) {
+            ref.read(localeProvider.notifier).state =
+                profile.preferredLanguage;
+          }
+
           final role = ref.read(currentRoleProvider) ?? 'retailer';
           switch (role) {
             case 'supplier':

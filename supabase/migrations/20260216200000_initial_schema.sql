@@ -25,13 +25,15 @@ CREATE TABLE public.profiles (
     role        TEXT        NOT NULL CHECK (role IN ('supplier', 'retailer', 'driver')),
     phone       TEXT,
     city        TEXT,
-    avatar_url  TEXT,
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+    avatar_url          TEXT,
+    preferred_language  TEXT NOT NULL DEFAULT 'fr' CHECK (preferred_language IN ('fr', 'ar')),
+    created_at          TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at          TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 COMMENT ON TABLE  public.profiles IS 'User profiles: Moul Hanout (supplier), retailer, or driver.';
 COMMENT ON COLUMN public.profiles.role IS 'One of: supplier, retailer, driver.';
+COMMENT ON COLUMN public.profiles.preferred_language IS 'UI language: fr (French) or ar (Moroccan Darija).';
 
 -- ─────────────────────────────────────────────────────────────────────────────
 -- 2. SUPPLIER ↔ RETAILER RELATIONS
@@ -601,12 +603,13 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
 BEGIN
-    INSERT INTO public.profiles (id, shop_name, role, phone)
+    INSERT INTO public.profiles (id, shop_name, role, phone, preferred_language)
     VALUES (
         NEW.id,
         COALESCE(NEW.raw_user_meta_data->>'shop_name', 'Nouveau Compte'),
         COALESCE(NEW.raw_user_meta_data->>'role', 'retailer'),
-        NEW.phone
+        NEW.phone,
+        COALESCE(NEW.raw_user_meta_data->>'preferred_language', 'fr')
     );
     RETURN NEW;
 END;
