@@ -1,2 +1,5 @@
 // Barrel file — Feature screens (Driver)
-// Screens will be added per feature milestone.
+export 'providers/driver_providers.dart';
+export 'screens/driver_marketplace_screen.dart';
+export 'screens/driver_bid_screen.dart';
+export 'screens/driver_active_trip_screen.dart';

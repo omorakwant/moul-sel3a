@@ -13,11 +13,14 @@ class DeliveryJob extends Equatable {
   final String? assignedDriverId;
   final String pickupCity;
   final String? pickupAddress;
+  final String? pickupLocationName; // descriptive supplier location
   final String dropoffCity;
   final String? dropoffAddress;
+  final String? dropoffLocationName; // descriptive retailer location
   final double? estimatedWeightKg;
   final String jobType; // 'delivery_only' | 'cod'
   final double? codAmount; // amount to collect if COD
+  final String? deliveryPin; // 4-digit handshake PIN
   final String status; // 'open' | 'bidding_closed' | 'assigned' | 'in_transit' | 'completed' | 'cancelled'
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -34,11 +37,14 @@ class DeliveryJob extends Equatable {
     this.assignedDriverId,
     required this.pickupCity,
     this.pickupAddress,
+    this.pickupLocationName,
     required this.dropoffCity,
     this.dropoffAddress,
+    this.dropoffLocationName,
     this.estimatedWeightKg,
     required this.jobType,
     this.codAmount,
+    this.deliveryPin,
     required this.status,
     required this.createdAt,
     required this.updatedAt,
@@ -56,6 +62,22 @@ class DeliveryJob extends Equatable {
   /// Route display string: "Casablanca → Marrakech"
   String get routeDisplay => '$pickupCity → $dropoffCity';
 
+  /// Full pickup label: "Derb Omar, n°42 · Casablanca"
+  String get pickupLabel {
+    if (pickupLocationName != null && pickupLocationName!.isNotEmpty) {
+      return '$pickupLocationName · $pickupCity';
+    }
+    return pickupAddress != null ? '$pickupAddress · $pickupCity' : pickupCity;
+  }
+
+  /// Full dropoff label: "Boutique Hay Riad · Rabat"
+  String get dropoffLabel {
+    if (dropoffLocationName != null && dropoffLocationName!.isNotEmpty) {
+      return '$dropoffLocationName · $dropoffCity';
+    }
+    return dropoffAddress != null ? '$dropoffAddress · $dropoffCity' : dropoffCity;
+  }
+
   factory DeliveryJob.fromJson(Map<String, dynamic> json) {
     return DeliveryJob(
       id: json['id'] as String,
@@ -64,8 +86,10 @@ class DeliveryJob extends Equatable {
       assignedDriverId: json['assigned_driver_id'] as String?,
       pickupCity: json['pickup_city'] as String,
       pickupAddress: json['pickup_address'] as String?,
+      pickupLocationName: json['pickup_location_name'] as String?,
       dropoffCity: json['dropoff_city'] as String,
       dropoffAddress: json['dropoff_address'] as String?,
+      dropoffLocationName: json['dropoff_location_name'] as String?,
       estimatedWeightKg: json['estimated_weight_kg'] != null
           ? (json['estimated_weight_kg'] as num).toDouble()
           : null,
@@ -73,6 +97,7 @@ class DeliveryJob extends Equatable {
       codAmount: json['cod_amount'] != null
           ? (json['cod_amount'] as num).toDouble()
           : null,
+      deliveryPin: json['delivery_pin'] as String?,
       status: json['status'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
@@ -91,8 +116,10 @@ class DeliveryJob extends Equatable {
       if (assignedDriverId != null) 'assigned_driver_id': assignedDriverId,
       'pickup_city': pickupCity,
       'pickup_address': pickupAddress,
+      'pickup_location_name': pickupLocationName,
       'dropoff_city': dropoffCity,
       'dropoff_address': dropoffAddress,
+      'dropoff_location_name': dropoffLocationName,
       'estimated_weight_kg': estimatedWeightKg,
       'job_type': jobType,
       if (codAmount != null) 'cod_amount': codAmount,

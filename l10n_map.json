@@ -73,6 +73,142 @@
     "cash_collection": {
       "fr": "Avec collecte d'argent",
       "ar_MA": "فيها جمع الفلوس"
+    },
+    "delivery_only": {
+      "fr": "Livraison seule",
+      "ar_MA": "توصيل فقط"
+    },
+    "driver_marketplace": {
+      "fr": "Livraisons disponibles",
+      "ar_MA": "سوق التوصيل"
+    },
+    "available_jobs": {
+      "fr": "Offres de livraison",
+      "ar_MA": "الخدمات المتاحة"
+    },
+    "no_jobs_available": {
+      "fr": "Aucune livraison disponible",
+      "ar_MA": "ما كاين تا خدمة دابا"
+    },
+    "pickup_from": {
+      "fr": "Ramassage",
+      "ar_MA": "من عند"
+    },
+    "deliver_to": {
+      "fr": "Livraison",
+      "ar_MA": "ل"
+    },
+    "place_bid": {
+      "fr": "Proposer un prix",
+      "ar_MA": "قدم عرض"
+    },
+    "bid_sheet": {
+      "fr": "Fiche d'offre",
+      "ar_MA": "ورقة العرض"
+    },
+    "estimated_time": {
+      "fr": "Temps estimé",
+      "ar_MA": "الوقت التقريبي"
+    },
+    "driver_message": {
+      "fr": "Message (optionnel)",
+      "ar_MA": "رسالة (اختياري)"
+    },
+    "submit_bid": {
+      "fr": "Envoyer l'offre",
+      "ar_MA": "صيفط العرض"
+    },
+    "bid_submitted": {
+      "fr": "Offre envoyée !",
+      "ar_MA": "العرض تصيفط!"
+    },
+    "bid_already_placed": {
+      "fr": "Offre déjà soumise",
+      "ar_MA": "عندك عرض فهاد الخدمة"
+    },
+    "active_trip": {
+      "fr": "Trajet en cours",
+      "ar_MA": "المسار الحالي"
+    },
+    "active_trips": {
+      "fr": "Trajets actifs",
+      "ar_MA": "المسارات النشطة"
+    },
+    "route_details": {
+      "fr": "Détails du trajet",
+      "ar_MA": "تفاصيل المسار"
+    },
+    "start_trip": {
+      "fr": "Démarrer le trajet",
+      "ar_MA": "بدا المسار"
+    },
+    "i_arrived": {
+      "fr": "Je suis arrivé !",
+      "ar_MA": "وصلت!"
+    },
+    "enter_pin": {
+      "fr": "Entrer le code PIN",
+      "ar_MA": "دخل الكود"
+    },
+    "ask_retailer_pin": {
+      "fr": "Demandez le code PIN au commerçant (4 chiffres)",
+      "ar_MA": "طلب الكود من مول الحانوت (4 أرقام)"
+    },
+    "wrong_pin": {
+      "fr": "Code incorrect, réessayez",
+      "ar_MA": "الكود غالط، عاود"
+    },
+    "verify_delivery": {
+      "fr": "Confirmer la livraison",
+      "ar_MA": "أكد التوصيل"
+    },
+    "delivery_completed": {
+      "fr": "Livraison terminée !",
+      "ar_MA": "التوصيل تم بنجاح!"
+    },
+    "delivery_completed_subtitle": {
+      "fr": "Le carnet a été mis à jour automatiquement",
+      "ar_MA": "الكارني تحدّث تلقائيا"
+    },
+    "cod_collect": {
+      "fr": "Montant à collecter (COD)",
+      "ar_MA": "فلوس خاصك تجمع"
+    },
+    "status_assigned": {
+      "fr": "Assigné",
+      "ar_MA": "مخصصة ليك"
+    },
+    "bid_manager": {
+      "fr": "Gestion des offres",
+      "ar_MA": "عروض الكورتيات"
+    },
+    "driver_bids": {
+      "fr": "Offres des livreurs",
+      "ar_MA": "العروض"
+    },
+    "no_bids_yet": {
+      "fr": "Aucune offre pour le moment",
+      "ar_MA": "مازال ما جا تا عرض"
+    },
+    "confirm_accept_bid": {
+      "fr": "Accepter l'offre ?",
+      "ar_MA": "قبل العرض؟"
+    },
+    "bid_accepted": {
+      "fr": "Offre acceptée ! PIN généré",
+      "ar_MA": "العرض تقبل! PIN تولّد"
+    },
+    "driver_assigned": {
+      "fr": "Livreur assigné",
+      "ar_MA": "الكورتيا تعيّن"
+    },
+    "location_name": {
+      "fr": "Adresse / Emplacement",
+      "ar_MA": "العنوان ديالك"
+    },
+    "location_name_hint": {
+      "fr": "ex: Derb Omar, Magasin n°42",
+      "ar_MA": "مثلا: درب عمر، رقم 42"
     }
   },
   "status": {

@@ -83,6 +83,70 @@ class AppLocalizations {
       isDarija ? 'ثمن الخدمة ديالك' : 'Votre prix de livraison';
   String get cashCollection =>
       isDarija ? 'فيها جمع الفلوس' : "Avec collecte d'argent";
+  String get deliveryOnly =>
+      isDarija ? 'توصيل فقط' : 'Livraison seule';
+  String get driverMarketplace =>
+      isDarija ? 'سوق التوصيل' : 'Livraisons disponibles';
+  String get availableJobs =>
+      isDarija ? 'الخدمات المتاحة' : 'Offres de livraison';
+  String get noJobsAvailable =>
+      isDarija ? 'ما كاين تا خدمة دابا' : 'Aucune livraison disponible';
+  String get pickupFrom => isDarija ? 'من عند' : 'Ramassage';
+  String get deliverTo => isDarija ? 'ل' : 'Livraison';
+  String get placeBid => isDarija ? 'قدم عرض' : 'Proposer un prix';
+  String get bidSheet => isDarija ? 'ورقة العرض' : "Fiche d'offre";
+  String get estimatedTime =>
+      isDarija ? 'الوقت التقريبي' : 'Temps estimé';
+  String get driverMessage =>
+      isDarija ? 'رسالة (اختياري)' : 'Message (optionnel)';
+  String get submitBid =>
+      isDarija ? 'صيفط العرض' : "Envoyer l'offre";
+  String get bidSubmitted =>
+      isDarija ? 'العرض تصيفط!' : 'Offre envoyée !';
+  String get bidAlreadyPlaced =>
+      isDarija ? 'عندك عرض فهاد الخدمة' : 'Offre déjà soumise';
+  String get activeTrip =>
+      isDarija ? 'المسار الحالي' : 'Trajet en cours';
+  String get activeTrips =>
+      isDarija ? 'المسارات النشطة' : 'Trajets actifs';
+  String get routeDetails =>
+      isDarija ? 'تفاصيل المسار' : 'Détails du trajet';
+  String get startTrip => isDarija ? 'بدا المسار' : 'Démarrer le trajet';
+  String get iArrived => isDarija ? 'وصلت!' : "Je suis arrivé !";
+  String get enterPin => isDarija ? 'دخل الكود' : 'Entrer le code PIN';
+  String get askRetailerPin => isDarija
+      ? 'طلب الكود من مول الحانوت (4 أرقام)'
+      : 'Demandez le code PIN au commerçant (4 chiffres)';
+  String get wrongPin =>
+      isDarija ? 'الكود غالط، عاود' : 'Code incorrect, réessayez';
+  String get verifyDelivery =>
+      isDarija ? 'أكد التوصيل' : 'Confirmer la livraison';
+  String get deliveryCompleted =>
+      isDarija ? 'التوصيل تم بنجاح!' : 'Livraison terminée !';
+  String get deliveryCompletedSubtitle => isDarija
+      ? 'الكارني تحدّث تلقائيا'
+      : 'Le carnet a été mis à jour automatiquement';
+  String get codCollect =>
+      isDarija ? 'فلوس خاصك تجمع' : 'Montant à collecter (COD)';
+  String get statusAssigned =>
+      isDarija ? 'مخصصة ليك' : 'Assigné';
+  String get bidManager =>
+      isDarija ? 'عروض الكورتيات' : 'Gestion des offres';
+  String get driverBids =>
+      isDarija ? 'العروض' : 'Offres des livreurs';
+  String get noBidsYet =>
+      isDarija ? 'مازال ما جا تا عرض' : 'Aucune offre pour le moment';
+  String get confirmAcceptBid =>
+      isDarija ? 'قبل العرض؟' : "Accepter l'offre ?";
+  String get bidAccepted =>
+      isDarija ? 'العرض تقبل! PIN تولّد' : 'Offre acceptée ! PIN généré';
+  String get driverAssigned =>
+      isDarija ? 'الكورتيا تعيّن' : 'Livreur assigné';
+  String get locationName =>
+      isDarija ? 'العنوان ديالك' : 'Adresse / Emplacement';
+  String get locationNameHint => isDarija
+      ? 'مثلا: درب عمر، رقم 42'
+      : 'ex: Derb Omar, Magasin n°42';
 
   // ══════════════════════════════════════════════════════════════════════════
   // STATUS

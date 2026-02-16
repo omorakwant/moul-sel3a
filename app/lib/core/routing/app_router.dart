@@ -8,6 +8,9 @@ import '../../features/auth/screens/otp_verify_screen.dart';
 import '../../features/auth/screens/pending_verification_screen.dart';
 import '../../features/auth/screens/role_selection_screen.dart';
 import '../../features/auth/screens/splash_screen.dart';
+import '../../features/driver/screens/driver_active_trip_screen.dart';
+import '../../features/driver/screens/driver_bid_screen.dart';
+import '../../features/driver/screens/driver_marketplace_screen.dart';
 import '../../features/retailer/screens/retailer_cart_screen.dart';
 import '../../features/retailer/screens/retailer_catalog_screen.dart';
 import '../../features/retailer/screens/retailer_handshake_screen.dart';
@@ -15,6 +18,7 @@ import '../../features/retailer/screens/retailer_home_screen.dart';
 import '../../features/retailer/screens/retailer_order_detail_screen.dart';
 import '../../features/retailer/screens/retailer_partial_receipt_screen.dart';
 import '../../features/supplier/screens/supplier_add_edit_product_screen.dart';
+import '../../features/supplier/screens/supplier_bid_manager_screen.dart';
 import '../../features/supplier/screens/supplier_inventory_screen.dart';
 
 /// Application router using GoRouter.
@@ -162,19 +166,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/driver/marketplace',
             name: 'driver-marketplace',
             builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Driver Marketplace'),
+                const DriverMarketplaceScreen(),
           ),
           GoRoute(
             path: '/driver/bid/:jobId',
             name: 'driver-bid',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Bid Sheet'),
+            builder: (context, state) {
+              final jobId = state.pathParameters['jobId']!;
+              return DriverBidScreen(jobId: jobId);
+            },
           ),
           GoRoute(
             path: '/driver/active-trip/:jobId',
             name: 'driver-active-trip',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Active Trip'),
+            builder: (context, state) {
+              final jobId = state.pathParameters['jobId']!;
+              return DriverActiveTripScreen(jobId: jobId);
+            },
           ),
           GoRoute(
             path: '/driver/handshake/:orderId',
@@ -229,8 +237,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/supplier/bids/:jobId',
         name: 'supplier-bid-manager',
-        builder: (context, state) =>
-            const _PlaceholderScreen(title: 'Bid Manager'),
+        builder: (context, state) {
+          final jobId = state.pathParameters['jobId']!;
+          return SupplierBidManagerScreen(jobId: jobId);
+        },
       ),
     ],
   );

@@ -51,6 +51,22 @@ class DeliveryRepository {
     return (response as List).map((e) => DeliveryJob.fromJson(e)).toList();
   }
 
+  /// Fetch a single delivery job by ID.
+  Future<DeliveryJob?> getJobById(String jobId) async {
+    final response = await _client
+        .from(SupabaseConstants.deliveryJobsTable)
+        .select('''
+          *,
+          supplier:supplier_id(shop_name),
+          driver:assigned_driver_id(shop_name, phone)
+        ''')
+        .eq('id', jobId)
+        .maybeSingle();
+
+    if (response == null) return null;
+    return DeliveryJob.fromJson(response);
+  }
+
   /// Fetch delivery jobs for a supplier.
   Future<List<DeliveryJob>> getSupplierJobs({String? status}) async {
     final userId = _client.auth.currentUser?.id;
@@ -103,6 +119,86 @@ class DeliveryRepository {
         .eq('id', jobId);
   }
 
+  /// Mark job as in_transit (Driver starts the trip).
+  Future<void> startTrip(String jobId) async {
+    await _client
+        .from(SupabaseConstants.deliveryJobsTable)
+        .update({'status': 'in_transit'})
+        .eq('id', jobId);
+  }
+
+  /// Verify the delivery PIN and complete the handshake.
+  ///
+  /// Flow:
+  ///   1. Driver collects 4-digit PIN from retailer
+  ///   2. Verify PIN matches delivery_jobs.delivery_pin
+  ///   3. If match → mark job as 'completed', order as 'delivered'
+  ///   4. If COD → create verified ledger entry (payment_decrease)
+  ///
+  /// Returns true if PIN is correct, false otherwise.
+  Future<bool> verifyPinAndComplete({
+    required String jobId,
+    required String pin,
+  }) async {
+    // 1. Fetch the job to verify PIN
+    final jobResponse = await _client
+        .from(SupabaseConstants.deliveryJobsTable)
+        .select('*, orders!inner(relation_id)')
+        .eq('id', jobId)
+        .single();
+
+    final storedPin = jobResponse['delivery_pin'] as String?;
+    if (storedPin == null || storedPin != pin) {
+      return false; // PIN mismatch
+    }
+
+    final orderId = jobResponse['order_id'] as String;
+    final jobType = jobResponse['job_type'] as String;
+    final codAmount = jobResponse['cod_amount'] as num?;
+
+    // 2. Mark delivery job as completed
+    await _client
+        .from(SupabaseConstants.deliveryJobsTable)
+        .update({'status': 'completed'})
+        .eq('id', jobId);
+
+    // 3. Mark order as delivered
+    await _client
+        .from(SupabaseConstants.ordersTable)
+        .update({'status': 'delivered'})
+        .eq('id', orderId);
+
+    // 4. If COD, create a verified payment ledger entry
+    if (jobType == 'cod' && codAmount != null && codAmount > 0) {
+      final relationId = (jobResponse['orders'] as Map<String, dynamic>)['relation_id'] as String;
+
+      await _client
+          .from(SupabaseConstants.ledgerTable)
+          .insert({
+            'relation_id': relationId,
+            'order_id': orderId,
+            'transaction_type': 'payment_decrease',
+            'amount': codAmount,
+            'payment_method': 'driver_cash',
+            'notes': 'COD collected by driver — PIN verified',
+            'status': 'verified',
+          });
+    }
+
+    return true;
+  }
+
+  /// Get the delivery PIN for a job (Retailer sees this to share with driver).
+  Future<String?> getDeliveryPin(String jobId) async {
+    final response = await _client
+        .from(SupabaseConstants.deliveryJobsTable)
+        .select('delivery_pin')
+        .eq('id', jobId)
+        .maybeSingle();
+
+    return response?['delivery_pin'] as String?;
+  }
+
   // ══════════════════════════════════════════════════════════════════════════
   // DELIVERY BIDS
   // ══════════════════════════════════════════════════════════════════════════
@@ -129,6 +225,22 @@ class DeliveryRepository {
         .select()
         .single();
 
+    return DeliveryBid.fromJson(response);
+  }
+
+  /// Check if the current driver already bid on a job.
+  Future<DeliveryBid?> getMyBidForJob(String jobId) async {
+    final userId = _client.auth.currentUser?.id;
+    if (userId == null) return null;
+
+    final response = await _client
+        .from(SupabaseConstants.deliveryBidsTable)
+        .select()
+        .eq('job_id', jobId)
+        .eq('driver_id', userId)
+        .maybeSingle();
+
+    if (response == null) return null;
     return DeliveryBid.fromJson(response);
   }
 
@@ -163,11 +275,12 @@ class DeliveryRepository {
         .neq('id', bidId);
 
     // Assign driver to job and close bidding
+    // (triggers trg_generate_delivery_pin → auto-generates 4-digit PIN)
     await _client
         .from(SupabaseConstants.deliveryJobsTable)
         .update({
           'assigned_driver_id': driverId,
-          'status': 'bidding_closed',
+          'status': 'assigned',
         })
         .eq('id', jobId);
   }

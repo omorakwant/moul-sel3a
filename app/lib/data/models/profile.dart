@@ -9,6 +9,7 @@ class Profile extends Equatable {
   final String role; // 'supplier' | 'retailer' | 'driver'
   final String? phone;
   final String? city;
+  final String? locationName; // descriptive location label (e.g. "Derb Omar, n°42")
   final String? avatarUrl;
   final String preferredLanguage; // 'fr' | 'ar'
   final DateTime createdAt;
@@ -20,6 +21,7 @@ class Profile extends Equatable {
     required this.role,
     this.phone,
     this.city,
+    this.locationName,
     this.avatarUrl,
     this.preferredLanguage = 'fr',
     required this.createdAt,
@@ -42,6 +44,7 @@ class Profile extends Equatable {
       role: json['role'] as String,
       phone: json['phone'] as String?,
       city: json['city'] as String?,
+      locationName: json['location_name'] as String?,
       avatarUrl: json['avatar_url'] as String?,
       preferredLanguage: json['preferred_language'] as String? ?? 'fr',
       createdAt: DateTime.parse(json['created_at'] as String),
@@ -56,6 +59,7 @@ class Profile extends Equatable {
       'role': role,
       'phone': phone,
       'city': city,
+      'location_name': locationName,
       'avatar_url': avatarUrl,
       'preferred_language': preferredLanguage,
       // created_at and updated_at handled by DB
@@ -66,6 +70,7 @@ class Profile extends Equatable {
     String? shopName,
     String? phone,
     String? city,
+    String? locationName,
     String? avatarUrl,
     String? preferredLanguage,
   }) {
@@ -75,6 +80,7 @@ class Profile extends Equatable {
       role: role,
       phone: phone ?? this.phone,
       city: city ?? this.city,
+      locationName: locationName ?? this.locationName,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       preferredLanguage: preferredLanguage ?? this.preferredLanguage,
       createdAt: createdAt,
@@ -84,5 +90,5 @@ class Profile extends Equatable {
 
   @override
   List<Object?> get props =>
-      [id, shopName, role, phone, city, avatarUrl, preferredLanguage];
+      [id, shopName, role, phone, city, locationName, avatarUrl, preferredLanguage];
 }
