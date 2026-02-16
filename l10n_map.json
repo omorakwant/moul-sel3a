@@ -101,6 +101,118 @@
     "preview_price": {
       "fr": "Aperçu du nouveau prix",
       "ar_MA": "شوف الثمن الجديد"
+    },
+    "my_inventory": {
+      "fr": "Mon inventaire",
+      "ar_MA": "المنتوجات ديالي"
+    },
+    "new_product": {
+      "fr": "Nouveau produit",
+      "ar_MA": "منتوج جديد"
+    },
+    "edit_product": {
+      "fr": "Modifier le produit",
+      "ar_MA": "بدل المنتوج"
+    },
+    "product_name": {
+      "fr": "Nom du produit",
+      "ar_MA": "اسم المنتوج"
+    },
+    "brand": {
+      "fr": "Marque",
+      "ar_MA": "الماركة"
+    },
+    "compatibility": {
+      "fr": "Compatibilité Modèles",
+      "ar_MA": "الموديلات المتوافقة"
+    },
+    "tiered_pricing": {
+      "fr": "Prix de Gros",
+      "ar_MA": "ثمن الجملة"
+    },
+    "stock_quantity": {
+      "fr": "Quantité en stock",
+      "ar_MA": "الكمية فالمخزن"
+    },
+    "product_photo": {
+      "fr": "Photo du produit",
+      "ar_MA": "صور المنتوج"
+    },
+    "new_arrival": {
+      "fr": "Nouveauté",
+      "ar_MA": "جديد"
+    },
+    "add_tier": {
+      "fr": "Ajouter un palier",
+      "ar_MA": "زيد بالية جديدة"
+    },
+    "add_model": {
+      "fr": "Ajouter un modèle",
+      "ar_MA": "زيد موديل"
+    },
+    "select_models": {
+      "fr": "Sélectionner les modèles",
+      "ar_MA": "اختار الموديلات"
+    },
+    "choose_brand": {
+      "fr": "Choisir la marque",
+      "ar_MA": "اختار الماركة"
+    },
+    "bulk_adjust": {
+      "fr": "Ajustement groupé",
+      "ar_MA": "بدل الأثمنة بالجملة"
+    },
+    "percentage": {
+      "fr": "Pourcentage",
+      "ar_MA": "بالنسبة المئوية"
+    },
+    "fixed_amount": {
+      "fr": "Montant fixe",
+      "ar_MA": "مبلغ ثابت"
+    },
+    "increase": {
+      "fr": "Augmenter",
+      "ar_MA": "زيد"
+    },
+    "decrease": {
+      "fr": "Diminuer",
+      "ar_MA": "نقص"
+    },
+    "old_price": {
+      "fr": "Ancien prix",
+      "ar_MA": "الثمن القديم"
+    },
+    "new_price": {
+      "fr": "Nouveau prix",
+      "ar_MA": "الثمن الجديد"
+    },
+    "preview_changes": {
+      "fr": "Aperçu des changements",
+      "ar_MA": "شوف التغييرات"
+    },
+    "apply": {
+      "fr": "Appliquer",
+      "ar_MA": "طبّق"
+    },
+    "hidden": {
+      "fr": "Masqué",
+      "ar_MA": "مخبي"
+    },
+    "in_stock": {
+      "fr": "en stock",
+      "ar_MA": "فالمخزن"
+    },
+    "tiers": {
+      "fr": "paliers",
+      "ar_MA": "باليات"
+    },
+    "no_products": {
+      "fr": "Aucun produit encore",
+      "ar_MA": "مازال ما عندك تا منتوج"
+    },
+    "no_results": {
+      "fr": "Aucun résultat",
+      "ar_MA": "ما لقينا والو"
     }
   }
 }

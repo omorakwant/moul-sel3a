@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../data/models/product.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/otp_verify_screen.dart';
 import '../../features/auth/screens/pending_verification_screen.dart';
@@ -12,6 +13,8 @@ import '../../features/retailer/screens/retailer_handshake_screen.dart';
 import '../../features/retailer/screens/retailer_home_screen.dart';
 import '../../features/retailer/screens/retailer_order_detail_screen.dart';
 import '../../features/retailer/screens/retailer_partial_receipt_screen.dart';
+import '../../features/supplier/screens/supplier_add_edit_product_screen.dart';
+import '../../features/supplier/screens/supplier_inventory_screen.dart';
 
 /// Application router using GoRouter.
 /// Routes are organized by user role (Retailer, Driver, Supplier).
@@ -183,7 +186,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/supplier/inventory',
         name: 'supplier-inventory',
         builder: (context, state) =>
-            const _PlaceholderScreen(title: 'Bulk Inventory Manager'),
+            const SupplierInventoryScreen(),
+      ),
+      GoRoute(
+        path: '/supplier/product/add',
+        name: 'supplier-product-add',
+        builder: (context, state) =>
+            const SupplierAddEditProductScreen(),
+      ),
+      GoRoute(
+        path: '/supplier/product/:productId/edit',
+        name: 'supplier-product-edit',
+        builder: (context, state) {
+          final product = state.extra as Product?;
+          return SupplierAddEditProductScreen(
+            existingProduct: product,
+          );
+        },
       ),
       GoRoute(
         path: '/supplier/dispute/:transactionId',
