@@ -1,0 +1,74 @@
+🚀 Implementation Roadmap: The "Souk-B2B" App
+Phase 1: The Core "Carnet" & Products (The Foundation)
+
+Goal: Build the database that handles multiple suppliers, tiered pricing, and the rolling debt logic.
+1.1 Database Schema (SQL)
+
+    Prompt: "Generate a Supabase PostgreSQL schema for a B2B phone accessory marketplace. We need:
+
+        Profiles: id, shop_name, role (supplier/retailer), phone, city.
+
+        Supplier_Retailer_Relation: supplier_id, retailer_id, credit_limit, current_balance. (Important: Balance must be specific to each supplier relationship).
+
+        Products: id, supplier_id, name, brand, compatibility (array of phone models), price_tiers (JSONB: {min_qty: price}), is_new (boolean).
+
+        Bons (Orders): id, supplier_id, retailer_id, total_amount, status (pending, shipped, delivered), delivery_type (in-house, bid_driver).
+
+        Ledger_Transactions: id, relation_id, amount, type (debit/credit), payment_method (cash, wafacash, check), evidence_url (photo of receipt), status (pending_verification, confirmed)."
+
+Phase 2: The "In-Drive" Delivery System
+
+Goal: Create the bidding marketplace for independent drivers.
+2.1 Logistics Logic
+
+    Prompt: "Build a 'Delivery Job' logic. When a Supplier marks a Bon as 'Ready for Pickup':
+
+        It creates a record in a Delivery_Requests table with pickup_location, dropoff_location, and estimated_weight.
+
+        Create a Bids table where Drivers can submit an amount and estimated_time.
+
+        The Supplier can 'Accept' a bid. This links the driver_id to the Order.
+
+        Include a 'Payment_Collection' flag: Does the driver need to collect cash, or is it just delivery only?"
+
+Phase 3: The "Souk-First" UI (Flutter)
+
+Goal: High-contrast, fast, and bilingual interface.
+3.1 The Multi-Ledger Dashboard
+
+    Prompt: "Create a Flutter Dashboard for a Retailer.
+
+        Top View: A horizontal list of 'My Suppliers'. Each card shows the Supplier Name and the 'Solde Actuel' (Current Balance).
+
+        Middle View: A 'Quick Search' bar that defaults to filtering by 'Phone Model' (Compatibility).
+
+        Bottom View: A 'Timeline' of recent activity (New Bon received, Payment confirmed, etc.) using a mix of French and Darija."
+
+4. Prioritization Matrix (What comes first?)
+🟩 Build Now (The MVP)
+
+    Direct Catalog: Supplier adds products, Retailer adds to cart.
+
+    The Digital Bon: Automatic generation of a simple table-based PDF.
+
+    Manual Ledger: Supplier can manually add a payment when they receive a Wafacash photo.
+
+    WhatsApp "Handshake": Every action (New Order, Delivery Confirmed) sends a pre-filled WhatsApp message.
+
+🟨 Build Later (The Scale-up)
+
+    The Bidding System: Start with "Assigned Drivers" (manual) before building the "InDrive" open bidding.
+
+    Voice-to-Search: Start with text search, add AI voice-to-text later.
+
+    OCR for Receipts: Use AI to automatically read the "Reference Number" from a photo of a Wafacash receipt.
+
+    Credit Scoring: Use the 6-month payment history to show "Trust Scores" for retailers.
+
+5. The "Anti-Luck" Promotion Plan (Step-by-Step)
+
+    The Anchor: Find one supplier in Garage Allal who has a messy "Carnet" problem. Install the app for him and his top 10 retailers for free.
+
+    The Viral Trigger: When a retailer sees how clean their debt is with Supplier A, they will show it to Supplier B.
+
+    The "Driver" Force: When independent drivers see they can get more "courses" by being on the app, they will tell other suppliers: "Sign up here so I can see your orders faster."

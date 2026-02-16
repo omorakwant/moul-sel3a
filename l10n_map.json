@@ -1,0 +1,106 @@
+{
+  "app_title": {
+    "fr": "L'Carnet B2B",
+    "ar_MA": "لكارني B2B"
+  },
+  "dashboard": {
+    "current_debt": {
+      "fr": "Solde Actuel",
+      "ar_MA": "الحساب لي عليك"
+    },
+    "credit_limit": {
+      "fr": "Limite de Crédit",
+      "ar_MA": "بلافو ديالك"
+    },
+    "my_suppliers": {
+      "fr": "Mes Grossistes",
+      "ar_MA": "المالين السلعة ديالي"
+    }
+  },
+  "catalog": {
+    "search_compatibility": {
+      "fr": "Filtrer par modèle (ex: iPhone 13)",
+      "ar_MA": "قلب بالموديل (مثلا ايفون 13)"
+    },
+    "new_arrival": {
+      "fr": "Nouveauté",
+      "ar_MA": "جديد"
+    },
+    "wholesale_price": {
+      "fr": "Prix de Gros",
+      "ar_MA": "ثمن الجملة"
+    },
+    "add_to_cart": {
+      "fr": "Ajouter au Panier",
+      "ar_MA": "زيد للياني"
+    }
+  },
+  "actions": {
+    "confirm_order": {
+      "fr": "Valider la Commande",
+      "ar_MA": "كونفطرمي الطلبية"
+    },
+    "confirm_receipt": {
+      "fr": "J'ai reçu la marchandise",
+      "ar_MA": "وصلاتني السلعة"
+    },
+    "partial_receipt": {
+      "fr": "Réception Partielle",
+      "ar_MA": "نقص السلعة لي ناقصة"
+    },
+    "declare_payment": {
+      "fr": "Déclarer un Paiement",
+      "ar_MA": "خلصت شوية"
+    },
+    "upload_receipt": {
+      "fr": "Photo du reçu (Wafacash/CashPlus)",
+      "ar_MA": "صور الورقة ديال كاش بلوس"
+    },
+    "call_whatsapp": {
+      "fr": "Contacter via WhatsApp",
+      "ar_MA": "صيفط أوديو"
+    }
+  },
+  "logistics": {
+    "find_driver": {
+      "fr": "Chercher un livreur",
+      "ar_MA": "قلب على كورتي"
+    },
+    "bid_amount": {
+      "fr": "Votre prix de livraison",
+      "ar_MA": "ثمن الخدمة ديالك"
+    },
+    "cash_collection": {
+      "fr": "Avec collecte d'argent",
+      "ar_MA": "فيها جمع الفلوس"
+    }
+  },
+  "status": {
+    "pending": {
+      "fr": "En préparation",
+      "ar_MA": "كتوجد"
+    },
+    "shipped": {
+      "fr": "En route",
+      "ar_MA": "في الطريق"
+    },
+    "delivered": {
+      "fr": "Livré",
+      "ar_MA": "وصلات"
+    },
+    "verified": {
+      "fr": "Validé / Payé",
+      "ar_MA": "خالصة صافية"
+    }
+  },
+  "inventory_admin": {
+    "bulk_update": {
+      "fr": "Mise à jour en masse",
+      "ar_MA": "بدل كولشي دقة وحدة"
+    },
+    "preview_price": {
+      "fr": "Aperçu du nouveau prix",
+      "ar_MA": "شوف الثمن الجديد"
+    }
+  }
+}
