@@ -604,7 +604,7 @@ class _RetailerPartialReceiptScreenState
                     ),
                   ),
                   Text(
-                    l10n.isDarija ? 'المبلغ الأصلي' : 'المبلغ الأصلي',
+                    l10n.isDarija ? 'Total initial' : 'المبلغ الأصلي',
                     style: const TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 10,
@@ -637,7 +637,7 @@ class _RetailerPartialReceiptScreenState
                     ),
                   ),
                   Text(
-                    l10n.isDarija ? 'المبلغ المعدّل' : 'المبلغ المعدّل',
+                    l10n.isDarija ? 'Total ajusté' : 'المبلغ المعدّل',
                     style: const TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 10,
@@ -668,7 +668,7 @@ class _RetailerPartialReceiptScreenState
                           ),
                           child: Center(
                             child: Text(
-                              '${diff > 0 ? '+' : ''}${diff.toStringAsFixed(0)}',
+                              '${diff > 0 ? '+' : ''}${diff.toStringAsFixed(2)} DH',
                               style: const TextStyle(
                                 fontFamily: 'Inter',
                                 fontSize: 10,

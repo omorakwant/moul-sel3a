@@ -116,8 +116,12 @@ class _RetailerOrderDetailScreenState
                           _buildDeliverySection(order, l10n),
                           const SizedBox(height: 16),
 
-                          // ── WhatsApp note ──
+                          // ── WhatsApp voice note ──
                           _buildWhatsAppNote(l10n),
+                          const SizedBox(height: 12),
+
+                          // ── WhatsApp voice button — PROJECT_CONTEXT: "صيفط أوديو" ──
+                          _buildVoiceNoteButton(l10n),
                           const SizedBox(height: 20),
 
                           // ── Confirm / Partial Receipt button ──
@@ -128,8 +132,8 @@ class _RetailerOrderDetailScreenState
                           Center(
                             child: Text(
                               l10n.isDarija
-                                  ? 'الحساب غادي يتبدل بعد ما تأكد الإستلام'
-                                  : 'Le solde sera mis à jour après réception confirmée',
+                                  ? 'الحساب غادي يتبدل من بعد ما المول السلعة يأكد'
+                                  : 'Le solde sera mis à jour après validation du fournisseur',
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 fontFamily: 'Inter',
@@ -196,7 +200,7 @@ class _RetailerOrderDetailScreenState
               Text(
                 l10n.isDarija
                     ? 'الطلبية · ${order.supplierName ?? ''}'
-                    : 'الطلبية · ${order.supplierName ?? ''}',
+                    : 'Commande · ${order.supplierName ?? ''}',
                 style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 14,
@@ -503,6 +507,62 @@ class _RetailerOrderDetailScreenState
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // VOICE NOTE BUTTON — WhatsApp audio per PROJECT_CONTEXT.md
+  //   "Voice Notes: Integrated WhatsApp button on every order page"
+  //   Darija label: "صيفط أوديو" (Send Audio)
+  // ════════════════════════════════════════════════════════════════════════════
+  Widget _buildVoiceNoteButton(AppLocalizations l10n) {
+    return GestureDetector(
+      onTap: () {
+        // TODO: open WhatsApp voice note via url_launcher
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.callWhatsApp),
+            backgroundColor: const Color(0xFF25D366),
+          ),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 48,
+        decoration: BoxDecoration(
+          color: const Color(0xFF25D366),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.mic, size: 20, color: Colors.white),
+            const SizedBox(width: 8),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  l10n.isDarija ? 'صيفط أوديو' : 'Envoyer un vocal',
+                  style: const TextStyle(
+                    fontFamily: 'Manrope',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  l10n.isDarija ? 'WhatsApp' : 'صيفط أوديو · WhatsApp',
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    fontSize: 10,
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

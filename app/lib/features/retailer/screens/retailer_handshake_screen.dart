@@ -233,10 +233,10 @@ class RetailerHandshakeScreen extends StatelessWidget {
               color: const Color(0xFFD1FAE5),
               borderRadius: BorderRadius.circular(6),
             ),
-            child: const Center(
+            child: Center(
               child: Text(
-                '✓ Validé',
-                style: TextStyle(
+                '✓ ${l10n.statusVerified}',
+                style: const TextStyle(
                   fontFamily: 'Inter',
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
