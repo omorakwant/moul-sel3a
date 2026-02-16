@@ -291,6 +291,18 @@
     "new_order": {
       "fr": "Nouvelle Commande",
       "ar_MA": "طلبية جديدة"
+    },
+    "estimated_total": {
+      "fr": "Total estimé :",
+      "ar_MA": "المجموع التقريبي:"
+    },
+    "remaining_credit": {
+      "fr": "Crédit restant",
+      "ar_MA": "بلافو لي باقي"
+    },
+    "over_credit_limit": {
+      "fr": "Cette commande dépassera votre limite de crédit !",
+      "ar_MA": "هاد الطلبية غادي تفوت البلافو ديالك!"
     }
   }
 }

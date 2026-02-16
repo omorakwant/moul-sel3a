@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models/product.dart';
+import '../../../data/models/supplier_retailer_relation.dart';
 import '../../../data/repositories/product_repository.dart';
+import '../../../data/repositories/relation_repository.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // STATE: Which supplier catalog we're viewing
@@ -108,4 +110,22 @@ final catalogModelsProvider = FutureProvider<List<String>>((ref) async {
 
   final sorted = models.toList()..sort();
   return sorted;
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA: Supplier-Retailer relation for credit limit tracking
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// The relation ID for the currently viewed supplier catalog.
+final catalogRelationIdProvider = StateProvider<String?>((ref) => null);
+
+/// Fetches the SupplierRetailerRelation for the current catalog supplier.
+/// Provides credit_limit and current_balance for the sticky bottom bar.
+final catalogRelationProvider =
+    FutureProvider<SupplierRetailerRelation?>((ref) async {
+  final relationId = ref.watch(catalogRelationIdProvider);
+  if (relationId == null || relationId.isEmpty) return null;
+
+  final repo = ref.watch(relationRepositoryProvider);
+  return repo.getById(relationId);
 });

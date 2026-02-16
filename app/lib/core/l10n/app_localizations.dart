@@ -145,6 +145,11 @@ class AppLocalizations {
   String get addedToCart => isDarija ? 'تزاد فلياني' : 'Ajouté au panier';
   String get viewCart => isDarija ? 'شوف لياني' : 'Voir le panier';
   String get newOrder => isDarija ? 'طلبية جديدة' : 'Nouvelle Commande';
+  String get estimatedTotal => isDarija ? 'المجموع التقريبي:' : 'Total estimé :';
+  String get remainingCredit => isDarija ? 'بلافو لي باقي' : 'Crédit restant';
+  String get overCreditLimit => isDarija
+      ? '⚠️ هاد الطلبية غادي تفوت البلافو ديالك!'
+      : '⚠️ Cette commande dépassera votre limite de crédit !';
 
   // ══════════════════════════════════════════════════════════════════════════
   // AUTH

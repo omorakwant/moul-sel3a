@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/formatters.dart';
 import '../providers/cart_providers.dart';
 import '../providers/catalog_providers.dart';
 import '../widgets/product_card.dart';
@@ -54,10 +55,14 @@ class _RetailerCatalogScreenState
   @override
   void initState() {
     super.initState();
-    // Set the supplier ID for all catalog providers
+    // Set the supplier ID and relation ID for all catalog providers
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(catalogSupplierIdProvider.notifier).state =
           widget.supplierId;
+      if (widget.relationId != null) {
+        ref.read(catalogRelationIdProvider.notifier).state =
+            widget.relationId;
+      }
     });
   }
 
@@ -140,30 +145,20 @@ class _RetailerCatalogScreenState
     final selectedModel = ref.watch(selectedModelProvider);
 
     final cartCount = ref.watch(cartItemCountProvider);
+    final cartTotal = ref.watch(cartTotalProvider);
+    final relationAsync = ref.watch(catalogRelationProvider);
 
     return Scaffold(
       backgroundColor: AppColors.bgPrimary,
-      // ── Cart FAB (shows when items in cart) or WhatsApp FAB ──
-      floatingActionButton: cartCount > 0
-          ? FloatingActionButton.extended(
-              onPressed: () => _navigateToCart(context),
-              backgroundColor: AppColors.accentOrange,
-              icon: const Icon(Icons.shopping_cart_rounded, color: AppColors.onAccent),
-              label: Text(
-                '$cartCount ${l10n.items}',
-                style: const TextStyle(
-                  fontFamily: 'Manrope',
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.onAccent,
-                ),
-              ),
-            )
-          : FloatingActionButton(
+      // WhatsApp voice note FAB — only when cart is empty (sticky bar takes over)
+      floatingActionButton: cartCount == 0
+          ? FloatingActionButton(
               onPressed: _openWhatsAppVoiceNote,
-              backgroundColor: const Color(0xFF25D366), // WhatsApp green
+              backgroundColor: const Color(0xFF25D366),
               tooltip: l10n.callWhatsApp,
               child: const Icon(Icons.mic, color: Colors.white),
-            ),
+            )
+          : null,
       body: SafeArea(
         child: Column(
           children: [
@@ -229,10 +224,175 @@ class _RetailerCatalogScreenState
               ),
             ),
 
+            // ── Sticky Bottom Bar (cart summary + credit limit) ──
+            if (cartCount > 0)
+              _buildStickyCartBar(context, l10n, cartCount, cartTotal, relationAsync),
+
             // ── Tab Bar ──
             _buildTabBar(context, l10n),
           ],
         ),
+      ),
+    );
+  }
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // STICKY CART BAR — real-time cart total + credit limit guard
+  // ════════════════════════════════════════════════════════════════════════════
+  Widget _buildStickyCartBar(
+    BuildContext context,
+    AppLocalizations l10n,
+    int cartCount,
+    double cartTotal,
+    AsyncValue<dynamic> relationAsync,
+  ) {
+    // Extract credit info from relation
+    double? creditLimit;
+    double currentBalance = 0;
+    relationAsync.whenData((relation) {
+      if (relation != null) {
+        creditLimit = relation.creditLimit;
+        currentBalance = relation.currentBalance;
+      }
+    });
+
+    // Check if this order would exceed credit limit
+    final projectedBalance = currentBalance + cartTotal;
+    final bool isOverLimit =
+        creditLimit != null && creditLimit! > 0 && projectedBalance > creditLimit!;
+    final double remainingCredit =
+        creditLimit != null && creditLimit! > 0 ? creditLimit! - currentBalance : 0;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isOverLimit
+            ? AppColors.alertRed.withValues(alpha: 0.05)
+            : Colors.white,
+        border: Border(
+          top: BorderSide(
+            color: isOverLimit ? AppColors.alertRed.withValues(alpha: 0.3) : AppColors.bgSurface,
+          ),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // ── Over-limit warning banner ──
+          if (isOverLimit)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              color: AppColors.alertRed.withValues(alpha: 0.1),
+              child: Row(
+                children: [
+                  const Icon(Icons.warning_amber_rounded,
+                      size: 16, color: AppColors.alertRed),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      l10n.overCreditLimit,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.alertRed,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+            child: Row(
+              children: [
+                // ── Left: item count + total ──
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$cartCount ${l10n.items} ${l10n.isDarija ? "فلياني" : "dans le panier"}',
+                        style: const TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        children: [
+                          Text(
+                            l10n.estimatedTotal,
+                            style: const TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 13,
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            Formatters.price(cartTotal),
+                            style: TextStyle(
+                              fontFamily: 'Manrope',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                              color: isOverLimit
+                                  ? AppColors.alertRed
+                                  : AppColors.textPrimary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Credit remaining hint
+                      if (creditLimit != null && creditLimit! > 0)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            '${l10n.remainingCredit}: ${Formatters.price(remainingCredit)}',
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 11,
+                              color: isOverLimit
+                                  ? AppColors.alertRed
+                                  : AppColors.successGreen,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+
+                // ── Right: View Cart button ──
+                SizedBox(
+                  height: 44,
+                  child: ElevatedButton.icon(
+                    onPressed: () => _navigateToCart(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.accentOrange,
+                      foregroundColor: AppColors.onAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                    ),
+                    icon: const Icon(Icons.shopping_cart_rounded, size: 18),
+                    label: Text(
+                      l10n.viewCart,
+                      style: const TextStyle(
+                        fontFamily: 'Manrope',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
