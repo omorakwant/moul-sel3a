@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/retailer/screens/retailer_catalog_screen.dart';
+import '../../features/retailer/screens/retailer_handshake_screen.dart';
 import '../../features/retailer/screens/retailer_home_screen.dart';
+import '../../features/retailer/screens/retailer_order_detail_screen.dart';
+import '../../features/retailer/screens/retailer_partial_receipt_screen.dart';
 
 /// Application router using GoRouter.
 /// Routes are organized by user role (Retailer, Driver, Supplier).
@@ -56,8 +59,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/retailer/order/:orderId',
             name: 'retailer-order-detail',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Order Detail'),
+            builder: (context, state) {
+              final orderId = state.pathParameters['orderId']!;
+              return RetailerOrderDetailScreen(orderId: orderId);
+            },
           ),
           GoRoute(
             path: '/retailer/payment/:relationId',
@@ -68,8 +73,27 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/retailer/receipt/:orderId',
             name: 'retailer-partial-receipt',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Partial Receipt'),
+            builder: (context, state) {
+              final orderId = state.pathParameters['orderId']!;
+              return RetailerPartialReceiptScreen(orderId: orderId);
+            },
+          ),
+          GoRoute(
+            path: '/retailer/handshake/:orderId',
+            name: 'retailer-handshake',
+            builder: (context, state) {
+              final orderId = state.pathParameters['orderId']!;
+              final qp = state.uri.queryParameters;
+              return RetailerHandshakeScreen(
+                orderId: orderId,
+                adjustedTotal: double.tryParse(qp['adjustedTotal'] ?? '') ?? 0,
+                originalTotal: double.tryParse(qp['originalTotal'] ?? '') ?? 0,
+                itemCount: int.tryParse(qp['itemCount'] ?? '') ?? 0,
+                adjustmentCount: int.tryParse(qp['adjustmentCount'] ?? '') ?? 0,
+                driverName: qp['driverName'] ?? '',
+                retailerName: qp['retailerName'] ?? '',
+              );
+            },
           ),
           GoRoute(
             path: '/retailer/profile',
