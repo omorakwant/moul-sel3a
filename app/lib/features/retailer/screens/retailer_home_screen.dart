@@ -75,6 +75,10 @@ class RetailerHomeScreen extends ConsumerWidget {
                                       pathParameters: {
                                         'supplierId': relation.supplierId,
                                       },
+                                      queryParameters: {
+                                        if (relation.supplierName != null)
+                                          'name': relation.supplierName!,
+                                      },
                                     );
                                   },
                                   onPay: () {

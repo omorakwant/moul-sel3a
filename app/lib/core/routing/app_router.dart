@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/retailer/screens/retailer_catalog_screen.dart';
 import '../../features/retailer/screens/retailer_home_screen.dart';
 
 /// Application router using GoRouter.
@@ -36,8 +37,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/retailer/catalog/:supplierId',
             name: 'retailer-catalog',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Catalog'),
+            builder: (context, state) {
+              final supplierId = state.pathParameters['supplierId']!;
+              final supplierName =
+                  state.uri.queryParameters['name'];
+              return RetailerCatalogScreen(
+                supplierId: supplierId,
+                supplierName: supplierName,
+              );
+            },
           ),
           GoRoute(
             path: '/retailer/orders',
