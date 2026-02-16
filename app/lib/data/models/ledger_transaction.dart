@@ -14,7 +14,7 @@ class LedgerTransaction extends Equatable {
   final String? orderId;
   final String transactionType; // 'order_increase' | 'payment_decrease'
   final double amount; // always positive
-  final String? paymentMethod; // 'cash' | 'wafacash' | 'cashplus' | 'bank_transfer' | 'check'
+  final String? paymentMethod; // 'wafacash' | 'cashplus' | 'bank_transfer' | 'driver_cash' | 'check'
   final String? evidenceUrl; // photo of receipt
   final String? referenceCode; // Wafacash/CashPlus transaction ID
   final String? notes;

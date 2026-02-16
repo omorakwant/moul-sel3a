@@ -63,6 +63,62 @@ class _RetailerCatalogScreenState
     super.dispose();
   }
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // VOICE SEARCH — Step 3 spec: "use speech_to_text package to capture
+  //   Darija/French product names and auto-fill the text search field."
+  // TODO: Add speech_to_text dependency and replace ScaffoldMessenger
+  //       with actual SpeechToText.listen() / stop() calls.
+  // ═══════════════════════════════════════════════════════════════════════════
+  void _startVoiceSearch() {
+    // TODO: Initialize speech_to_text and start listening
+    // final speechToText = SpeechToText();
+    // speechToText.listen(onResult: (result) {
+    //   _searchController.text = result.recognizedWords;
+    //   ref.read(catalogSearchQueryProvider.notifier).state = result.recognizedWords;
+    // });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.of(context).isDarija
+              ? 'كتكلم... هضر بالمنتوج'
+              : 'Écoute en cours... dites le nom du produit',
+        ),
+        backgroundColor: AppColors.accentOrange,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _stopVoiceSearch() {
+    // TODO: Stop speech_to_text listening
+    // speechToText.stop();
+  }
+
+  /// Opens WhatsApp to send a voice note to the current supplier.
+  /// PROJECT_CONTEXT.md: "Voice Notes: Integrated WhatsApp button on every
+  /// order page for Darija-based communication."
+  /// Pro-Tip tooltip label: "صيفط أوديو" (Send Audio)
+  void _openWhatsAppVoiceNote() {
+    // TODO: Fetch supplier phone from relation and open WhatsApp
+    // final supplierPhone = ref.read(supplierPhoneProvider);
+    // final link = Formatters.whatsappLink(
+    //   phone: supplierPhone,
+    //   message: 'Voice note regarding order from ${widget.supplierName}',
+    // );
+    // launchUrl(Uri.parse(link));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          AppLocalizations.of(context).isDarija
+              ? 'صيفط أوديو للمول السلعة'
+              : 'Envoi vocal au fournisseur',
+        ),
+        backgroundColor: const Color(0xFF25D366),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -74,6 +130,15 @@ class _RetailerCatalogScreenState
 
     return Scaffold(
       backgroundColor: AppColors.bgPrimary,
+      // ── WhatsApp Voice Note FAB ──
+      // PROJECT_CONTEXT.md: "Voice Notes: Integrated WhatsApp button on every
+      // order page for Darija-based communication" + tooltip "صيفط أوديو"
+      floatingActionButton: FloatingActionButton(
+        onPressed: _openWhatsAppVoiceNote,
+        backgroundColor: const Color(0xFF25D366), // WhatsApp green
+        tooltip: l10n.callWhatsApp,
+        child: const Icon(Icons.mic, color: Colors.white),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -260,10 +325,14 @@ class _RetailerCatalogScreenState
             ),
           ),
           const SizedBox(width: 14),
-          const Icon(
-            Icons.mic,
-            size: 20,
-            color: AppColors.accentOrange,
+          GestureDetector(
+            onLongPress: _startVoiceSearch,
+            onLongPressUp: _stopVoiceSearch,
+            child: const Icon(
+              Icons.mic,
+              size: 20,
+              color: AppColors.accentOrange,
+            ),
           ),
         ],
       ),

@@ -190,8 +190,12 @@ class _ProductCardState extends State<ProductCard> {
                   const SizedBox(height: 8),
                 ],
 
-                // ── Quantity Stepper + Add Button ──
+                // ── Quantity Stepper ──
                 _buildQuantityStepper(l10n),
+                const SizedBox(height: 8),
+
+                // ── Add to Cart Button ──
+                _buildAddToCartButton(l10n),
               ],
             ),
           ),
@@ -305,6 +309,35 @@ class _ProductCardState extends State<ProductCard> {
               color: enabled
                   ? AppColors.textPrimary
                   : AppColors.textTertiary,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // ADD TO CART BUTTON — orange, full-width, cornerRadius 10
+  // PROJECT_CONTEXT.md: "Tap to add to cart" + l10n addToCart
+  // ══════════════════════════════════════════════════════════════════════════
+  Widget _buildAddToCartButton(AppLocalizations l10n) {
+    return GestureDetector(
+      onTap: widget.onAddToCart,
+      child: Container(
+        width: double.infinity,
+        height: 36,
+        decoration: BoxDecoration(
+          color: AppColors.accentOrange,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Text(
+            l10n.addToCart,
+            style: const TextStyle(
+              fontFamily: 'Manrope',
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: AppColors.onAccent,
             ),
           ),
         ),
