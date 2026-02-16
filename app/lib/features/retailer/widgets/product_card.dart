@@ -24,7 +24,7 @@ import '../../../data/models/product.dart';
 ///   - Tap to add to cart
 class ProductCard extends StatefulWidget {
   final Product product;
-  final VoidCallback? onAddToCart;
+  final void Function(Product product, int quantity)? onAddToCart;
   final ValueChanged<int>? onQuantityChanged;
 
   const ProductCard({
@@ -322,7 +322,7 @@ class _ProductCardState extends State<ProductCard> {
   // ══════════════════════════════════════════════════════════════════════════
   Widget _buildAddToCartButton(AppLocalizations l10n) {
     return GestureDetector(
-      onTap: widget.onAddToCart,
+      onTap: () => widget.onAddToCart?.call(product, _quantity),
       child: Container(
         width: double.infinity,
         height: 36,

@@ -8,6 +8,7 @@ import '../../features/auth/screens/otp_verify_screen.dart';
 import '../../features/auth/screens/pending_verification_screen.dart';
 import '../../features/auth/screens/role_selection_screen.dart';
 import '../../features/auth/screens/splash_screen.dart';
+import '../../features/retailer/screens/retailer_cart_screen.dart';
 import '../../features/retailer/screens/retailer_catalog_screen.dart';
 import '../../features/retailer/screens/retailer_handshake_screen.dart';
 import '../../features/retailer/screens/retailer_home_screen.dart';
@@ -76,11 +77,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: 'retailer-catalog',
             builder: (context, state) {
               final supplierId = state.pathParameters['supplierId']!;
-              final supplierName =
-                  state.uri.queryParameters['name'];
+              final qp = state.uri.queryParameters;
               return RetailerCatalogScreen(
                 supplierId: supplierId,
-                supplierName: supplierName,
+                supplierName: qp['name'],
+                relationId: qp['relationId'],
+                supplierPhone: qp['phone'],
               );
             },
           ),
@@ -89,6 +91,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: 'retailer-orders',
             builder: (context, state) =>
                 const _PlaceholderScreen(title: 'Orders'),
+          ),
+          GoRoute(
+            path: '/retailer/cart/:supplierId',
+            name: 'retailer-cart',
+            builder: (context, state) {
+              final supplierId = state.pathParameters['supplierId']!;
+              final extra = state.extra as Map<String, dynamic>? ?? {};
+              return RetailerCartScreen(
+                supplierId: supplierId,
+                relationId: extra['relationId'] as String? ?? '',
+                supplierName: extra['supplierName'] as String?,
+                supplierPhone: extra['supplierPhone'] as String?,
+              );
+            },
           ),
           GoRoute(
             path: '/retailer/order/:orderId',

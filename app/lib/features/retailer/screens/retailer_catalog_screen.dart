@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../providers/cart_providers.dart';
 import '../providers/catalog_providers.dart';
 import '../widgets/product_card.dart';
 
@@ -29,11 +30,15 @@ import '../widgets/product_card.dart';
 class RetailerCatalogScreen extends ConsumerStatefulWidget {
   final String supplierId;
   final String? supplierName;
+  final String? relationId;
+  final String? supplierPhone;
 
   const RetailerCatalogScreen({
     super.key,
     required this.supplierId,
     this.supplierName,
+    this.relationId,
+    this.supplierPhone,
   });
 
   @override
@@ -100,12 +105,6 @@ class _RetailerCatalogScreenState
   /// Pro-Tip tooltip label: "صيفط أوديو" (Send Audio)
   void _openWhatsAppVoiceNote() {
     // TODO: Fetch supplier phone from relation and open WhatsApp
-    // final supplierPhone = ref.read(supplierPhoneProvider);
-    // final link = Formatters.whatsappLink(
-    //   phone: supplierPhone,
-    //   message: 'Voice note regarding order from ${widget.supplierName}',
-    // );
-    // launchUrl(Uri.parse(link));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -119,6 +118,18 @@ class _RetailerCatalogScreenState
     );
   }
 
+  /// Navigate to cart screen with supplier context.
+  void _navigateToCart(BuildContext context) {
+    context.push(
+      '/retailer/cart/${widget.supplierId}',
+      extra: {
+        'supplierName': widget.supplierName,
+        'supplierPhone': widget.supplierPhone,
+        'relationId': widget.relationId,
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -128,17 +139,31 @@ class _RetailerCatalogScreenState
     final selectedBrand = ref.watch(selectedBrandProvider);
     final selectedModel = ref.watch(selectedModelProvider);
 
+    final cartCount = ref.watch(cartItemCountProvider);
+
     return Scaffold(
       backgroundColor: AppColors.bgPrimary,
-      // ── WhatsApp Voice Note FAB ──
-      // PROJECT_CONTEXT.md: "Voice Notes: Integrated WhatsApp button on every
-      // order page for Darija-based communication" + tooltip "صيفط أوديو"
-      floatingActionButton: FloatingActionButton(
-        onPressed: _openWhatsAppVoiceNote,
-        backgroundColor: const Color(0xFF25D366), // WhatsApp green
-        tooltip: l10n.callWhatsApp,
-        child: const Icon(Icons.mic, color: Colors.white),
-      ),
+      // ── Cart FAB (shows when items in cart) or WhatsApp FAB ──
+      floatingActionButton: cartCount > 0
+          ? FloatingActionButton.extended(
+              onPressed: () => _navigateToCart(context),
+              backgroundColor: AppColors.accentOrange,
+              icon: const Icon(Icons.shopping_cart_rounded, color: AppColors.onAccent),
+              label: Text(
+                '$cartCount ${l10n.items}',
+                style: const TextStyle(
+                  fontFamily: 'Manrope',
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.onAccent,
+                ),
+              ),
+            )
+          : FloatingActionButton(
+              onPressed: _openWhatsAppVoiceNote,
+              backgroundColor: const Color(0xFF25D366), // WhatsApp green
+              tooltip: l10n.callWhatsApp,
+              child: const Icon(Icons.mic, color: Colors.white),
+            ),
       body: SafeArea(
         child: Column(
           children: [
@@ -602,8 +627,29 @@ class _RetailerCatalogScreenState
               final product = products[index];
               return ProductCard(
                 product: product,
-                onAddToCart: () {
-                  // TODO: Add to cart logic
+                onAddToCart: (product, quantity) {
+                  ref.read(cartProvider.notifier).addItem(
+                    product,
+                    widget.supplierId,
+                    quantity: quantity,
+                  );
+                  final l10n = AppLocalizations.of(context);
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        '${l10n.addedToCart} — ${product.name} × $quantity',
+                        style: const TextStyle(fontFamily: 'Inter'),
+                      ),
+                      backgroundColor: AppColors.successGreen,
+                      duration: const Duration(seconds: 2),
+                      action: SnackBarAction(
+                        label: l10n.viewCart,
+                        textColor: Colors.white,
+                        onPressed: () => _navigateToCart(context),
+                      ),
+                    ),
+                  );
                 },
               );
             },

@@ -116,6 +116,37 @@ class AppLocalizations {
   String get retry => isDarija ? 'عاود' : 'Réessayer';
 
   // ══════════════════════════════════════════════════════════════════════════
+  // CART & ORDER
+  // ══════════════════════════════════════════════════════════════════════════
+  String get cart => isDarija ? 'لياني' : 'Panier';
+  String get items => isDarija ? 'منتوجات' : 'articles';
+  String get pieces => isDarija ? 'قطع' : 'pièces';
+  String get clearCart => isDarija ? 'فرّغ لياني' : 'Vider le panier';
+  String get clearCartConfirm => isDarija
+      ? 'بصح بغيتي تفرغ لياني؟'
+      : 'Voulez-vous vraiment vider le panier ?';
+  String get emptyCart => isDarija ? 'لياني خاوي' : 'Panier vide';
+  String get emptyCartSubtitle => isDarija
+      ? 'زيد شي منتوجات من الكاطالوغ'
+      : 'Ajoutez des produits depuis le catalogue';
+  String get backToCatalog => isDarija ? 'رجع للكاطالوغ' : 'Retour au catalogue';
+  String get orderFor => isDarija ? 'طلبية عند' : 'Commande pour';
+  String get orderNotes => isDarija
+      ? 'ملاحظات للمولي (اختياري)'
+      : 'Notes pour le grossiste (optionnel)';
+  String get orderTotal => isDarija ? 'المجموع' : 'Total commande';
+  String get lineTotal => isDarija ? 'المجموع الفرعي' : 'Sous-total';
+  String get orderConfirmed => isDarija ? 'الطلبية تصيفطات!' : 'Commande envoyée !';
+  String get orderConfirmedSubtitle => isDarija
+      ? 'المولي غادي يتوصل بالطلبية'
+      : 'Votre grossiste va recevoir la commande';
+  String get orderNumber => isDarija ? 'رقم الطلبية' : 'N° commande';
+  String get shareOnWhatsApp => isDarija ? 'صيفط فواتساب' : 'Partager sur WhatsApp';
+  String get addedToCart => isDarija ? 'تزاد فلياني' : 'Ajouté au panier';
+  String get viewCart => isDarija ? 'شوف لياني' : 'Voir le panier';
+  String get newOrder => isDarija ? 'طلبية جديدة' : 'Nouvelle Commande';
+
+  // ══════════════════════════════════════════════════════════════════════════
   // AUTH
   // ══════════════════════════════════════════════════════════════════════════
   String get phoneNumber => isDarija ? 'رقم الهاتف' : 'Numéro de téléphone';

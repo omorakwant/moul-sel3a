@@ -214,5 +214,83 @@
       "fr": "Aucun résultat",
       "ar_MA": "ما لقينا والو"
     }
+  },
+  "cart": {
+    "cart": {
+      "fr": "Panier",
+      "ar_MA": "لياني"
+    },
+    "items": {
+      "fr": "articles",
+      "ar_MA": "منتوجات"
+    },
+    "pieces": {
+      "fr": "pièces",
+      "ar_MA": "قطع"
+    },
+    "clear_cart": {
+      "fr": "Vider le panier",
+      "ar_MA": "فرّغ لياني"
+    },
+    "clear_cart_confirm": {
+      "fr": "Voulez-vous vraiment vider le panier ?",
+      "ar_MA": "بصح بغيتي تفرغ لياني؟"
+    },
+    "empty_cart": {
+      "fr": "Panier vide",
+      "ar_MA": "لياني خاوي"
+    },
+    "empty_cart_subtitle": {
+      "fr": "Ajoutez des produits depuis le catalogue",
+      "ar_MA": "زيد شي منتوجات من الكاطالوغ"
+    },
+    "back_to_catalog": {
+      "fr": "Retour au catalogue",
+      "ar_MA": "رجع للكاطالوغ"
+    },
+    "order_for": {
+      "fr": "Commande pour",
+      "ar_MA": "طلبية عند"
+    },
+    "order_notes": {
+      "fr": "Notes pour le grossiste (optionnel)",
+      "ar_MA": "ملاحظات للمولي (اختياري)"
+    },
+    "order_total": {
+      "fr": "Total commande",
+      "ar_MA": "المجموع"
+    },
+    "line_total": {
+      "fr": "Sous-total",
+      "ar_MA": "المجموع الفرعي"
+    },
+    "order_confirmed": {
+      "fr": "Commande envoyée !",
+      "ar_MA": "الطلبية تصيفطات!"
+    },
+    "order_confirmed_subtitle": {
+      "fr": "Votre grossiste va recevoir la commande",
+      "ar_MA": "المولي غادي يتوصل بالطلبية"
+    },
+    "order_number": {
+      "fr": "N° commande",
+      "ar_MA": "رقم الطلبية"
+    },
+    "share_on_whatsapp": {
+      "fr": "Partager sur WhatsApp",
+      "ar_MA": "صيفط فواتساب"
+    },
+    "added_to_cart": {
+      "fr": "Ajouté au panier",
+      "ar_MA": "تزاد فلياني"
+    },
+    "view_cart": {
+      "fr": "Voir le panier",
+      "ar_MA": "شوف لياني"
+    },
+    "new_order": {
+      "fr": "Nouvelle Commande",
+      "ar_MA": "طلبية جديدة"
+    }
   }
 }

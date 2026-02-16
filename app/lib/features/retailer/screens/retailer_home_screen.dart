@@ -78,6 +78,9 @@ class RetailerHomeScreen extends ConsumerWidget {
                                       queryParameters: {
                                         if (relation.supplierName != null)
                                           'name': relation.supplierName!,
+                                        'relationId': relation.id,
+                                        if (relation.supplierPhone != null)
+                                          'phone': relation.supplierPhone!,
                                       },
                                     );
                                   },
@@ -411,6 +414,150 @@ class RetailerHomeScreen extends ConsumerWidget {
   }
 
   // ════════════════════════════════════════════════════════════════════════════
+  // SUPPLIER PICKER — For "Nouvelle Commande" when multiple suppliers exist
+  // ════════════════════════════════════════════════════════════════════════════
+  void _showSupplierPicker(BuildContext context, AppLocalizations l10n) {
+    final relationsAsync = ProviderScope.containerOf(context).read(retailerRelationsProvider);
+    relationsAsync.whenData((relations) {
+      if (relations.isEmpty) return;
+
+      // If only one supplier, navigate directly
+      if (relations.length == 1) {
+        final r = relations.first;
+        context.pushNamed(
+          'retailer-catalog',
+          pathParameters: {'supplierId': r.supplierId},
+          queryParameters: {
+            if (r.supplierName != null) 'name': r.supplierName!,
+            'relationId': r.id,
+            if (r.supplierPhone != null) 'phone': r.supplierPhone!,
+          },
+        );
+        return;
+      }
+
+      // Multiple suppliers: show picker bottom sheet
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (ctx) => Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppColors.bgMuted,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n.newOrder,
+                    style: const TextStyle(
+                      fontFamily: 'Manrope',
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  Text(
+                    l10n.isDarija
+                        ? 'اختار المولي ديالك'
+                        : 'Choisissez votre grossiste',
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 14,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ...relations.map((r) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(ctx).pop();
+                        context.pushNamed(
+                          'retailer-catalog',
+                          pathParameters: {'supplierId': r.supplierId},
+                          queryParameters: {
+                            if (r.supplierName != null) 'name': r.supplierName!,
+                            'relationId': r.id,
+                            if (r.supplierPhone != null) 'phone': r.supplierPhone!,
+                          },
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(14),
+                      child: Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: AppColors.bgPrimary,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: AppColors.bgSurface),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: AppColors.accentOrange.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  (r.supplierName ?? '?')[0].toUpperCase(),
+                                  style: const TextStyle(
+                                    fontFamily: 'Manrope',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.accentOrange,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                r.supplierName ?? '—',
+                                style: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                            ),
+                            const Icon(
+                              Icons.chevron_right_rounded,
+                              color: AppColors.textTertiary,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
+  // ════════════════════════════════════════════════════════════════════════════
   // STICKY FOOTER — FAB + TAB BAR
   // ════════════════════════════════════════════════════════════════════════════
   Widget _buildStickyFooter(BuildContext context, AppLocalizations l10n) {
@@ -424,11 +571,11 @@ class RetailerHomeScreen extends ConsumerWidget {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () {
-                // TODO: Navigate to new order flow
+                _showSupplierPicker(context, l10n);
               },
               icon: const Icon(Icons.add, size: 20),
               label: Text(
-                l10n.isDarija ? 'طلبية جديدة' : 'Nouvelle Commande',
+                l10n.newOrder,
                 style: const TextStyle(
                   fontFamily: 'Manrope',
                   fontSize: 15,
