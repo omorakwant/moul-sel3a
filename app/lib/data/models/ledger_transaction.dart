@@ -63,14 +63,14 @@ class LedgerTransaction extends Equatable {
   /// Human-readable payment method label.
   String get paymentMethodLabel {
     switch (paymentMethod) {
-      case 'cash':
-        return 'Cash';
       case 'wafacash':
         return 'Wafacash';
       case 'cashplus':
         return 'CashPlus';
       case 'bank_transfer':
         return 'Virement';
+      case 'driver_cash':
+        return 'Cash Livreur';
       case 'check':
         return 'Chèque';
       default:

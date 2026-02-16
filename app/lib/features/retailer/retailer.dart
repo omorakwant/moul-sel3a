@@ -1,2 +1,4 @@
 // Barrel file — Feature screens (Retailer)
-// Screens will be added per feature milestone.
+export 'screens/retailer_home_screen.dart';
+export 'widgets/supplier_card.dart';
+export 'providers/retailer_providers.dart';

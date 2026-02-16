@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/retailer/screens/retailer_home_screen.dart';
+
 /// Application router using GoRouter.
 /// Routes are organized by user role (Retailer, Driver, Supplier).
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -29,7 +31,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/retailer/dashboard',
             name: 'retailer-dashboard',
             builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Dashboard'),
+                const RetailerHomeScreen(),
           ),
           GoRoute(
             path: '/retailer/catalog/:supplierId',

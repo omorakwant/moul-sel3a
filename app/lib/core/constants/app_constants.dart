@@ -37,11 +37,13 @@ class AppConstants {
   static const String jobCOD = 'cod';
 
   // ── Payment Methods ──
+  // Per PROJECT_CONTEXT.md payment declaration spec:
+  //   Wafacash, CashPlus, Bank Transfer, Driver Cash (+ check for legacy)
   static const List<String> paymentMethods = [
-    'cash',
     'wafacash',
     'cashplus',
     'bank_transfer',
+    'driver_cash',
     'check',
   ];
 

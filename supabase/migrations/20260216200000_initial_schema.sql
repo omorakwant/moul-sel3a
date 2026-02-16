@@ -228,7 +228,7 @@ CREATE TABLE public.ledger_transactions (
 
     amount           NUMERIC(12,2) NOT NULL CHECK (amount > 0),  -- always positive; direction via type
 
-    payment_method   TEXT       CHECK (payment_method IN ('cash', 'wafacash', 'cashplus', 'bank_transfer', 'check')),
+    payment_method   TEXT       CHECK (payment_method IN ('wafacash', 'cashplus', 'bank_transfer', 'driver_cash', 'check')),
     evidence_url     TEXT,       -- photo of Wafacash/CashPlus receipt
     reference_code   TEXT,       -- transaction reference from payment service
     notes            TEXT,
