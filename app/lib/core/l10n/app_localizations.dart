@@ -115,6 +115,68 @@ class AppLocalizations {
   String get success => isDarija ? 'مزيان' : 'Succès';
   String get retry => isDarija ? 'عاود' : 'Réessayer';
 
+  // ══════════════════════════════════════════════════════════════════════════
+  // AUTH
+  // ══════════════════════════════════════════════════════════════════════════
+  String get phoneNumber => isDarija ? 'رقم الهاتف' : 'Numéro de téléphone';
+  String get phoneHint => isDarija ? '6XXXXXXXX' : '6XXXXXXXX';
+  String get sendCode => isDarija ? 'صيفط الكود' : 'Envoyer le code';
+  String get loginSubtitle => isDarija
+      ? 'غادي نصيفطو ليك رسالة فيها الكود'
+      : 'Un code de vérification sera envoyé par SMS';
+  String get loginDisclaimer => isDarija
+      ? 'كتقبل الشروط ديالنا ملي كتسجل'
+      : 'En continuant, vous acceptez nos conditions';
+
+  // OTP
+  String get otpTitle => isDarija ? 'دخل الكود' : 'Vérification';
+  String otpSubtitle(String phone) => isDarija
+      ? 'دخل الكود لي صيفطنا لـ $phone'
+      : 'Entrez le code envoyé au $phone';
+  String get verifyCode => isDarija ? 'تأكد' : 'Vérifier';
+  String get resendCode => isDarija ? 'عاود صيفط الكود' : 'Renvoyer le code';
+  String resendCountdown(int seconds) => isDarija
+      ? 'عاود صيفط بعد ${seconds}ث'
+      : 'Renvoyer dans ${seconds}s';
+  String get changeNumber => isDarija ? 'بدل الرقم' : 'Modifier le numéro';
+
+  // Role Selection
+  String get chooseRole => isDarija ? 'شكون نتا؟' : 'Choisissez votre rôle';
+  String get chooseRoleSubtitle => isDarija
+      ? 'اختار الدور ديالك باش نعرفو شنو كدير'
+      : 'Sélectionnez votre profil pour commencer';
+  String get roleSupplier => isDarija ? 'المولي' : 'Grossiste';
+  String get roleRetailer => isDarija ? 'مول الحانوت' : 'Détaillant';
+  String get roleDriver => isDarija ? 'كورتيا' : 'Livreur';
+  String get roleSupplierDesc => isDarija
+      ? 'كتبيع بالجملة'
+      : 'Vente en gros';
+  String get roleRetailerDesc => isDarija
+      ? 'كتشري من عند المولي'
+      : 'Achat auprès des grossistes';
+  String get roleDriverDesc => isDarija
+      ? 'كتوصل السلعة'
+      : 'Livraison de marchandises';
+  String get shopNameLabel => isDarija ? 'سمية الحانوت' : 'Nom du commerce';
+  String get shopNameHint => isDarija ? 'مثلا: حانوت النجاح' : 'ex: Boutique Al Najah';
+  String get cityLabel => isDarija ? 'المدينة' : 'Ville';
+  String get cityHint => isDarija ? 'مثلا: الدار البيضاء' : 'ex: Casablanca';
+  String get createAccount => isDarija ? 'كمل التسجيل' : 'Créer mon compte';
+
+  // Pending Verification
+  String get pendingTitle => isDarija
+      ? 'الحساب كيتسنا التأكيد'
+      : 'Compte en attente de vérification';
+  String get pendingSubtitle => isDarija
+      ? 'المولي خاصو يأكد الحساب ديالك قبل ما تقدر تشري'
+      : 'Le grossiste doit valider votre compte avant de pouvoir commander';
+  String get contactSupplier => isDarija
+      ? 'تواصل مع المولي'
+      : 'Contacter le grossiste';
+  String get backToDashboard => isDarija
+      ? 'رجع للصفحة الرئيسية'
+      : "Retour à l'accueil";
+
   /// Format a price with DH suffix (used universally per PROJECT_CONTEXT.md)
   String formatPrice(double amount) {
     return '${amount.toStringAsFixed(2)} DH';

@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/auth/screens/login_screen.dart';
+import '../../features/auth/screens/otp_verify_screen.dart';
+import '../../features/auth/screens/pending_verification_screen.dart';
+import '../../features/auth/screens/role_selection_screen.dart';
+import '../../features/auth/screens/splash_screen.dart';
 import '../../features/retailer/screens/retailer_catalog_screen.dart';
 import '../../features/retailer/screens/retailer_handshake_screen.dart';
 import '../../features/retailer/screens/retailer_home_screen.dart';
@@ -19,12 +24,38 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/splash',
         name: 'splash',
-        builder: (context, state) => const _PlaceholderScreen(title: 'Splash'),
+        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: '/login',
         name: 'login',
-        builder: (context, state) => const _PlaceholderScreen(title: 'Login'),
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/otp-verify/:phone',
+        name: 'otp-verify',
+        builder: (context, state) {
+          final phone = state.pathParameters['phone']!;
+          return OtpVerifyScreen(phone: phone);
+        },
+      ),
+      GoRoute(
+        path: '/role-selection',
+        name: 'role-selection',
+        builder: (context, state) => const RoleSelectionScreen(),
+      ),
+      GoRoute(
+        path: '/pending-verification/:supplierId',
+        name: 'pending-verification',
+        builder: (context, state) {
+          final supplierId = state.pathParameters['supplierId']!;
+          final supplierName =
+              state.uri.queryParameters['supplierName'];
+          return PendingVerificationScreen(
+            supplierId: supplierId,
+            supplierName: supplierName,
+          );
+        },
       ),
 
       // ── Retailer Routes ──
