@@ -43,6 +43,52 @@ class Formatters {
     return '${AppConstants.whatsappBaseUrl}$cleanPhone${encoded.isNotEmpty ? '?text=$encoded' : ''}';
   }
 
+  /// Generate a bilingual WhatsApp order message following Moroccan B2B norms.
+  ///
+  /// Template (from PROJECT_CONTEXT.md + ideation.txt):
+  ///   1. Salaam greeting — mandatory for Moroccan business etiquette
+  ///   2. Order ID — for dispute resolution / DB lookup
+  ///   3. Client name — the retailer's shop
+  ///   4. Bullet-point line items: • QTYx Name (unit_price DH)
+  ///   5. "Total Estimé" — we say "estimated" because partial receipt
+  ///      may adjust the final amount later
+  ///   6. Deep-link placeholder for in-app order view
+  static String generateWhatsAppOrderMessage({
+    required String orderId,
+    required String retailerName,
+    required List<Map<String, dynamic>> items,
+    required double totalAmount,
+    String? notes,
+  }) {
+    // Build bullet-point item list
+    final itemDetails = items
+        .map((item) =>
+            '• ${item['qty']}x ${item['name']} (${price(item['price_per_unit'] as double)} )')
+        .join('\n');
+
+    final orderRef = orderId.length >= 8
+        ? orderId.substring(0, 8).toUpperCase()
+        : orderId.toUpperCase();
+
+    final buffer = StringBuffer()
+      ..writeln('السلام عليكم')
+      ..writeln('Nouvelle Commande: #$orderRef')
+      ..writeln('Client: $retailerName')
+      ..writeln('------------------')
+      ..writeln(itemDetails)
+      ..writeln('------------------')
+      ..writeln('Total Estimé: ${price(totalAmount)}');
+
+    if (notes != null && notes.isNotEmpty) {
+      buffer.writeln('\nNotes: $notes');
+    }
+
+    buffer.writeln(
+        '\nConsulter sur l\'app: lcarnet://order/$orderId');
+
+    return buffer.toString();
+  }
+
   /// Resolve tiered price from JSONB price_tiers map.
   ///
   /// Logic from PROJECT_CONTEXT.md:

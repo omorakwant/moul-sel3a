@@ -8,6 +8,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/order.dart';
 import '../../../data/repositories/order_repository.dart';
+import '../../auth/providers/auth_providers.dart';
 import '../providers/cart_providers.dart';
 import '../providers/retailer_providers.dart';
 
@@ -620,6 +621,10 @@ class _RetailerCartScreenState extends ConsumerState<RetailerCartScreen> {
   // ═══════════════════════════════════════════════════════════════════════════
 
   void _showOrderConfirmation(AppLocalizations l10n, Order order) {
+    // Read the retailer's shop name for the WhatsApp message
+    final profile = ref.read(currentProfileProvider).valueOrNull;
+    final retailerName = profile?.shopName ?? '';
+
     showModalBottomSheet(
       context: context,
       isDismissible: false,
@@ -630,6 +635,7 @@ class _RetailerCartScreenState extends ConsumerState<RetailerCartScreen> {
         order: order,
         supplierName: widget.supplierName,
         supplierPhone: widget.supplierPhone,
+        retailerName: retailerName,
         onDone: () {
           Navigator.of(ctx).pop();
           // Navigate back to dashboard
@@ -684,12 +690,14 @@ class _OrderConfirmationSheet extends StatelessWidget {
   final Order order;
   final String? supplierName;
   final String? supplierPhone;
+  final String retailerName;
   final VoidCallback onDone;
 
   const _OrderConfirmationSheet({
     required this.l10n,
     required this.order,
     required this.onDone,
+    required this.retailerName,
     this.supplierName,
     this.supplierPhone,
   });
@@ -876,69 +884,50 @@ class _OrderConfirmationSheet extends StatelessWidget {
 
   // ═══════════════════════════════════════════════════════════════════════════
   // WHATSAPP DEEP-LINK
+  //
+  // Template (Moroccan B2B norms):
+  //   السلام عليكم
+  //   Nouvelle Commande: #A1B2C3D4
+  //   Client: Boutique Al Najah
+  //   ------------------
+  //   • 50x Câble USB-C (10.00 DH)
+  //   • 20x Coque iPhone 13 (15.00 DH)
+  //   ------------------
+  //   Total Estimé: 890.00 DH
+  //
+  // Why this format:
+  //   - Salaam: Standard Moroccan business greeting
+  //   - Bullet points: Suppliers scan quantities fast
+  //   - Order ID: For dispute resolution / DB lookup
+  //   - "Total Estimé": Partial Receipt may adjust the final amount later
   // ═══════════════════════════════════════════════════════════════════════════
 
   Future<void> _shareOnWhatsApp(BuildContext context) async {
-    final message = _buildWhatsAppMessage();
-    final link = Formatters.whatsappLink(
+    // Build item maps for the message generator
+    final itemMaps = order.items
+        .map((item) => <String, dynamic>{
+              'qty': item.quantity,
+              'name': item.name,
+              'price_per_unit': item.unitPrice,
+            })
+        .toList();
+
+    final message = Formatters.generateWhatsAppOrderMessage(
+      orderId: order.id,
+      retailerName: retailerName,
+      items: itemMaps,
+      totalAmount: order.originalTotal,
+      notes: order.notes,
+    );
+
+    final url = Formatters.whatsappLink(
       phone: supplierPhone!,
       message: message,
     );
 
-    final uri = Uri.parse(link);
+    final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
-  }
-
-  /// Generate a formatted order summary for WhatsApp.
-  ///
-  /// Format:
-  /// 🛒 *Nouvelle Commande — L'Carnet B2B*
-  /// ──────────────────
-  /// 📦 Cable USB-C × 20 → 240.00 DH
-  /// 📦 Coque iPhone 13 × 10 → 150.00 DH
-  /// ──────────────────
-  /// 💰 *TOTAL: 390.00 DH*
-  /// 📋 Commande #A1B2C3D4
-  /// ⏳ En attente de confirmation
-  String _buildWhatsAppMessage() {
-    final buffer = StringBuffer();
-    final isDarija = l10n.isDarija;
-
-    // Header
-    buffer.writeln(isDarija
-        ? '🛒 *طلبية جديدة — لكارني B2B*'
-        : '🛒 *Nouvelle Commande — L\'Carnet B2B*');
-    buffer.writeln('──────────────────');
-
-    // Line items
-    for (final item in order.items) {
-      buffer.writeln(
-          '📦 ${item.name} × ${item.quantity} → ${Formatters.price(item.lineTotal)}');
-    }
-
-    buffer.writeln('──────────────────');
-
-    // Total
-    buffer.writeln(isDarija
-        ? '💰 *المجموع: ${Formatters.price(order.originalTotal)}*'
-        : '💰 *TOTAL: ${Formatters.price(order.originalTotal)}*');
-
-    // Order ref
-    buffer.writeln(isDarija
-        ? '📋 طلبية #${order.id.substring(0, 8).toUpperCase()}'
-        : '📋 Commande #${order.id.substring(0, 8).toUpperCase()}');
-
-    // Status
-    buffer.writeln(isDarija ? '⏳ كتسنا التأكيد' : '⏳ En attente de confirmation');
-
-    // Notes
-    if (order.notes != null && order.notes!.isNotEmpty) {
-      buffer.writeln('');
-      buffer.writeln(isDarija ? '📝 ملاحظات: ${order.notes}' : '📝 Notes: ${order.notes}');
-    }
-
-    return buffer.toString();
   }
 }
