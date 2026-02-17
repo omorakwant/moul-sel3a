@@ -16,10 +16,14 @@ import '../../features/retailer/screens/retailer_catalog_screen.dart';
 import '../../features/retailer/screens/retailer_handshake_screen.dart';
 import '../../features/retailer/screens/retailer_home_screen.dart';
 import '../../features/retailer/screens/retailer_order_detail_screen.dart';
+import '../../features/retailer/screens/retailer_orders_screen.dart';
 import '../../features/retailer/screens/retailer_partial_receipt_screen.dart';
+import '../../features/retailer/screens/payment_declaration_screen.dart';
 import '../../features/supplier/screens/supplier_add_edit_product_screen.dart';
 import '../../features/supplier/screens/supplier_bid_manager_screen.dart';
+import '../../features/supplier/screens/supplier_dashboard_screen.dart';
 import '../../features/supplier/screens/supplier_inventory_screen.dart';
+import '../../features/supplier/screens/supplier_verification_screen.dart';
 
 /// Application router using GoRouter.
 /// Routes are organized by user role (Retailer, Driver, Supplier).
@@ -94,7 +98,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/retailer/orders',
             name: 'retailer-orders',
             builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Orders'),
+                const RetailerOrdersScreen(),
           ),
           GoRoute(
             path: '/retailer/cart/:supplierId',
@@ -121,8 +125,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/retailer/payment/:relationId',
             name: 'retailer-payment',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Payment Declaration'),
+            builder: (context, state) {
+              final relationId = state.pathParameters['relationId']!;
+              return PaymentDeclarationScreen(relationId: relationId);
+            },
           ),
           GoRoute(
             path: '/retailer/receipt/:orderId',
@@ -198,13 +204,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/supplier/dashboard',
         name: 'supplier-dashboard',
         builder: (context, state) =>
-            const _PlaceholderScreen(title: 'Supplier Dashboard'),
+            const SupplierDashboardScreen(),
       ),
       GoRoute(
         path: '/supplier/verification',
         name: 'supplier-verification',
         builder: (context, state) =>
-            const _PlaceholderScreen(title: 'Verification Desk'),
+            const SupplierVerificationScreen(),
       ),
       GoRoute(
         path: '/supplier/inventory',

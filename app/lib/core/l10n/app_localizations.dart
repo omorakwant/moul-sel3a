@@ -169,6 +169,118 @@ class AppLocalizations {
       isDarija ? 'شوف الثمن الجديد' : 'Aperçu du nouveau prix';
 
   // ══════════════════════════════════════════════════════════════════════════
+  // SUPPLIER DASHBOARD
+  // ══════════════════════════════════════════════════════════════════════════
+  String get supplierDashboard =>
+      isDarija ? 'لوحة التحكم' : 'Tableau de bord';
+  String get supplierSpace =>
+      isDarija ? 'المولي' : 'Espace Grossiste';
+  String get overview => isDarija ? 'الملخص' : 'Aperçu';
+  String get orders => isDarija ? 'الطلبيات' : 'Commandes';
+  String get clients => isDarija ? 'الزبناء' : 'Clients';
+  String get pendingOrders =>
+      isDarija ? 'طلبيات كتسنا' : 'En attente';
+  String get activeDeliveries =>
+      isDarija ? 'توصيلات نشطة' : 'Livraisons actives';
+  String get totalRevenue =>
+      isDarija ? 'الدخل الكلي' : 'Revenu total';
+  String get outstandingDebt =>
+      isDarija ? 'الديون' : 'Créances';
+  String get newOrders =>
+      isDarija ? 'طلبيات جديدة' : 'Nouvelles commandes';
+  String get quickAccess =>
+      isDarija ? 'وصول سريع' : 'Accès rapide';
+  String get inventory =>
+      isDarija ? 'المخزون' : 'Inventaire';
+  String get verification =>
+      isDarija ? 'التحقق' : 'Vérification';
+  String get addProduct =>
+      isDarija ? 'زيد منتوج' : 'Ajouter produit';
+  String get deliveries =>
+      isDarija ? 'التوصيلات' : 'Livraisons';
+  String get noOrdersYet =>
+      isDarija ? 'مازال ما جات تا طلبية' : 'Aucune commande';
+  String get noClientsYet =>
+      isDarija ? 'مازال ما عندك تا زبون' : 'Aucun client';
+  String get noPendingOrders =>
+      isDarija ? 'ما كاين تا طلبية جديدة ✓' : 'Aucune commande en attente ✓';
+  String get confirmAction =>
+      isDarija ? 'قبل' : 'Confirmer';
+  String get rejectAction =>
+      isDarija ? 'رفض' : 'Refuser';
+  String get rejectOrderConfirm =>
+      isDarija ? 'واش بصح بغيتي ترفض هاد الطلبية?' : 'Voulez-vous vraiment refuser cette commande ?';
+  String get orderConfirmedMsg =>
+      isDarija ? 'الطلبية تأكدات ✓' : 'Commande confirmée ✓';
+  String get orderRejectedMsg =>
+      isDarija ? 'الطلبية ترفضات' : 'Commande refusée';
+  String get readyForPickup =>
+      isDarija ? 'جاهزة للنقل' : 'Prête pour ramassage';
+  String get overCreditLimitBadge =>
+      isDarija ? 'فات البلافو' : 'Hors limite';
+  String viewAll(int count) =>
+      isDarija ? 'شوف الكل ($count)' : 'Voir tout ($count)';
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // VERIFICATION DESK
+  // ══════════════════════════════════════════════════════════════════════════
+  String get verificationTitle =>
+      isDarija ? 'التحقق من الخلصات' : 'Vérification des paiements';
+  String get noPendingPayments =>
+      isDarija ? 'ما كاين تا خلصة كتسنا التأكيد ✓' : 'Aucun paiement en attente ✓';
+  String get allPaymentsVerified =>
+      isDarija ? 'كولشي مقبول' : 'Tous les paiements sont validés';
+  String get approvePayment =>
+      isDarija ? 'قبل — خالصة صافية' : 'Approuver';
+  String get rejectPayment =>
+      isDarija ? 'رفض' : 'Rejeter';
+  String get paymentApproved =>
+      isDarija ? 'الخلصة تأكدات ✓ الحساب تحدث' : 'Paiement validé ✓ Solde mis à jour';
+  String get paymentRejected =>
+      isDarija ? 'الخلصة ترفضات' : 'Paiement rejeté';
+  String get rejectReason =>
+      isDarija ? 'علاش كترفض هاد الخلصة؟ (اختياري)' : 'Motif du rejet (optionnel)';
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // PAYMENT DECLARATION
+  // ══════════════════════════════════════════════════════════════════════════
+  String get selectPaymentMethod =>
+      isDarija ? 'اختار الطريقة' : 'Mode de paiement';
+  String get takeReceiptPhoto =>
+      isDarija ? 'صور الورقة' : 'Prendre une photo du reçu';
+  String get referenceCodeLabel =>
+      isDarija ? 'الرقم السري' : 'Code de transaction';
+  String get referenceCodeHint =>
+      isDarija ? 'الرقم لي فالورقة' : 'Réf. sur le reçu';
+  String get amountPaid =>
+      isDarija ? 'شحال صيفطتي' : 'Montant versé';
+  String get amountRequired =>
+      isDarija ? 'دخل المبلغ' : 'Montant requis';
+  String get invalidAmount =>
+      isDarija ? 'مبلغ غير صحيح' : 'Montant invalide';
+  String get sendToSupplier =>
+      isDarija ? 'صيفط لمول السلعة' : 'Envoyer au Grossiste';
+  String get declarationSent =>
+      isDarija ? 'تصيفطات بنجاح!' : 'Déclaration envoyée !';
+  String get balanceUpdatedAfterValidation =>
+      isDarija ? 'الحساب غادي يتحدث ملي المولي يأكد' : 'Le solde sera mis à jour après validation du fournisseur';
+  String get notifySupplierWhatsApp =>
+      isDarija ? 'صيفط للمولي فواتساب' : 'Notifier le grossiste (WhatsApp)';
+  String get receiptPhotoHint =>
+      isDarija ? 'خلي الرقم السري بان مزيان' : 'Assurez-vous que le numéro de réf. est visible';
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // RETAILER ORDERS LIST
+  // ══════════════════════════════════════════════════════════════════════════
+  String get myOrders =>
+      isDarija ? 'الطلبيات ديالي' : 'Mes Commandes';
+  String get allFilter => isDarija ? 'الكل' : 'Tout';
+  String get viewDetails =>
+      isDarija ? 'شوف التفاصيل ←' : 'Voir détails →';
+  String get noOrders =>
+      isDarija ? 'مازال ما كاين تا طلبية' : 'Aucune commande';
+
+  // ══════════════════════════════════════════════════════════════════════════
   // COMMON
   // ══════════════════════════════════════════════════════════════════════════
   String get cancel => isDarija ? 'الغي' : 'Annuler';

@@ -191,7 +191,7 @@ class _RouteCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        job.supplierName ?? l10n.isDarija ? 'المولي' : 'Fournisseur',
+                        job.supplierName ?? (l10n.isDarija ? 'المولي' : 'Fournisseur'),
                         style: const TextStyle(
                           fontFamily: 'Manrope',
                           fontSize: 15,

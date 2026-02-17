@@ -51,7 +51,7 @@ class _BulkPriceAdjustmentModalState
 
   BulkPriceUpdate _buildUpdate() {
     return BulkPriceUpdate(
-      productIds: widget.selectedProducts.map((p) => p.id).toList(),
+      products: widget.selectedProducts,
       mode: _mode,
       value: _parsedValue,
     );

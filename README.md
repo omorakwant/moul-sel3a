@@ -26,14 +26,14 @@
 | Local Storage | hive_flutter |
 | Communication | WhatsApp deep links (url_launcher) |
 
-### Codebase Stats (as of commit `62c3f8f`)
+### Codebase Stats (as of commit `phase2`)
 | Metric | Count |
 |--------|-------|
-| Dart source files | 59 |
-| Lines of Dart | ~16,000 |
+| Dart source files | 67 |
+| Lines of Dart | ~18,500 |
 | SQL migration lines | ~792 |
-| L10n strings | ~130+ (FR + Darija) |
-| Total commits | 13 |
+| L10n strings | ~200+ (FR + Darija) |
+| Total commits | 14 |
 | Database tables | 7 |
 | Supabase triggers | 3 |
 | RLS policies | ~20 |
@@ -51,7 +51,7 @@ app/lib/
 │   │   ├── app_constants.dart         # App-wide constants
 │   │   └── supabase_constants.dart    # Table names, bucket, keys
 │   ├── l10n/
-│   │   └── app_localizations.dart     # Bilingual FR/Darija (~130 strings)
+│   │   └── app_localizations.dart     # Bilingual FR/Darija (~200+ strings)
 │   ├── routing/
 │   │   └── app_router.dart            # GoRouter — all role-based routes
 │   ├── theme/
@@ -143,6 +143,7 @@ All development occurred on **February 16, 2026**.
 | 11 | `5e5d39f` | **Credit guard** — sticky bottom bar with real-time cart total + credit limit warning |
 | 12 | `482a4a1` | **WhatsApp template** — Moroccan B2B format (Salaam, bullet items, Total Estimé) |
 | 13 | `62c3f8f` | **Logistics flow** — driver marketplace, bidding, PIN handshake, ledger auto-update |
+| 14 | — | **Phase 2+3** — Supplier dashboard, retailer orders list, payment declaration, verification desk, order→ledger wiring, delivery job auto-creation, +70 l10n strings, 3 bug fixes |
 
 ---
 
@@ -177,6 +178,8 @@ All development occurred on **February 16, 2026**.
 | Order detail view | ✅ Done | `retailer_order_detail_screen.dart` |
 | Partial receipt (+/- steppers) | ✅ Done | `retailer_partial_receipt_screen.dart` |
 | Handshake confirmation | ✅ Done | `retailer_handshake_screen.dart` |
+| Order history with status filters | ✅ Done | `retailer_orders_screen.dart` |
+| Payment declaration (receipt photo) | ✅ Done | `payment_declaration_screen.dart`, `payment_providers.dart` |
 
 ### 📦 Supplier Experience
 | Feature | Status | Files |
@@ -188,6 +191,11 @@ All development occurred on **February 16, 2026**.
 | Bulk price adjustment | ✅ Done | `bulk_price_adjustment_modal.dart`, `bulk_price_logic.dart` |
 | Preview changes before apply | ✅ Done | `bulk_price_adjustment_modal.dart` |
 | Bid manager (view/accept bids) | ✅ Done | `supplier_bid_manager_screen.dart` |
+| Supplier dashboard (3-tab admin) | ✅ Done | `supplier_dashboard_screen.dart`, `supplier_dashboard_providers.dart` |
+| Order confirm/reject/ready_for_pickup | ✅ Done | `supplier_dashboard_providers.dart` |
+| Verification desk (approve/reject) | ✅ Done | `supplier_verification_screen.dart`, `supplier_verification_providers.dart` |
+| Order→Ledger auto-wiring | ✅ Done | `supplier_dashboard_providers.dart` |
+| Delivery job auto-creation | ✅ Done | `supplier_dashboard_providers.dart` |
 
 ### 🚚 Driver / Logistics Experience
 | Feature | Status | Files |
@@ -212,7 +220,7 @@ All development occurred on **February 16, 2026**.
 | French strings | ✅ Done | `app_localizations.dart` |
 | Moroccan Darija strings | ✅ Done | `app_localizations.dart` |
 | L10n JSON reference map | ✅ Done | `l10n_map.json` |
-| ~130+ bilingual strings | ✅ Done | — |
+| ~200+ bilingual strings | ✅ Done | — |
 
 ### 💾 Database & Backend
 | Feature | Status | Files |
@@ -230,25 +238,26 @@ All development occurred on **February 16, 2026**.
 
 ## 🚧 Yet to Be Built
 
-### Priority 1 — Core Missing Screens (Placeholder Routes)
+### Priority 1 — Remaining Placeholder Routes
 | Feature | Route | Priority | Description |
 |---------|-------|----------|-------------|
-| Retailer Orders List | `/retailer/orders` | 🔴 High | List of all orders with status filters, tap to view detail |
-| Payment Declaration | `/retailer/payment/:relationId` | 🔴 High | Wafacash/CashPlus receipt photo + reference code + amount form |
+| ~~Retailer Orders List~~ | ~~`/retailer/orders`~~ | ✅ Done | ~~List of all orders with status filters~~ |
+| ~~Payment Declaration~~ | ~~`/retailer/payment/:relationId`~~ | ✅ Done | ~~Wafacash/CashPlus receipt photo + form~~ |
 | Retailer Profile | `/retailer/profile` | 🟡 Medium | Edit shop name, city, location_name, avatar, language preference |
-| Supplier Dashboard | `/supplier/dashboard` | 🔴 High | Overview: pending orders, revenue, active deliveries, retailer list |
-| Supplier Verification Desk | `/supplier/verification` | 🔴 High | Pending ledger_transactions — evidence photo + approve/reject |
+| ~~Supplier Dashboard~~ | ~~`/supplier/dashboard`~~ | ✅ Done | ~~Overview: pending orders, revenue, retailer list~~ |
+| ~~Supplier Verification Desk~~ | ~~`/supplier/verification`~~ | ✅ Done | ~~Approve/reject payment evidence~~ |
 | Supplier Dispute Resolution | `/supplier/dispute/:transactionId` | 🟡 Medium | Dispute flow for rejected payments |
 | Driver Handshake View | `/driver/handshake/:orderId` | 🟢 Low | Redundant — PIN is already handled in active trip screen |
 
 ### Priority 2 — Critical Business Logic
 | Feature | Priority | Description |
 |---------|----------|-------------|
-| Supplier order management | 🔴 High | Confirm/reject orders, assign drivers, mark ready_for_pickup |
-| Delivery job creation | 🔴 High | When supplier marks order "ready_for_pickup" → auto-create delivery_job |
+| ~~Supplier order management~~ | ✅ Done | ~~Confirm/reject orders, mark ready_for_pickup~~ |
+| ~~Delivery job creation~~ | ✅ Done | ~~Auto-create delivery_job on ready_for_pickup~~ |
+| ~~Order→Ledger wiring~~ | ✅ Done | ~~Auto-create order_increase on order confirmation~~ |
+| ~~Payment receipt photo upload~~ | ✅ Done | ~~ImagePicker + Supabase Storage upload~~ |
 | Push notifications | 🟡 Medium | Order placed, bid received, payment declared, delivery completed |
 | Retailer order tracking | 🟡 Medium | Real-time status updates on order detail screen |
-| Payment receipt photo upload | 🔴 High | ImagePicker + Supabase Storage upload for Wafacash receipts |
 
 ### Priority 3 — Enhancements
 | Feature | Priority | Description |
@@ -261,6 +270,8 @@ All development occurred on **February 16, 2026**.
 | Trusted driver assignment | 🟡 Medium | Supplier manually assigns from a list of known drivers |
 | Driver earnings dashboard | 🟢 Low | Total earnings, completed deliveries, average bid |
 | Supplier analytics | 🟢 Low | Revenue trends, top products, retailer activity |
+| Logout functionality | 🟡 Medium | Sign-out button + session management |
+| WhatsApp deep link stubs | 🟡 Medium | Replace TODO stubs with actual launchUrl() calls |
 
 ### Priority 4 — Production Readiness
 | Feature | Priority | Description |
