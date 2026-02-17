@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/order.dart';
 import '../../../data/repositories/profile_repository.dart';
@@ -46,6 +47,7 @@ class RetailerOrderDetailScreen extends ConsumerStatefulWidget {
 class _RetailerOrderDetailScreenState
     extends ConsumerState<RetailerOrderDetailScreen> {
   bool _payOnDelivery = false;
+  bool _validating = false;
 
   @override
   Widget build(BuildContext context) {
@@ -632,6 +634,34 @@ class _RetailerOrderDetailScreenState
   }
 
   // ════════════════════════════════════════════════════════════════════════════
+  // VALIDATE ORDER — retailer confirms the order (status → confirmed)
+  // ════════════════════════════════════════════════════════════════════════════
+  Future<void> _validateOrder(Order order, AppLocalizations l10n) async {
+    setState(() => _validating = true);
+
+    try {
+      await ref.read(retailerValidateOrderProvider(order.id).future);
+
+      if (mounted) {
+        showSuccessSnackBar(
+          context,
+          messageFr: 'Commande validée avec succès',
+          messageDarija: 'الطلبية تأكدات بنجاح',
+        );
+        // Refresh order detail
+        ref.invalidate(orderDetailProvider(widget.orderId));
+        ref.invalidate(retailerOrdersProvider);
+      }
+    } catch (e) {
+      if (mounted) {
+        showErrorSnackBar(context, e);
+      }
+    } finally {
+      if (mounted) setState(() => _validating = false);
+    }
+  }
+
+  // ════════════════════════════════════════════════════════════════════════════
   // ACTION BUTTON — context-sensitive based on order status
   // ════════════════════════════════════════════════════════════════════════════
   Widget _buildActionButton(Order order, AppLocalizations l10n) {
@@ -651,23 +681,19 @@ class _RetailerOrderDetailScreenState
     final icon = isShipped ? Icons.check_circle_outline : Icons.check;
 
     return GestureDetector(
-      onTap: () {
-        if (isShipped) {
-          // Navigate to partial receipt screen
-          context.pushNamed(
-            'retailer-partial-receipt',
-            pathParameters: {'orderId': widget.orderId},
-          );
-        } else {
-          // TODO: Validate order logic
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(l10n.isDarija ? 'الطلبية تأكدات!' : 'Commande validée!'),
-              backgroundColor: AppColors.successGreen,
-            ),
-          );
-        }
-      },
+      onTap: _validating
+          ? null
+          : () {
+              if (isShipped) {
+                // Navigate to partial receipt screen
+                context.pushNamed(
+                  'retailer-partial-receipt',
+                  pathParameters: {'orderId': widget.orderId},
+                );
+              } else {
+                _validateOrder(order, l10n);
+              }
+            },
       child: Container(
         width: double.infinity,
         height: 52,

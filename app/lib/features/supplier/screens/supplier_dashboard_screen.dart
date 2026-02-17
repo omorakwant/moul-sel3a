@@ -134,6 +134,12 @@ class _SupplierDashboardScreenState
             tooltip: l10n.isDarija ? 'التحقق' : 'Vérification',
             onPressed: () => context.pushNamed('supplier-verification'),
           ),
+          IconButton(
+            icon: const Icon(Icons.person_outline),
+            color: AppColors.textSecondary,
+            tooltip: l10n.isDarija ? 'الملف ديالي' : 'Mon Profil',
+            onPressed: () => context.pushNamed('supplier-profile'),
+          ),
         ],
       ),
     );
@@ -1005,9 +1011,7 @@ class _QuickLinksGrid extends StatelessWidget {
         _QuickLinkTile(
           icon: Icons.local_shipping_outlined,
           label: l10n.isDarija ? 'التوصيلات' : 'Livraisons',
-          onTap: () {
-            // TODO: Navigate to delivery management
-          },
+          onTap: () => context.pushNamed('supplier-deliveries'),
         ),
       ],
     );

@@ -23,7 +23,10 @@ import '../../features/retailer/screens/payment_declaration_screen.dart';
 import '../../features/supplier/screens/supplier_add_edit_product_screen.dart';
 import '../../features/supplier/screens/supplier_bid_manager_screen.dart';
 import '../../features/supplier/screens/supplier_dashboard_screen.dart';
+import '../../features/supplier/screens/supplier_delivery_screen.dart';
+import '../../features/supplier/screens/supplier_dispute_screen.dart';
 import '../../features/supplier/screens/supplier_inventory_screen.dart';
+import '../../features/supplier/screens/supplier_profile_screen.dart';
 import '../../features/supplier/screens/supplier_verification_screen.dart';
 
 /// Application router using GoRouter.
@@ -194,8 +197,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/driver/handshake/:orderId',
             name: 'driver-handshake',
-            builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Delivery Handshake'),
+            redirect: (context, state) {
+              // Handshake (PIN verification) is handled inside the active trip screen.
+              // Redirect to active trip with the orderId as jobId.
+              final orderId = state.pathParameters['orderId']!;
+              return '/driver/active-trip/$orderId';
+            },
           ),
         ],
       ),
@@ -238,8 +245,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/supplier/dispute/:transactionId',
         name: 'supplier-dispute',
-        builder: (context, state) =>
-            const _PlaceholderScreen(title: 'Dispute Resolution'),
+        builder: (context, state) {
+          final transactionId = state.pathParameters['transactionId']!;
+          return SupplierDisputeScreen(transactionId: transactionId);
+        },
       ),
       GoRoute(
         path: '/supplier/bids/:jobId',
@@ -249,25 +258,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return SupplierBidManagerScreen(jobId: jobId);
         },
       ),
+      GoRoute(
+        path: '/supplier/deliveries',
+        name: 'supplier-deliveries',
+        builder: (context, state) =>
+            const SupplierDeliveryScreen(),
+      ),
+      GoRoute(
+        path: '/supplier/profile',
+        name: 'supplier-profile',
+        builder: (context, state) =>
+            const SupplierProfileScreen(),
+      ),
     ],
   );
 });
-
-/// Temporary placeholder screen for route scaffolding.
-class _PlaceholderScreen extends StatelessWidget {
-  final String title;
-  const _PlaceholderScreen({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.headlineMedium,
-        ),
-      ),
-    );
-  }
-}

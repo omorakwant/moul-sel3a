@@ -195,3 +195,14 @@ final supplierPhoneProvider =
   final profile = await profileRepo.getById(supplierId);
   return profile?.phone;
 });
+
+/// Validate (confirm) an order from the retailer side.
+///
+/// This updates the order status to 'confirmed' — the retailer agrees
+/// with the bon (items + prices) and is ready for the supplier to prepare.
+final retailerValidateOrderProvider =
+    FutureProvider.family.autoDispose<void, String>((ref, orderId) async {
+  final repo = ref.watch(orderRepositoryProvider);
+  await repo.updateStatus(orderId, 'confirmed');
+  ref.invalidate(retailerOrdersProvider);
+});

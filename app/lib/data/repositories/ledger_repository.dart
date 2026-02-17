@@ -128,4 +128,28 @@ class LedgerRepository with SupabaseErrorHandler {
         })
         .eq('id', transactionId);
   });
+
+  /// Get a single ledger transaction by ID.
+  Future<LedgerTransaction?> getById(String transactionId) => guard(() async {
+    final response = await _client
+        .from(SupabaseConstants.ledgerTable)
+        .select()
+        .eq('id', transactionId)
+        .maybeSingle();
+
+    if (response == null) return null;
+    return LedgerTransaction.fromJson(response);
+  });
+
+  /// Dispute a transaction (Supplier action).
+  /// Marks the transaction as 'disputed' with a reason note.
+  Future<void> disputeTransaction(String transactionId, String reason) => guard(() async {
+    await _client
+        .from(SupabaseConstants.ledgerTable)
+        .update({
+          'status': 'disputed',
+          'notes': reason,
+        })
+        .eq('id', transactionId);
+  });
 }

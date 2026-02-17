@@ -6,4 +6,7 @@ export 'screens/supplier_inventory_screen.dart';
 export 'screens/supplier_dashboard_screen.dart';
 export 'screens/supplier_verification_screen.dart';
 export 'screens/supplier_add_edit_product_screen.dart';
+export 'screens/supplier_delivery_screen.dart';
+export 'screens/supplier_dispute_screen.dart';
+export 'screens/supplier_profile_screen.dart';
 export 'screens/bulk_price_adjustment_modal.dart';
