@@ -110,7 +110,7 @@ class _ProductCardState extends State<ProductCard> {
                       vertical: 3,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.accentOrange,
+                      color: AppColors.primary,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -327,7 +327,7 @@ class _ProductCardState extends State<ProductCard> {
         width: double.infinity,
         height: 36,
         decoration: BoxDecoration(
-          color: AppColors.accentOrange,
+          color: AppColors.primary,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(

@@ -112,7 +112,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   width: 72,
                   height: 72,
                   decoration: BoxDecoration(
-                    color: AppColors.accentOrange,
+                    color: AppColors.primary,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Center(
@@ -295,7 +295,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     decoration: BoxDecoration(
                       color: _isLoading
                           ? AppColors.bgMuted
-                          : AppColors.accentOrange,
+                          : AppColors.primary,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Center(

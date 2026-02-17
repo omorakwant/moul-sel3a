@@ -126,12 +126,12 @@ class _BulkPriceAdjustmentModalState
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: AppColors.accentOrange.withOpacity(0.12),
+                      color: AppColors.primary.withOpacity(0.12),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Center(
                       child: Icon(Icons.tune,
-                          size: 20, color: AppColors.accentOrange),
+                          size: 20, color: AppColors.primary),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -185,7 +185,7 @@ class _BulkPriceAdjustmentModalState
                         ? null
                         : () => setState(() => _showPreview = true),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.accentOrange,
+                      backgroundColor: AppColors.primary,
                       disabledBackgroundColor: AppColors.bgMuted,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -247,7 +247,7 @@ class _BulkPriceAdjustmentModalState
                         child: ElevatedButton.icon(
                           onPressed: _isApplying ? null : _apply,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.accentOrange,
+                            backgroundColor: AppColors.primary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14),
                             ),
@@ -324,12 +324,12 @@ class _BulkPriceAdjustmentModalState
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
           decoration: BoxDecoration(
             color: selected
-                ? AppColors.accentOrange.withOpacity(0.08)
+                ? AppColors.primary.withOpacity(0.08)
                 : AppColors.bgSurface,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: selected
-                  ? AppColors.accentOrange
+                  ? AppColors.primary
                   : AppColors.borderSubtle,
               width: selected ? 1.5 : 0.5,
             ),
@@ -339,7 +339,7 @@ class _BulkPriceAdjustmentModalState
               Icon(icon,
                   size: 22,
                   color: selected
-                      ? AppColors.accentOrange
+                      ? AppColors.primary
                       : AppColors.textTertiary),
               const SizedBox(height: 6),
               Text(
@@ -349,7 +349,7 @@ class _BulkPriceAdjustmentModalState
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: selected
-                      ? AppColors.accentOrange
+                      ? AppColors.primary
                       : AppColors.textPrimary,
                 ),
               ),
@@ -359,7 +359,7 @@ class _BulkPriceAdjustmentModalState
                   fontFamily: 'Inter',
                   fontSize: 11,
                   color: selected
-                      ? AppColors.accentOrange
+                      ? AppColors.primary
                       : AppColors.textTertiary,
                 ),
               ),
@@ -491,7 +491,7 @@ class _BulkPriceAdjustmentModalState
             padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.accentOrange.withOpacity(0.12),
+              color: AppColors.primary.withOpacity(0.12),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -500,7 +500,7 @@ class _BulkPriceAdjustmentModalState
                 fontFamily: 'Manrope',
                 fontSize: 16,
                 fontWeight: FontWeight.w800,
-                color: AppColors.accentOrange,
+                color: AppColors.primary,
               ),
             ),
           ),
@@ -520,16 +520,16 @@ class _BulkPriceAdjustmentModalState
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.accentOrange.withOpacity(0.06),
+        color: AppColors.primary.withOpacity(0.06),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: AppColors.accentOrange.withOpacity(0.2),
+          color: AppColors.primary.withOpacity(0.2),
         ),
       ),
       child: Row(
         children: [
           const Icon(Icons.info_outline,
-              size: 18, color: AppColors.accentOrange),
+              size: 18, color: AppColors.primary),
           const SizedBox(width: 8),
           Expanded(
             child: RichText(

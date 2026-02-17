@@ -177,11 +177,11 @@ class _RetailerCartScreenState extends ConsumerState<RetailerCartScreen> {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: AppColors.accentOrange.withValues(alpha: 0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(Icons.store_rounded,
-                size: 18, color: AppColors.accentOrange),
+                size: 18, color: AppColors.primary),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -279,7 +279,7 @@ class _RetailerCartScreenState extends ConsumerState<RetailerCartScreen> {
                         fontFamily: 'Inter',
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.accentOrange,
+                        color: AppColors.primary,
                       ),
                     ),
                     if (hasDiscount) ...[
@@ -400,7 +400,7 @@ class _RetailerCartScreenState extends ConsumerState<RetailerCartScreen> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
             borderSide:
-                const BorderSide(color: AppColors.accentOrange, width: 1.5),
+                const BorderSide(color: AppColors.primary, width: 1.5),
           ),
           prefixIcon: const Icon(Icons.note_alt_outlined,
               size: 20, color: AppColors.textTertiary),
@@ -456,7 +456,7 @@ class _RetailerCartScreenState extends ConsumerState<RetailerCartScreen> {
             child: ElevatedButton.icon(
               onPressed: _isSubmitting ? null : () => _confirmOrder(l10n),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.accentOrange,
+                backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.onAccent,
                 disabledBackgroundColor: AppColors.bgMuted,
                 shape: RoundedRectangleBorder(
@@ -538,7 +538,7 @@ class _RetailerCartScreenState extends ConsumerState<RetailerCartScreen> {
             icon: const Icon(Icons.arrow_back_rounded, size: 18),
             label: Text(l10n.backToCatalog),
             style: TextButton.styleFrom(
-              foregroundColor: AppColors.accentOrange,
+              foregroundColor: AppColors.primary,
               textStyle: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 14,
@@ -875,7 +875,7 @@ class _OrderConfirmationSheet extends StatelessWidget {
             fontFamily: 'Inter',
             fontSize: 13,
             fontWeight: isBold ? FontWeight.w700 : FontWeight.w500,
-            color: isBold ? AppColors.accentOrange : AppColors.textPrimary,
+            color: isBold ? AppColors.primary : AppColors.textPrimary,
           ),
         ),
       ],

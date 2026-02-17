@@ -81,7 +81,7 @@ class _DriverBidScreenState extends ConsumerState<DriverBidScreen> {
                         Row(
                           children: [
                             const Icon(Icons.store_outlined,
-                                color: AppColors.accentOrange, size: 20),
+                                color: AppColors.primary, size: 20),
                             const SizedBox(width: 8),
                             Text(
                               l10n.pickupFrom,
@@ -141,13 +141,13 @@ class _DriverBidScreenState extends ConsumerState<DriverBidScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
-                              color: AppColors.accentOrange.withOpacity(0.08),
+                              color: AppColors.primary.withOpacity(0.08),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Row(
                               children: [
                                 const Icon(Icons.payments_outlined,
-                                    size: 18, color: AppColors.accentOrange),
+                                    size: 18, color: AppColors.primary),
                                 const SizedBox(width: 8),
                                 Text(
                                   '${l10n.cashCollection}: ${Formatters.price(job.codAmount!)}',
@@ -155,7 +155,7 @@ class _DriverBidScreenState extends ConsumerState<DriverBidScreen> {
                                     fontFamily: 'Inter',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
-                                    color: AppColors.accentOrange,
+                                    color: AppColors.primary,
                                   ),
                                 ),
                               ],
@@ -269,7 +269,7 @@ class _DriverBidScreenState extends ConsumerState<DriverBidScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                              color: AppColors.accentOrange, width: 2),
+                              color: AppColors.primary, width: 2),
                         ),
                       ),
                       validator: (v) {
@@ -321,7 +321,7 @@ class _DriverBidScreenState extends ConsumerState<DriverBidScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                              color: AppColors.accentOrange, width: 2),
+                              color: AppColors.primary, width: 2),
                         ),
                       ),
                     ),
@@ -360,7 +360,7 @@ class _DriverBidScreenState extends ConsumerState<DriverBidScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                              color: AppColors.accentOrange, width: 2),
+                              color: AppColors.primary, width: 2),
                         ),
                       ),
                     ),
@@ -390,7 +390,7 @@ class _DriverBidScreenState extends ConsumerState<DriverBidScreen> {
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.accentOrange,
+                          backgroundColor: AppColors.primary,
                           foregroundColor: AppColors.onAccent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
@@ -405,7 +405,7 @@ class _DriverBidScreenState extends ConsumerState<DriverBidScreen> {
           );
         },
         loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.accentOrange),
+          child: CircularProgressIndicator(color: AppColors.primary),
         ),
         error: (e, _) => Center(child: Text('$e')),
       ),

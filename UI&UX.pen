@@ -16074,35 +16074,37 @@
   "variables": {
     "accent-orange": {
       "type": "color",
-      "value": "#C2410C"
+      "value": "#C2410C",
+      "deprecated": true,
+      "description": "Deprecated: Use 'primary' instead"
     },
     "alert-red": {
       "type": "color",
-      "value": "#EF4444"
+      "value": "#E11D48"
     },
     "bg-dark": {
       "type": "color",
-      "value": "#2D2D2D"
+      "value": "#1E293B"
     },
     "bg-dark-muted": {
       "type": "color",
-      "value": "#44403C"
+      "value": "#334155"
     },
     "bg-muted": {
       "type": "color",
-      "value": "#D6D3D1"
+      "value": "#E2E8F0"
     },
     "bg-primary": {
       "type": "color",
-      "value": "#FAF9F7"
+      "value": "#F8FAFC"
     },
     "bg-surface": {
       "type": "color",
-      "value": "#E7E5E4"
+      "value": "#FFFFFF"
     },
     "border-subtle": {
       "type": "color",
-      "value": "#D6D3D1"
+      "value": "#E2E8F0"
     },
     "font-primary": {
       "type": "string",
@@ -16114,7 +16116,7 @@
     },
     "on-accent": {
       "type": "color",
-      "value": "#FAF9F7"
+      "value": "#FFFFFF"
     },
     "success-green": {
       "type": "color",
@@ -16122,23 +16124,23 @@
     },
     "text-muted-on-dark": {
       "type": "color",
-      "value": "#A8A29E"
+      "value": "#94A3B8"
     },
     "text-on-dark": {
       "type": "color",
-      "value": "#FAF9F7"
+      "value": "#F8FAFC"
     },
     "text-primary": {
       "type": "color",
-      "value": "#2D2D2D"
+      "value": "#1E293B"
     },
     "text-secondary": {
       "type": "color",
-      "value": "#78716C"
+      "value": "#64748B"
     },
     "text-tertiary": {
       "type": "color",
-      "value": "#A8A29E"
+      "value": "#94A3B8"
     },
     "web-bg": {
       "type": "color",
@@ -16162,7 +16164,7 @@
     },
     "web-sidebar-active": {
       "type": "color",
-      "value": "#C2410C"
+      "value": "#4F46E5"
     },
     "web-sidebar-bg": {
       "type": "color",
@@ -16187,6 +16189,67 @@
     "web-table-row-alt": {
       "type": "color",
       "value": "#FAFAF9"
+    },
+    "primary": {
+      "type": "color",
+      "value": "#4F46E5",
+      "description": "Deep Indigo — Trust & Business (new primary brand color)"
+    },
+    "badge-pending-bg": {
+      "type": "color",
+      "value": "#FEF3C7"
+    },
+    "badge-pending-fg": {
+      "type": "color",
+      "value": "#D97706"
+    },
+    "badge-delivered-bg": {
+      "type": "color",
+      "value": "#D1FAE5"
+    },
+    "badge-delivered-fg": {
+      "type": "color",
+      "value": "#065F46"
+    },
+    "badge-cod-bg": {
+      "type": "color",
+      "value": "#FEE2E2"
+    },
+    "badge-cod-fg": {
+      "type": "color",
+      "value": "#991B1B"
+    },
+    "badge-open-bg": {
+      "type": "color",
+      "value": "#DBEAFE"
+    },
+    "badge-open-fg": {
+      "type": "color",
+      "value": "#1E40AF"
+    },
+    "badge-closed-bg": {
+      "type": "color",
+      "value": "#FEE2E2"
+    },
+    "badge-closed-fg": {
+      "type": "color",
+      "value": "#991B1B"
+    },
+    "badge-credit-bg": {
+      "type": "color",
+      "value": "#D1FAE5"
+    },
+    "badge-credit-fg": {
+      "type": "color",
+      "value": "#065F46"
+    },
+    "badge-debt-bg": {
+      "type": "color",
+      "value": "#FEE2E2"
+    },
+    "badge-debt-fg": {
+      "type": "color",
+      "value": "#991B1B"
     }
   }
 }

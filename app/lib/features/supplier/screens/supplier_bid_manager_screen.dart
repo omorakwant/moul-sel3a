@@ -39,7 +39,7 @@ class SupplierBidManagerScreen extends ConsumerWidget {
           if (job == null) return Center(child: Text(l10n.error));
 
           return RefreshIndicator(
-            color: AppColors.accentOrange,
+            color: AppColors.primary,
             onRefresh: () async {
               ref.invalidate(deliveryJobByIdProvider(jobId));
               ref.invalidate(jobBidsProvider(jobId));
@@ -118,7 +118,7 @@ class SupplierBidManagerScreen extends ConsumerWidget {
                     },
                     loading: () => const Center(
                       child: CircularProgressIndicator(
-                          color: AppColors.accentOrange),
+                          color: AppColors.primary),
                     ),
                     error: (e, _) => Text('$e'),
                   ),
@@ -128,7 +128,7 @@ class SupplierBidManagerScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.accentOrange),
+          child: CircularProgressIndicator(color: AppColors.primary),
         ),
         error: (e, _) => Center(child: Text('$e')),
       ),
@@ -211,7 +211,7 @@ class _RouteHeader extends StatelessWidget {
           Row(
             children: [
               const Icon(Icons.store_outlined,
-                  color: AppColors.accentOrange, size: 18),
+                  color: AppColors.primary, size: 18),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -254,7 +254,7 @@ class _RouteHeader extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.accentOrange.withOpacity(0.08),
+                color: AppColors.primary.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -263,7 +263,7 @@ class _RouteHeader extends StatelessWidget {
                   fontFamily: 'Inter',
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.accentOrange,
+                  color: AppColors.primary,
                 ),
               ),
             ),
@@ -358,7 +358,7 @@ class _BidCard extends StatelessWidget {
       'accepted' => AppColors.successGreen,
       'rejected' => AppColors.alertRed,
       'withdrawn' => AppColors.textTertiary,
-      _ => AppColors.accentOrange,
+      _ => AppColors.primary,
     };
 
     return Container(
@@ -426,7 +426,7 @@ class _BidCard extends StatelessWidget {
                       fontFamily: 'Manrope',
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.accentOrange,
+                      color: AppColors.primary,
                     ),
                   ),
                   if (bid.estimatedTime != null)

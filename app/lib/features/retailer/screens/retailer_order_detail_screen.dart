@@ -151,7 +151,7 @@ class _RetailerOrderDetailScreenState
             );
           },
           loading: () => const Center(
-            child: CircularProgressIndicator(color: AppColors.accentOrange),
+            child: CircularProgressIndicator(color: AppColors.primary),
           ),
           error: (error, _) => Center(
             child: Column(
@@ -407,7 +407,7 @@ class _RetailerOrderDetailScreenState
                 const Icon(
                   Icons.local_shipping,
                   size: 22,
-                  color: AppColors.accentOrange,
+                  color: AppColors.primary,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -483,7 +483,7 @@ class _RetailerOrderDetailScreenState
                     padding: const EdgeInsets.all(3),
                     decoration: BoxDecoration(
                       color: _payOnDelivery
-                          ? AppColors.accentOrange
+                          ? AppColors.primary
                           : AppColors.bgMuted,
                       borderRadius: BorderRadius.circular(100),
                     ),
@@ -618,7 +618,7 @@ class _RetailerOrderDetailScreenState
             ? '${l10n.confirmOrder} · كونفطرمي'
             : '${l10n.confirmOrder} · كونفطرمي');
 
-    final color = isShipped ? AppColors.successGreen : AppColors.accentOrange;
+    final color = isShipped ? AppColors.successGreen : AppColors.primary;
     final icon = isShipped ? Icons.check_circle_outline : Icons.check;
 
     return GestureDetector(

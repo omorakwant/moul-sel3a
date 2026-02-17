@@ -287,7 +287,7 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(
                               color: _controllers[index].text.isNotEmpty
-                                  ? AppColors.accentOrange
+                                  ? AppColors.primary
                                   : AppColors.borderSubtle,
                               width: 1.5,
                             ),
@@ -296,7 +296,7 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                             borderRadius: BorderRadius.circular(12),
                             borderSide: BorderSide(
                               color: _controllers[index].text.isNotEmpty
-                                  ? AppColors.accentOrange
+                                  ? AppColors.primary
                                   : AppColors.borderSubtle,
                               width: 1.5,
                             ),
@@ -304,7 +304,7 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                             borderSide: const BorderSide(
-                              color: AppColors.accentOrange,
+                              color: AppColors.primary,
                               width: 2,
                             ),
                           ),
@@ -353,7 +353,7 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                     decoration: BoxDecoration(
                       color: _isVerifying
                           ? AppColors.bgMuted
-                          : AppColors.accentOrange,
+                          : AppColors.primary,
                       borderRadius: BorderRadius.circular(14),
                     ),
                     child: Center(
@@ -418,7 +418,7 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                         fontFamily: 'Inter',
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.accentOrange,
+                        color: AppColors.primary,
                       ),
                     ),
                   ),
