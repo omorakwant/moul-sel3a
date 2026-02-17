@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
@@ -327,7 +328,7 @@ class RetailerHomeScreen extends ConsumerWidget {
   // ════════════════════════════════════════════════════════════════════════════
   Widget _buildAddSupplierButton(AppLocalizations l10n) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         // Open WhatsApp with a pre-filled invite message
         final link = Formatters.whatsappLink(
           phone: '',
@@ -335,7 +336,12 @@ class RetailerHomeScreen extends ConsumerWidget {
               ? 'سلام! بغيتك تنزل تطبيق لكارني B2B باش نخدمو مع بعض.'
               : 'Bonjour! Rejoignez L\'Carnet B2B pour gérer nos commandes.',
         );
-        // TODO: launch(link) via url_launcher
+        final url = Uri.parse(link);
+        try {
+          await launchUrl(url, mode: LaunchMode.externalApplication);
+        } catch (_) {
+          // WhatsApp not installed — fall back to share sheet
+        }
       },
       child: Container(
         width: double.infinity,

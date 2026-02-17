@@ -18,6 +18,7 @@ import '../../features/retailer/screens/retailer_home_screen.dart';
 import '../../features/retailer/screens/retailer_order_detail_screen.dart';
 import '../../features/retailer/screens/retailer_orders_screen.dart';
 import '../../features/retailer/screens/retailer_partial_receipt_screen.dart';
+import '../../features/retailer/screens/retailer_profile_screen.dart';
 import '../../features/retailer/screens/payment_declaration_screen.dart';
 import '../../features/supplier/screens/supplier_add_edit_product_screen.dart';
 import '../../features/supplier/screens/supplier_bid_manager_screen.dart';
@@ -159,7 +160,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/retailer/profile',
             name: 'retailer-profile',
             builder: (context, state) =>
-                const _PlaceholderScreen(title: 'Profile'),
+                const RetailerProfileScreen(),
           ),
         ],
       ),

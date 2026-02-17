@@ -26,14 +26,14 @@
 | Local Storage | hive_flutter |
 | Communication | WhatsApp deep links (url_launcher) |
 
-### Codebase Stats (as of commit `phase2`)
+### Codebase Stats (as of commit `phase4`)
 | Metric | Count |
 |--------|-------|
-| Dart source files | 67 |
-| Lines of Dart | ~18,500 |
+| Dart source files | 69 |
+| Lines of Dart | ~19,800 |
 | SQL migration lines | ~792 |
 | L10n strings | ~200+ (FR + Darija) |
-| Total commits | 14 |
+| Total commits | 15 |
 | Database tables | 7 |
 | Supabase triggers | 3 |
 | RLS policies | ~20 |
@@ -87,15 +87,15 @@ app/lib/
     │   ├── providers/auth_providers.dart
     │   └── screens/ (5 screens)
     ├── retailer/                       # Retailer (Buyer) experience
-    │   ├── providers/ (4 providers)
-    │   ├── screens/ (6 screens)
+    │   ├── providers/ (5 providers)
+    │   ├── screens/ (8 screens)
     │   └── widgets/ (2 widgets)
     ├── driver/                         # Driver (Livreur) experience
     │   ├── providers/driver_providers.dart
     │   └── screens/ (3 screens)
     ├── supplier/                       # Supplier (Admin) experience
-    │   ├── providers/supplier_inventory_providers.dart
-    │   └── screens/ (4 screens)
+    │   ├── providers/ (3 providers)
+    │   └── screens/ (5 screens)
     └── shared/shared.dart              # Shared widgets barrel
 ```
 
@@ -144,6 +144,7 @@ All development occurred on **February 16, 2026**.
 | 12 | `482a4a1` | **WhatsApp template** — Moroccan B2B format (Salaam, bullet items, Total Estimé) |
 | 13 | `62c3f8f` | **Logistics flow** — driver marketplace, bidding, PIN handshake, ledger auto-update |
 | 14 | — | **Phase 2+3** — Supplier dashboard, retailer orders list, payment declaration, verification desk, order→ledger wiring, delivery job auto-creation, +70 l10n strings, 3 bug fixes |
+| 15 | — | **Phase 4** — WhatsApp deep links wired (5 screens), retailer profile screen (edit + language toggle), sign-out with confirmation dialog, `supplierPhoneProvider` for order detail voice notes |
 
 ---
 
@@ -180,6 +181,9 @@ All development occurred on **February 16, 2026**.
 | Handshake confirmation | ✅ Done | `retailer_handshake_screen.dart` |
 | Order history with status filters | ✅ Done | `retailer_orders_screen.dart` |
 | Payment declaration (receipt photo) | ✅ Done | `payment_declaration_screen.dart`, `payment_providers.dart` |
+| Profile screen (edit + language toggle) | ✅ Done | `retailer_profile_screen.dart`, `profile_providers.dart` |
+| Sign-out with confirmation dialog | ✅ Done | `retailer_profile_screen.dart`, `profile_providers.dart` |
+| WhatsApp deep links (catalog, order, home) | ✅ Done | `url_launcher` wired in 5 screens |
 
 ### 📦 Supplier Experience
 | Feature | Status | Files |
@@ -243,7 +247,7 @@ All development occurred on **February 16, 2026**.
 |---------|-------|----------|-------------|
 | ~~Retailer Orders List~~ | ~~`/retailer/orders`~~ | ✅ Done | ~~List of all orders with status filters~~ |
 | ~~Payment Declaration~~ | ~~`/retailer/payment/:relationId`~~ | ✅ Done | ~~Wafacash/CashPlus receipt photo + form~~ |
-| Retailer Profile | `/retailer/profile` | 🟡 Medium | Edit shop name, city, location_name, avatar, language preference |
+| ~~Retailer Profile~~ | ~~`/retailer/profile`~~ | ✅ Done | ~~Edit shop name, city, location_name, language toggle, sign-out~~ |
 | ~~Supplier Dashboard~~ | ~~`/supplier/dashboard`~~ | ✅ Done | ~~Overview: pending orders, revenue, retailer list~~ |
 | ~~Supplier Verification Desk~~ | ~~`/supplier/verification`~~ | ✅ Done | ~~Approve/reject payment evidence~~ |
 | Supplier Dispute Resolution | `/supplier/dispute/:transactionId` | 🟡 Medium | Dispute flow for rejected payments |
@@ -270,8 +274,8 @@ All development occurred on **February 16, 2026**.
 | Trusted driver assignment | 🟡 Medium | Supplier manually assigns from a list of known drivers |
 | Driver earnings dashboard | 🟢 Low | Total earnings, completed deliveries, average bid |
 | Supplier analytics | 🟢 Low | Revenue trends, top products, retailer activity |
-| Logout functionality | 🟡 Medium | Sign-out button + session management |
-| WhatsApp deep link stubs | 🟡 Medium | Replace TODO stubs with actual launchUrl() calls |
+| ~~Logout functionality~~ | ✅ Done | ~~Sign-out button + confirmation dialog in profile screen~~ |
+| ~~WhatsApp deep link stubs~~ | ✅ Done | ~~All 5 TODO stubs replaced with actual launchUrl() calls~~ |
 
 ### Priority 4 — Production Readiness
 | Feature | Priority | Description |

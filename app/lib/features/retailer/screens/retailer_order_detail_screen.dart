@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/order.dart';
+import '../../../data/repositories/profile_repository.dart';
 import '../providers/order_providers.dart';
 
 /// Retailer Order Detail Screen — "Screen 3 — Digital Bon" from UI&UX.pen.
@@ -68,6 +70,9 @@ class _RetailerOrderDetailScreenState
               );
             }
 
+            // Pre-fetch supplier phone for WhatsApp voice note button
+            ref.watch(supplierPhoneProvider(order.supplierId));
+
             return Column(
               children: [
                 Expanded(
@@ -121,7 +126,7 @@ class _RetailerOrderDetailScreenState
                           const SizedBox(height: 12),
 
                           // ── WhatsApp voice button — PROJECT_CONTEXT: "صيفط أوديو" ──
-                          _buildVoiceNoteButton(l10n),
+                          _buildVoiceNoteButton(l10n, order),
                           const SizedBox(height: 20),
 
                           // ── Confirm / Partial Receipt button ──
@@ -516,16 +521,40 @@ class _RetailerOrderDetailScreenState
   //   "Voice Notes: Integrated WhatsApp button on every order page"
   //   Darija label: "صيفط أوديو" (Send Audio)
   // ════════════════════════════════════════════════════════════════════════════
-  Widget _buildVoiceNoteButton(AppLocalizations l10n) {
+  Widget _buildVoiceNoteButton(AppLocalizations l10n, Order order) {
     return GestureDetector(
-      onTap: () {
-        // TODO: open WhatsApp voice note via url_launcher
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.callWhatsApp),
-            backgroundColor: const Color(0xFF25D366),
-          ),
-        );
+      onTap: () async {
+        final phoneAsync = ref.read(supplierPhoneProvider(order.supplierId));
+        final phone = phoneAsync.valueOrNull;
+        if (phone == null || phone.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.isDarija
+                  ? 'ما كاينش رقم المول السلعة'
+                  : 'Numéro du fournisseur indisponible'),
+              backgroundColor: AppColors.alertRed,
+            ),
+          );
+          return;
+        }
+        final message = l10n.isDarija
+            ? 'سلام، بغيت نصيفط ليك أوديو على الطلبية ${order.id.substring(0, 8)}...'
+            : 'Bonjour, vocal concernant la commande ${order.id.substring(0, 8)}...';
+        final url = Uri.parse(Formatters.whatsappLink(phone: phone, message: message));
+        try {
+          await launchUrl(url, mode: LaunchMode.externalApplication);
+        } catch (_) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.isDarija
+                    ? 'ما قدرناش نفتحو واتساب'
+                    : 'Impossible d\'ouvrir WhatsApp'),
+                backgroundColor: AppColors.alertRed,
+              ),
+            );
+          }
+        }
       },
       child: Container(
         width: double.infinity,

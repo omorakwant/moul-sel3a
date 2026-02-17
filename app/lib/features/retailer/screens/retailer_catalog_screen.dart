@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
@@ -108,19 +109,42 @@ class _RetailerCatalogScreenState
   /// PROJECT_CONTEXT.md: "Voice Notes: Integrated WhatsApp button on every
   /// order page for Darija-based communication."
   /// Pro-Tip tooltip label: "صيفط أوديو" (Send Audio)
-  void _openWhatsAppVoiceNote() {
-    // TODO: Fetch supplier phone from relation and open WhatsApp
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          AppLocalizations.of(context).isDarija
-              ? 'صيفط أوديو للمول السلعة'
-              : 'Envoi vocal au fournisseur',
+  Future<void> _openWhatsAppVoiceNote() async {
+    final phone = widget.supplierPhone;
+    if (phone == null || phone.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context).isDarija
+                ? 'ما كاينش رقم الهاتف ديال المول السلعة'
+                : 'Numéro du fournisseur indisponible',
+          ),
+          backgroundColor: AppColors.alertRed,
+          duration: const Duration(seconds: 2),
         ),
-        backgroundColor: const Color(0xFF25D366),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+      );
+      return;
+    }
+
+    final l10n = AppLocalizations.of(context);
+    final message = l10n.isDarija
+        ? 'سلام، بغيت نصيفط ليك أوديو...'
+        : 'Bonjour, je souhaite vous envoyer un vocal...';
+    final url = Uri.parse(Formatters.whatsappLink(phone: phone, message: message));
+    try {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.isDarija
+                ? 'ما قدرناش نفتحو واتساب'
+                : 'Impossible d\'ouvrir WhatsApp'),
+            backgroundColor: AppColors.alertRed,
+          ),
+        );
+      }
+    }
   }
 
   /// Navigate to cart screen with supplier context.

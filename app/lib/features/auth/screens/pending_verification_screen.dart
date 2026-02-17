@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/formatters.dart';
+import '../../../data/repositories/profile_repository.dart';
 import '../providers/auth_providers.dart';
+
+/// Fetch supplier phone for WhatsApp contact on pending verification.
+final _supplierPhoneProvider =
+    FutureProvider.family<String?, String>((ref, supplierId) async {
+  final profile = await ref.watch(profileRepositoryProvider).getById(supplierId);
+  return profile?.phone;
+});
 
 /// Pending Verification Gate — "Compte en attente" screen.
 ///
@@ -28,6 +38,8 @@ class PendingVerificationScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
     final isDarija = locale == 'ar';
+    // Pre-fetch supplier phone for WhatsApp button
+    ref.watch(_supplierPhoneProvider(supplierId));
 
     return Scaffold(
       backgroundColor: AppColors.bgPrimary,
@@ -153,16 +165,30 @@ class PendingVerificationScreen extends ConsumerWidget {
 
                       // ── WhatsApp contact button ──
                       GestureDetector(
-                        onTap: () {
-                          // TODO: Open WhatsApp deep link to supplier
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(isDarija
-                                  ? 'كيفتح واتساب...'
-                                  : 'Ouverture de WhatsApp...'),
-                              backgroundColor: const Color(0xFF25D366),
-                            ),
-                          );
+                        onTap: () async {
+                          final phoneAsync = ref.read(_supplierPhoneProvider(supplierId));
+                          final phone = phoneAsync.valueOrNull;
+                          final message = isDarija
+                              ? 'سلام، أنا بغيت نخدم معاك ف لكارني B2B. ممكن تضيفني؟'
+                              : 'Bonjour, je souhaite être ajouté(e) comme client sur L\'Carnet B2B.';
+                          final url = Uri.parse(Formatters.whatsappLink(
+                            phone: phone ?? '',
+                            message: message,
+                          ));
+                          try {
+                            await launchUrl(url, mode: LaunchMode.externalApplication);
+                          } catch (_) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(isDarija
+                                      ? 'ما قدرناش نفتحو واتساب'
+                                      : 'Impossible d\'ouvrir WhatsApp'),
+                                  backgroundColor: AppColors.alertRed,
+                                ),
+                              );
+                            }
+                          }
                         },
                         child: Container(
                           width: double.infinity,

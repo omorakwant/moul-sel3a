@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models/order.dart';
 import '../../../data/repositories/order_repository.dart';
+import '../../../data/repositories/profile_repository.dart';
 
 /// ══════════════════════════════════════════════════════════════════════════════
 /// ORDER PROVIDERS — State management for Order Detail, Partial Receipt,
@@ -184,4 +185,13 @@ final confirmReceiptProvider =
     adjustedItems: adjustedItems,
     adjustedTotal: adjustedTotal,
   );
+});
+
+/// Fetches the phone number of a supplier by their profile ID.
+/// Used for WhatsApp voice note deep links on order detail screens.
+final supplierPhoneProvider =
+    FutureProvider.family<String?, String>((ref, supplierId) async {
+  final profileRepo = ref.watch(profileRepositoryProvider);
+  final profile = await profileRepo.getById(supplierId);
+  return profile?.phone;
 });

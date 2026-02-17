@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
@@ -591,18 +592,33 @@ class RetailerHandshakeScreen extends StatelessWidget {
         children: [
           // ── Share button — fill $bg-dark, cornerRadius 14, height 48 ──
           GestureDetector(
-            onTap: () {
-              // TODO: Share receipt via WhatsApp
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    l10n.isDarija
-                        ? 'شارك الوصل · WhatsApp'
-                        : 'Partage du reçu via WhatsApp...',
-                  ),
-                  backgroundColor: AppColors.bgDark,
-                ),
-              );
+            onTap: () async {
+              // Share receipt summary via WhatsApp
+              final bonRef = 'BON-${orderId.substring(0, 8).toUpperCase()}';
+              final message = l10n.isDarija
+                  ? '✅ وصل التسليم\n'
+                    '$bonRef\n'
+                    '${itemCount} articles · ${Formatters.price(adjustedTotal)}\n'
+                    '${adjustmentCount > 0 ? '⚠️ $adjustmentCount anomalies' : '✓ Pas d\'anomalies'}'
+                  : '✅ Reçu de livraison\n'
+                    '$bonRef\n'
+                    '${itemCount} articles · ${Formatters.price(adjustedTotal)}\n'
+                    '${adjustmentCount > 0 ? '⚠️ $adjustmentCount anomalie(s)' : '✓ Aucune anomalie'}';
+              final url = Uri.parse(Formatters.whatsappLink(phone: '', message: message));
+              try {
+                await launchUrl(url, mode: LaunchMode.externalApplication);
+              } catch (_) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.isDarija
+                          ? 'ما قدرناش نفتحو واتساب'
+                          : 'Impossible d\'ouvrir WhatsApp'),
+                      backgroundColor: AppColors.alertRed,
+                    ),
+                  );
+                }
+              }
             },
             child: Container(
               width: double.infinity,
