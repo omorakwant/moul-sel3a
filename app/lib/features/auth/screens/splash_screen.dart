@@ -96,7 +96,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               width: 88,
               height: 88,
               decoration: BoxDecoration(
-                color: AppColors.accentOrange,
+                color: AppColors.primary,
                 borderRadius: BorderRadius.circular(24),
               ),
               child: const Center(
@@ -139,7 +139,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               height: 28,
               child: CircularProgressIndicator(
                 strokeWidth: 2.5,
-                color: AppColors.accentOrange,
+                color: AppColors.primary,
               ),
             ),
           ],

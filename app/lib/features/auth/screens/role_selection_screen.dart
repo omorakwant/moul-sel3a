@@ -181,7 +181,7 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
                   arTitle: 'مول الحانوت',
                   frSubtitle: "J'achète pour revendre",
                   arSubtitle: 'كنشري باش نبيع',
-                  color: AppColors.accentOrange,
+                  color: AppColors.primary,
                   bgColor: const Color(0xFFFFF7ED),
                   isDarija: isDarija,
                 ),
@@ -322,7 +322,7 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
                       decoration: BoxDecoration(
                         color: _isSubmitting
                             ? AppColors.bgMuted
-                            : AppColors.accentOrange,
+                            : AppColors.primary,
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: Center(

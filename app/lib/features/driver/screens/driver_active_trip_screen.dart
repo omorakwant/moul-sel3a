@@ -60,7 +60,7 @@ class _DriverActiveTripScreenState
           return _buildTripContent(context, job, l10n, tripState);
         },
         loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.accentOrange),
+          child: CircularProgressIndicator(color: AppColors.primary),
         ),
         error: (e, _) => Center(child: Text('$e')),
       ),
@@ -115,7 +115,7 @@ class _DriverActiveTripScreenState
                 // Pickup
                 _TripRouteStop(
                   icon: Icons.store_outlined,
-                  iconColor: AppColors.accentOrange,
+                  iconColor: AppColors.primary,
                   label: l10n.pickupFrom,
                   location: job.pickupLabel,
                   subtitle: job.supplierName,
@@ -133,7 +133,7 @@ class _DriverActiveTripScreenState
                         height: 8,
                         margin: const EdgeInsets.symmetric(vertical: 2),
                         color: isInTransit
-                            ? AppColors.accentOrange
+                            ? AppColors.primary
                             : AppColors.bgMuted,
                       ),
                     ),
@@ -160,15 +160,15 @@ class _DriverActiveTripScreenState
               padding: const EdgeInsets.all(16),
               margin: const EdgeInsets.only(bottom: 16),
               decoration: BoxDecoration(
-                color: AppColors.accentOrange.withOpacity(0.08),
+                color: AppColors.primary.withOpacity(0.08),
                 borderRadius: BorderRadius.circular(14),
                 border:
-                    Border.all(color: AppColors.accentOrange.withOpacity(0.2)),
+                    Border.all(color: AppColors.primary.withOpacity(0.2)),
               ),
               child: Row(
                 children: [
                   const Icon(Icons.payments_outlined,
-                      color: AppColors.accentOrange, size: 24),
+                      color: AppColors.primary, size: 24),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -189,7 +189,7 @@ class _DriverActiveTripScreenState
                             fontFamily: 'Manrope',
                             fontSize: 22,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.accentOrange,
+                            color: AppColors.primary,
                           ),
                         ),
                       ],
@@ -245,7 +245,7 @@ class _DriverActiveTripScreenState
           ),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.accentOrange,
+          backgroundColor: AppColors.primary,
           foregroundColor: AppColors.onAccent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -296,7 +296,7 @@ class _DriverActiveTripScreenState
           const Icon(
             Icons.lock_outline,
             size: 40,
-            color: AppColors.accentOrange,
+            color: AppColors.primary,
           ),
           const SizedBox(height: 12),
           Text(
@@ -355,7 +355,7 @@ class _DriverActiveTripScreenState
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
-                      color: AppColors.accentOrange, width: 2),
+                      color: AppColors.primary, width: 2),
                 ),
               ),
               onChanged: (_) {
@@ -456,7 +456,7 @@ class _StatusBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final (color, icon, label) = switch (status) {
       'assigned' => (
-          AppColors.accentOrange,
+          AppColors.primary,
           Icons.assignment_outlined,
           l10n.statusAssigned,
         ),

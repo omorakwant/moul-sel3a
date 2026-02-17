@@ -97,7 +97,7 @@ class _SupplierInventoryScreenState
               child: productsAsync.when(
                 loading: () => const Center(
                   child: CircularProgressIndicator(
-                      color: AppColors.accentOrange),
+                      color: AppColors.primary),
                 ),
                 error: (e, _) => Center(
                   child: Column(
@@ -119,7 +119,7 @@ class _SupplierInventoryScreenState
                         child: Text(
                           isDarija ? 'عاود' : 'Réessayer',
                           style: const TextStyle(
-                              color: AppColors.accentOrange),
+                              color: AppColors.primary),
                         ),
                       ),
                     ],
@@ -131,7 +131,7 @@ class _SupplierInventoryScreenState
                     return _buildEmptyState(isDarija, products.isEmpty);
                   }
                   return RefreshIndicator(
-                    color: AppColors.accentOrange,
+                    color: AppColors.primary,
                     onRefresh: () async {
                       ref.invalidate(supplierProductsProvider);
                     },
@@ -156,7 +156,7 @@ class _SupplierInventoryScreenState
           ? null
           : FloatingActionButton.extended(
               onPressed: () => context.go('/supplier/product/add'),
-              backgroundColor: AppColors.accentOrange,
+              backgroundColor: AppColors.primary,
               icon: const Icon(Icons.add, color: Colors.white),
               label: Text(
                 isDarija ? 'زيد منتوج' : 'Nouveau produit',
@@ -228,7 +228,7 @@ class _SupplierInventoryScreenState
               height: 40,
               decoration: BoxDecoration(
                 color: _isSelecting
-                    ? AppColors.accentOrange.withOpacity(0.15)
+                    ? AppColors.primary.withOpacity(0.15)
                     : AppColors.bgSurface,
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -237,7 +237,7 @@ class _SupplierInventoryScreenState
                   _isSelecting ? Icons.close : Icons.checklist,
                   size: 20,
                   color: _isSelecting
-                      ? AppColors.accentOrange
+                      ? AppColors.primary
                       : AppColors.textPrimary,
                 ),
               ),
@@ -334,7 +334,7 @@ class _SupplierInventoryScreenState
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
           color:
-              selected ? AppColors.accentOrange : AppColors.bgSurface,
+              selected ? AppColors.primary : AppColors.bgSurface,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
@@ -359,7 +359,7 @@ class _SupplierInventoryScreenState
       margin: const EdgeInsets.fromLTRB(20, 4, 20, 4),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.accentOrange.withOpacity(0.08),
+        color: AppColors.primary.withOpacity(0.08),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -370,7 +370,7 @@ class _SupplierInventoryScreenState
               fontFamily: 'Inter',
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: AppColors.accentOrange,
+              color: AppColors.primary,
             ),
           ),
           const Spacer(),
@@ -386,7 +386,7 @@ class _SupplierInventoryScreenState
               style: const TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 13,
-                color: AppColors.accentOrange,
+                color: AppColors.primary,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -403,7 +403,7 @@ class _SupplierInventoryScreenState
               decoration: BoxDecoration(
                 color: _selectedIds.isEmpty
                     ? AppColors.bgMuted
-                    : AppColors.accentOrange,
+                    : AppColors.primary,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
@@ -485,7 +485,7 @@ class _SupplierInventoryScreenState
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: isSelected
-              ? Border.all(color: AppColors.accentOrange, width: 2)
+              ? Border.all(color: AppColors.primary, width: 2)
               : Border.all(color: AppColors.borderSubtle, width: 0.5),
           boxShadow: [
             BoxShadow(
@@ -506,12 +506,12 @@ class _SupplierInventoryScreenState
                   height: 24,
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.accentOrange
+                        ? AppColors.primary
                         : AppColors.bgSurface,
                     borderRadius: BorderRadius.circular(7),
                     border: Border.all(
                       color: isSelected
-                          ? AppColors.accentOrange
+                          ? AppColors.primary
                           : AppColors.bgMuted,
                     ),
                   ),
@@ -654,7 +654,7 @@ class _SupplierInventoryScreenState
                           fontFamily: 'Manrope',
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
-                          color: AppColors.accentOrange,
+                          color: AppColors.primary,
                         ),
                       ),
                       // Tier count
@@ -665,7 +665,7 @@ class _SupplierInventoryScreenState
                               horizontal: 5, vertical: 1),
                           decoration: BoxDecoration(
                             color:
-                                AppColors.accentOrange.withOpacity(0.1),
+                                AppColors.primary.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -674,7 +674,7 @@ class _SupplierInventoryScreenState
                               fontFamily: 'Inter',
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.accentOrange,
+                              color: AppColors.primary,
                             ),
                           ),
                         ),

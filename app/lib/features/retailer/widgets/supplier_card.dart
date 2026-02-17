@@ -131,7 +131,7 @@ class SupplierCard extends StatelessWidget {
                       _ActionChip(
                         label: l10n.isDarija ? 'شري' : 'Acheter',
                         icon: Icons.shopping_bag_outlined,
-                        color: AppColors.accentOrange,
+                        color: AppColors.primary,
                         onTap: onTap,
                       ),
                     ],

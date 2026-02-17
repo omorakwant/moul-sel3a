@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
-/// App theme built from the UI&UX.pen design tokens.
+/// App theme built from the DESIGN_CONTEXT.md design tokens.
+/// Updated to use Deep Indigo primary color for trust & business identity.
 /// Uses Manrope as primary font and Inter as secondary.
 class AppTheme {
   AppTheme._();
@@ -13,13 +14,13 @@ class AppTheme {
 
         // ── Color Scheme ──
         colorScheme: const ColorScheme.light(
-          primary: AppColors.accentOrange,
+          primary: AppColors.primary, // Deep Indigo
           onPrimary: AppColors.onAccent,
           secondary: AppColors.bgDark,
           onSecondary: AppColors.textOnDark,
           surface: AppColors.bgSurface,
           onSurface: AppColors.textPrimary,
-          error: AppColors.alertRed,
+          error: AppColors.alertRed, // Rose Red
           outline: AppColors.borderSubtle,
         ),
 
@@ -52,9 +53,10 @@ class AppTheme {
         // ── Elevated Buttons (Primary) ──
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.accentOrange,
+            backgroundColor: AppColors.primary, // Deep Indigo
             foregroundColor: AppColors.onAccent,
             elevation: 0,
+            minimumSize: const Size(88, 48), // Minimum 48px height for touch targets
             padding: const EdgeInsets.symmetric(
               horizontal: 24,
               vertical: 14,
@@ -64,7 +66,7 @@ class AppTheme {
             ),
             textStyle: const TextStyle(
               fontFamily: 'Manrope',
-              fontSize: 15,
+              fontSize: 16, // Increased from 15px for readability
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -129,7 +131,7 @@ class AppTheme {
         // ── Bottom Navigation ──
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: AppColors.bgSurface,
-          selectedItemColor: AppColors.accentOrange,
+          selectedItemColor: AppColors.primary, // Deep Indigo
           unselectedItemColor: AppColors.textTertiary,
           type: BottomNavigationBarType.fixed,
           showUnselectedLabels: true,
@@ -184,10 +186,10 @@ class AppTheme {
             fontWeight: FontWeight.w600,
             color: AppColors.textSecondary,
           ),
-          // Body
+          // Body (updated minimum size to 16px)
           bodyLarge: TextStyle(
             fontFamily: 'Inter',
-            fontSize: 16,
+            fontSize: 16, // Minimum body text size for sunlight readability
             fontWeight: FontWeight.w400,
             color: AppColors.textPrimary,
           ),

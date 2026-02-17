@@ -317,7 +317,7 @@ class _SupplierAddEditProductScreenState
       // ── FAB: Save ──
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _isSubmitting ? null : _submit,
-        backgroundColor: AppColors.accentOrange,
+        backgroundColor: AppColors.primary,
         icon: _isSubmitting
             ? const SizedBox(
                 width: 20,
@@ -532,7 +532,7 @@ class _SupplierAddEditProductScreenState
                       fontSize: 12,
                       color: AppColors.onAccent,
                     )),
-                backgroundColor: AppColors.accentOrange,
+                backgroundColor: AppColors.primary,
                 deleteIconColor: AppColors.onAccent,
                 onDeleted: () =>
                     setState(() => _selectedModels.remove(model)),
@@ -555,7 +555,7 @@ class _SupplierAddEditProductScreenState
             child: Row(
               children: [
                 const Icon(Icons.add,
-                    size: 20, color: AppColors.accentOrange),
+                    size: 20, color: AppColors.primary),
                 const SizedBox(width: 8),
                 Text(
                   isDarija
@@ -564,7 +564,7 @@ class _SupplierAddEditProductScreenState
                   style: const TextStyle(
                     fontFamily: 'Inter',
                     fontSize: 14,
-                    color: AppColors.accentOrange,
+                    color: AppColors.primary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -629,7 +629,7 @@ class _SupplierAddEditProductScreenState
                                 _selectedModels.contains(model);
                             return CheckboxListTile(
                               value: selected,
-                              activeColor: AppColors.accentOrange,
+                              activeColor: AppColors.primary,
                               title: Text(model,
                                   style: const TextStyle(
                                     fontFamily: 'Inter',
@@ -655,7 +655,7 @@ class _SupplierAddEditProductScreenState
                         height: 48,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.accentOrange,
+                            backgroundColor: AppColors.primary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14),
                             ),
@@ -702,7 +702,7 @@ class _SupplierAddEditProductScreenState
                   width: 28,
                   height: 28,
                   decoration: BoxDecoration(
-                    color: AppColors.accentOrange.withOpacity(0.12),
+                    color: AppColors.primary.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
@@ -712,7 +712,7 @@ class _SupplierAddEditProductScreenState
                         fontFamily: 'Manrope',
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.accentOrange,
+                        color: AppColors.primary,
                       ),
                     ),
                   ),
@@ -801,7 +801,7 @@ class _SupplierAddEditProductScreenState
                           fontFamily: 'Manrope',
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.accentOrange,
+                          color: AppColors.primary,
                         ),
                         border: InputBorder.none,
                         contentPadding:
@@ -847,14 +847,14 @@ class _SupplierAddEditProductScreenState
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: AppColors.accentOrange.withOpacity(0.4),
+                color: AppColors.primary.withOpacity(0.4),
               ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.add,
-                    size: 18, color: AppColors.accentOrange),
+                    size: 18, color: AppColors.primary),
                 const SizedBox(width: 6),
                 Text(
                   isDarija ? 'زيد بالية جديدة' : 'Ajouter un palier',
@@ -862,7 +862,7 @@ class _SupplierAddEditProductScreenState
                     fontFamily: 'Inter',
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.accentOrange,
+                    color: AppColors.primary,
                   ),
                 ),
               ],

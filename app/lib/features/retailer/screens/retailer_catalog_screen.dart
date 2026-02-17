@@ -93,7 +93,7 @@ class _RetailerCatalogScreenState
               ? 'كتكلم... هضر بالمنتوج'
               : 'Écoute en cours... dites le nom du produit',
         ),
-        backgroundColor: AppColors.accentOrange,
+        backgroundColor: AppColors.primary,
         duration: const Duration(seconds: 2),
       ),
     );
@@ -370,7 +370,7 @@ class _RetailerCatalogScreenState
                   child: ElevatedButton.icon(
                     onPressed: () => _navigateToCart(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.accentOrange,
+                      backgroundColor: AppColors.primary,
                       foregroundColor: AppColors.onAccent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
@@ -430,7 +430,7 @@ class _RetailerCatalogScreenState
                     fontFamily: 'Inter',
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.accentOrange,
+                    color: AppColors.primary,
                   ),
                 ),
             ],
@@ -516,7 +516,7 @@ class _RetailerCatalogScreenState
             child: const Icon(
               Icons.mic,
               size: 20,
-              color: AppColors.accentOrange,
+              color: AppColors.primary,
             ),
           ),
         ],
@@ -700,7 +700,7 @@ class _RetailerCatalogScreenState
                             fontFamily: 'Inter',
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.accentOrange,
+                            color: AppColors.primary,
                           ),
                         ),
                       ),
@@ -731,14 +731,14 @@ class _RetailerCatalogScreenState
                                 ? FontWeight.w700
                                 : FontWeight.w500,
                             color: isSelected
-                                ? AppColors.accentOrange
+                                ? AppColors.primary
                                 : AppColors.textPrimary,
                           ),
                         ),
                         trailing: isSelected
                             ? const Icon(
                                 Icons.check_circle,
-                                color: AppColors.accentOrange,
+                                color: AppColors.primary,
                                 size: 20,
                               )
                             : null,
@@ -822,7 +822,7 @@ class _RetailerCatalogScreenState
           child: Padding(
             padding: EdgeInsets.only(top: 60),
             child: CircularProgressIndicator(
-              color: AppColors.accentOrange,
+              color: AppColors.primary,
             ),
           ),
         ),
@@ -855,7 +855,7 @@ class _RetailerCatalogScreenState
                   child: Text(
                     l10n.retry,
                     style: const TextStyle(
-                      color: AppColors.accentOrange,
+                      color: AppColors.primary,
                     ),
                   ),
                 ),
@@ -969,7 +969,7 @@ class _RetailerCatalogScreenState
               icon,
               size: 24,
               color: isActive
-                  ? AppColors.accentOrange
+                  ? AppColors.primary
                   : AppColors.textSecondary,
             ),
             const SizedBox(height: 4),
@@ -980,7 +980,7 @@ class _RetailerCatalogScreenState
                 fontSize: 11,
                 fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
                 color: isActive
-                    ? AppColors.accentOrange
+                    ? AppColors.primary
                     : AppColors.textSecondary,
               ),
             ),

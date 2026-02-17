@@ -121,7 +121,7 @@ class _RetailerPartialReceiptScreenState
             );
           },
           loading: () => const Center(
-            child: CircularProgressIndicator(color: AppColors.accentOrange),
+            child: CircularProgressIndicator(color: AppColors.primary),
           ),
           error: (error, _) => Center(
             child: Column(

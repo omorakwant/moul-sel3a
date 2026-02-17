@@ -30,7 +30,7 @@ class DriverMarketplaceScreen extends ConsumerWidget {
         elevation: 0,
       ),
       body: RefreshIndicator(
-        color: AppColors.accentOrange,
+        color: AppColors.primary,
         onRefresh: () async {
           ref.invalidate(openJobsFeedProvider);
           ref.invalidate(myActiveJobsProvider);
@@ -118,7 +118,7 @@ class DriverMarketplaceScreen extends ConsumerWidget {
               },
               loading: () => const SliverFillRemaining(
                 child: Center(
-                  child: CircularProgressIndicator(color: AppColors.accentOrange),
+                  child: CircularProgressIndicator(color: AppColors.primary),
                 ),
               ),
               error: (e, _) => SliverFillRemaining(
@@ -208,7 +208,7 @@ class _RouteCard extends StatelessWidget {
                 // ── Route: From → To ──
                 _RouteLabel(
                   icon: Icons.store_outlined,
-                  iconColor: AppColors.accentOrange,
+                  iconColor: AppColors.primary,
                   label: l10n.pickupFrom,
                   location: job.pickupLabel,
                 ),
@@ -251,7 +251,7 @@ class _RouteCard extends StatelessWidget {
                     ],
                     if (job.isCOD && job.codAmount != null) ...[
                       Icon(Icons.payments_outlined,
-                          size: 16, color: AppColors.accentOrange),
+                          size: 16, color: AppColors.primary),
                       const SizedBox(width: 4),
                       Text(
                         '${l10n.isDarija ? 'فلوس:' : 'COD:'} ${Formatters.price(job.codAmount!)}',
@@ -259,7 +259,7 @@ class _RouteCard extends StatelessWidget {
                           fontFamily: 'Inter',
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.accentOrange,
+                          color: AppColors.primary,
                         ),
                       ),
                     ],
@@ -269,7 +269,7 @@ class _RouteCard extends StatelessWidget {
                       icon: const Icon(Icons.gavel_outlined, size: 18),
                       label: Text(l10n.placeBid),
                       style: TextButton.styleFrom(
-                        foregroundColor: AppColors.accentOrange,
+                        foregroundColor: AppColors.primary,
                         textStyle: const TextStyle(
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w600,
@@ -354,7 +354,7 @@ class _JobTypeBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: isCod
-            ? AppColors.accentOrange.withOpacity(0.1)
+            ? AppColors.primary.withOpacity(0.1)
             : AppColors.successGreen.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
       ),
@@ -364,7 +364,7 @@ class _JobTypeBadge extends StatelessWidget {
           fontFamily: 'Inter',
           fontSize: 11,
           fontWeight: FontWeight.w600,
-          color: isCod ? AppColors.accentOrange : AppColors.successGreen,
+          color: isCod ? AppColors.primary : AppColors.successGreen,
         ),
       ),
     );
@@ -392,7 +392,7 @@ class _ActiveTripsBanner extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.accentOrange, Color(0xFFE65100)],
+          colors: [AppColors.primary, Color(0xFFE65100)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

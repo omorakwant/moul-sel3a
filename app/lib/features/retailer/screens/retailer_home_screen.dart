@@ -105,7 +105,7 @@ class RetailerHomeScreen extends ConsumerWidget {
                         child: Padding(
                           padding: EdgeInsets.only(top: 60),
                           child: CircularProgressIndicator(
-                            color: AppColors.accentOrange,
+                            color: AppColors.primary,
                           ),
                         ),
                       ),
@@ -136,7 +136,7 @@ class RetailerHomeScreen extends ConsumerWidget {
                                 child: Text(
                                   l10n.retry,
                                   style: const TextStyle(
-                                    color: AppColors.accentOrange,
+                                    color: AppColors.primary,
                                   ),
                                 ),
                               ),
@@ -350,7 +350,7 @@ class RetailerHomeScreen extends ConsumerWidget {
             const Icon(
               Icons.person_add_outlined,
               size: 20,
-              color: AppColors.accentOrange,
+              color: AppColors.primary,
             ),
             const SizedBox(width: 8),
             Text(
@@ -361,7 +361,7 @@ class RetailerHomeScreen extends ConsumerWidget {
                 fontFamily: 'Manrope',
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: AppColors.accentOrange,
+                color: AppColors.primary,
               ),
             ),
           ],
@@ -512,7 +512,7 @@ class RetailerHomeScreen extends ConsumerWidget {
                               width: 40,
                               height: 40,
                               decoration: BoxDecoration(
-                                color: AppColors.accentOrange.withValues(alpha: 0.1),
+                                color: AppColors.primary.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
@@ -522,7 +522,7 @@ class RetailerHomeScreen extends ConsumerWidget {
                                     fontFamily: 'Manrope',
                                     fontSize: 16,
                                     fontWeight: FontWeight.w700,
-                                    color: AppColors.accentOrange,
+                                    color: AppColors.primary,
                                   ),
                                 ),
                               ),
@@ -583,7 +583,7 @@ class RetailerHomeScreen extends ConsumerWidget {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.accentOrange,
+                backgroundColor: AppColors.primary,
                 foregroundColor: AppColors.onAccent,
                 padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
                 shape: RoundedRectangleBorder(
@@ -670,7 +670,7 @@ class RetailerHomeScreen extends ConsumerWidget {
               icon,
               size: 24,
               color: isActive
-                  ? AppColors.accentOrange
+                  ? AppColors.primary
                   : AppColors.textSecondary,
             ),
             const SizedBox(height: 4),
@@ -681,7 +681,7 @@ class RetailerHomeScreen extends ConsumerWidget {
                 fontSize: 11,
                 fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
                 color: isActive
-                    ? AppColors.accentOrange
+                    ? AppColors.primary
                     : AppColors.textSecondary,
               ),
             ),
