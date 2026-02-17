@@ -7,7 +7,6 @@ import '../../../data/repositories/order_repository.dart';
 import '../../../data/repositories/relation_repository.dart';
 import '../../../data/repositories/delivery_repository.dart';
 import '../../../data/repositories/ledger_repository.dart';
-import '../../../data/services/supabase_service.dart';
 import '../../../data/repositories/profile_repository.dart';
 
 // ═════════════════════════════════════════════════════════════════════════════

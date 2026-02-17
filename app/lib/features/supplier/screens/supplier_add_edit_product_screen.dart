@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/errors/error_widgets.dart';
-import '../../../core/utils/formatters.dart';
 import '../../../data/models/product.dart';
 import '../../../data/repositories/product_repository.dart';
 import '../../../data/services/supabase_service.dart';

@@ -66,7 +66,6 @@ class _SupplierProfileScreenState extends ConsumerState<SupplierProfileScreen> {
       await ref.read(updateProfileProvider)(updated);
 
       if (mounted) {
-        final l10n = AppLocalizations.of(context);
         showSuccessSnackBar(
           context,
           messageFr: 'Profil mis à jour',

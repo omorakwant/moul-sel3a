@@ -11,7 +11,6 @@ import '../../../data/models/order.dart';
 import '../../../data/repositories/order_repository.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../providers/cart_providers.dart';
-import '../providers/retailer_providers.dart';
 
 /// ══════════════════════════════════════════════════════════════════════════════
 /// RETAILER CART SCREEN — Shopping cart + Order Confirmation + WhatsApp Share.

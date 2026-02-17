@@ -8,7 +8,6 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/order.dart';
-import '../../../data/repositories/profile_repository.dart';
 import '../providers/order_providers.dart';
 
 /// Retailer Order Detail Screen — "Screen 3 — Digital Bon" from UI&UX.pen.

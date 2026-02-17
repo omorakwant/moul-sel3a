@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/models/profile.dart';
 import '../../../data/repositories/profile_repository.dart';
+import '../../../data/services/supabase_service.dart';
 import '../../auth/providers/auth_providers.dart';
 
 /// ══════════════════════════════════════════════════════════════════════════════
