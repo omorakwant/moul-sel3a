@@ -26,17 +26,18 @@
 | Local Storage | hive_flutter |
 | Communication | WhatsApp deep links (url_launcher) |
 
-### Codebase Stats (as of commit `phase4`)
+### Codebase Stats (as of commit `phase6-error-handling`)
 | Metric | Count |
 |--------|-------|
-| Dart source files | 69 |
-| Lines of Dart | ~19,800 |
+| Dart source files | 73 |
+| Lines of Dart | ~20,500 |
 | SQL migration lines | ~792 |
 | L10n strings | ~200+ (FR + Darija) |
-| Total commits | 15 |
+| Total commits | 17 |
 | Database tables | 7 |
 | Supabase triggers | 3 |
 | RLS policies | ~20 |
+| Supabase project | `hqlmeotqpkgvcnuqslgc` (us-east-1) |
 
 ---
 
@@ -50,6 +51,10 @@ app/lib/
 │   ├── constants/
 │   │   ├── app_constants.dart         # App-wide constants
 │   │   └── supabase_constants.dart    # Table names, bucket, keys
+│   ├── errors/
+│   │   ├── app_exception.dart         # Typed exception hierarchy (network, auth, etc.)
+│   │   ├── error_widgets.dart         # ErrorCard, ErrorSliver, showErrorSnackBar
+│   │   └── errors.dart                # Barrel export
 │   ├── l10n/
 │   │   └── app_localizations.dart     # Bilingual FR/Darija (~200+ strings)
 │   ├── routing/
@@ -72,6 +77,7 @@ app/lib/
 │   │   ├── cart_item.dart             # Cart item model
 │   │   └── models.dart                # Barrel export
 │   ├── repositories/                  # Supabase CRUD operations
+│   │   ├── base_repository.dart       # SupabaseErrorHandler mixin
 │   │   ├── profile_repository.dart
 │   │   ├── product_repository.dart
 │   │   ├── order_repository.dart
@@ -145,6 +151,8 @@ All development occurred on **February 16, 2026**.
 | 13 | `62c3f8f` | **Logistics flow** — driver marketplace, bidding, PIN handshake, ledger auto-update |
 | 14 | — | **Phase 2+3** — Supplier dashboard, retailer orders list, payment declaration, verification desk, order→ledger wiring, delivery job auto-creation, +70 l10n strings, 3 bug fixes |
 | 15 | — | **Phase 4** — WhatsApp deep links wired (5 screens), retailer profile screen (edit + language toggle), sign-out with confirmation dialog, `supplierPhoneProvider` for order detail voice notes |
+| 16 | — | **Supabase setup** — Created `moul-sel3a` project (ref: `hqlmeotqpkgvcnuqslgc`, region: us-east-1), linked CLI, pushed both migrations, wired real API URL + anon key into `supabase_constants.dart` |
+| 17 | — | **Error handling** — `AppException` typed hierarchy, `SupabaseErrorHandler` mixin on all 6 repos (43 methods), `ErrorCard`/`ErrorSliver`/`showErrorSnackBar` widgets, replaced 16 raw `$e` patterns across 14 screens with user-friendly bilingual messages |
 
 ---
 
@@ -280,8 +288,8 @@ All development occurred on **February 16, 2026**.
 ### Priority 4 — Production Readiness
 | Feature | Priority | Description |
 |---------|----------|-------------|
-| Supabase project setup | 🔴 High | Replace placeholder URL/key in `supabase_constants.dart` |
-| Error handling & retry | 🟡 Medium | Network error UX, retry mechanisms, offline queue |
+| ~~Supabase project setup~~ | ✅ Done | ~~Replace placeholder URL/key~~ — project `hqlmeotqpkgvcnuqslgc` linked, real credentials wired |
+| ~~Error handling & retry~~ | ✅ Done | ~~Network error UX~~ — `AppException` types + `SupabaseErrorHandler` mixin on all repos + `ErrorCard`/`showErrorSnackBar` in all screens |
 | Unit & widget tests | 🟡 Medium | Test models, repositories, key widgets |
 | App icon & splash branding | 🟢 Low | L'Carnet B2B logo, branded splash screen |
 | Play Store / App Store prep | 🟢 Low | Screenshots, descriptions (FR/AR), privacy policy |
@@ -443,4 +451,4 @@ supabase db push
 
 ---
 
-*Last updated: February 16, 2026 · Commit `62c3f8f`*
+*Last updated: February 16, 2026 · Phase 6: Error Handling + Supabase*

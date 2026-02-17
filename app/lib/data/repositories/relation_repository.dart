@@ -4,20 +4,21 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/supplier_retailer_relation.dart';
 import '../services/supabase_service.dart';
 import '../../core/constants/supabase_constants.dart';
+import 'base_repository.dart';
 
 /// Repository for SupplierRetailerRelation ("Le Carnet") operations.
 final relationRepositoryProvider = Provider<RelationRepository>((ref) {
   return RelationRepository(ref.watch(supabaseClientProvider));
 });
 
-class RelationRepository {
+class RelationRepository with SupabaseErrorHandler {
   final SupabaseClient _client;
 
   RelationRepository(this._client);
 
   /// Fetch all supplier relations for the logged-in retailer.
   /// Includes supplier profile data for display (shop_name, phone).
-  Future<List<SupplierRetailerRelation>> getRetailerRelations() async {
+  Future<List<SupplierRetailerRelation>> getRetailerRelations() => guard(() async {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) return [];
 
@@ -34,10 +35,10 @@ class RelationRepository {
     return (response as List)
         .map((e) => SupplierRetailerRelation.fromJson(e))
         .toList();
-  }
+  });
 
   /// Fetch all retailer relations for the logged-in supplier.
-  Future<List<SupplierRetailerRelation>> getSupplierRelations() async {
+  Future<List<SupplierRetailerRelation>> getSupplierRelations() => guard(() async {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) return [];
 
@@ -54,10 +55,10 @@ class RelationRepository {
     return (response as List)
         .map((e) => SupplierRetailerRelation.fromJson(e))
         .toList();
-  }
+  });
 
   /// Get a single relation by ID.
-  Future<SupplierRetailerRelation?> getById(String id) async {
+  Future<SupplierRetailerRelation?> getById(String id) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.relationsTable)
         .select('''
@@ -70,13 +71,13 @@ class RelationRepository {
 
     if (response == null) return null;
     return SupplierRetailerRelation.fromJson(response);
-  }
+  });
 
   /// Create a new supplier-retailer relation (Supplier only).
   Future<SupplierRetailerRelation> create({
     required String retailerId,
     required double creditLimit,
-  }) async {
+  }) => guard(() async {
     final userId = _client.auth.currentUser!.id;
 
     final response = await _client
@@ -90,10 +91,10 @@ class RelationRepository {
         .single();
 
     return SupplierRetailerRelation.fromJson(response);
-  }
+  });
 
   /// Update credit limit or status (Supplier only).
-  Future<void> update(String id, {double? creditLimit, String? status}) async {
+  Future<void> update(String id, {double? creditLimit, String? status}) => guard(() async {
     final updates = <String, dynamic>{};
     if (creditLimit != null) updates['credit_limit'] = creditLimit;
     if (status != null) updates['status'] = status;
@@ -104,5 +105,5 @@ class RelationRepository {
           .update(updates)
           .eq('id', id);
     }
-  }
+  });
 }

@@ -4,19 +4,20 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/profile.dart';
 import '../services/supabase_service.dart';
 import '../../core/constants/supabase_constants.dart';
+import 'base_repository.dart';
 
 /// Repository for Profile CRUD operations.
 final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   return ProfileRepository(ref.watch(supabaseClientProvider));
 });
 
-class ProfileRepository {
+class ProfileRepository with SupabaseErrorHandler {
   final SupabaseClient _client;
 
   ProfileRepository(this._client);
 
   /// Fetch the current user's profile.
-  Future<Profile?> getCurrentProfile() async {
+  Future<Profile?> getCurrentProfile() => guard(() async {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) return null;
 
@@ -28,10 +29,10 @@ class ProfileRepository {
 
     if (response == null) return null;
     return Profile.fromJson(response);
-  }
+  });
 
   /// Fetch a profile by ID.
-  Future<Profile?> getById(String id) async {
+  Future<Profile?> getById(String id) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.profilesTable)
         .select()
@@ -40,13 +41,13 @@ class ProfileRepository {
 
     if (response == null) return null;
     return Profile.fromJson(response);
-  }
+  });
 
   /// Update a profile.
-  Future<void> update(Profile profile) async {
+  Future<void> update(Profile profile) => guard(() async {
     await _client
         .from(SupabaseConstants.profilesTable)
         .update(profile.toJson())
         .eq('id', profile.id);
-  }
+  });
 }

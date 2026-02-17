@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/order.dart';
 import '../providers/order_providers.dart';
@@ -712,12 +713,7 @@ class _RetailerPartialReceiptScreenState
                       }
                     } catch (e) {
                       if (mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('${l10n.error}: $e'),
-                            backgroundColor: AppColors.alertRed,
-                          ),
-                        );
+                        showErrorSnackBar(context, e);
                       }
                     } finally {
                       if (mounted) setState(() => _isSubmitting = false);

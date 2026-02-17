@@ -4,19 +4,20 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/ledger_transaction.dart';
 import '../services/supabase_service.dart';
 import '../../core/constants/supabase_constants.dart';
+import 'base_repository.dart';
 
 /// Repository for Ledger Transactions — the financial source of truth.
 final ledgerRepositoryProvider = Provider<LedgerRepository>((ref) {
   return LedgerRepository(ref.watch(supabaseClientProvider));
 });
 
-class LedgerRepository {
+class LedgerRepository with SupabaseErrorHandler {
   final SupabaseClient _client;
 
   LedgerRepository(this._client);
 
   /// Fetch all transactions for a specific supplier-retailer relation.
-  Future<List<LedgerTransaction>> getByRelation(String relationId) async {
+  Future<List<LedgerTransaction>> getByRelation(String relationId) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.ledgerTable)
         .select()
@@ -26,10 +27,10 @@ class LedgerRepository {
     return (response as List)
         .map((e) => LedgerTransaction.fromJson(e))
         .toList();
-  }
+  });
 
   /// Fetch pending transactions for supplier verification.
-  Future<List<LedgerTransaction>> getPendingForSupplier() async {
+  Future<List<LedgerTransaction>> getPendingForSupplier() => guard(() async {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) return [];
 
@@ -52,7 +53,7 @@ class LedgerRepository {
     }).toList();
 
     return filtered.map((e) => LedgerTransaction.fromJson(e)).toList();
-  }
+  });
 
   /// Create a payment declaration (Retailer action).
   /// Status is ALWAYS 'pending' — supplier must verify.
@@ -63,7 +64,7 @@ class LedgerRepository {
     String? evidenceUrl,
     String? referenceCode,
     String? notes,
-  }) async {
+  }) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.ledgerTable)
         .insert({
@@ -80,14 +81,14 @@ class LedgerRepository {
         .single();
 
     return LedgerTransaction.fromJson(response);
-  }
+  });
 
   /// Create an order increase transaction (usually triggered after order delivery).
   Future<LedgerTransaction> createOrderIncrease({
     required String relationId,
     required String orderId,
     required double amount,
-  }) async {
+  }) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.ledgerTable)
         .insert({
@@ -101,11 +102,11 @@ class LedgerRepository {
         .single();
 
     return LedgerTransaction.fromJson(response);
-  }
+  });
 
   /// Verify a transaction (Supplier action).
   /// This triggers fn_update_rolling_balance in the DB.
-  Future<void> verifyTransaction(String transactionId) async {
+  Future<void> verifyTransaction(String transactionId) => guard(() async {
     final userId = _client.auth.currentUser!.id;
 
     await _client
@@ -115,10 +116,10 @@ class LedgerRepository {
           'verified_by': userId,
         })
         .eq('id', transactionId);
-  }
+  });
 
   /// Reject a transaction (Supplier action).
-  Future<void> rejectTransaction(String transactionId, {String? notes}) async {
+  Future<void> rejectTransaction(String transactionId, {String? notes}) => guard(() async {
     await _client
         .from(SupabaseConstants.ledgerTable)
         .update({
@@ -126,5 +127,5 @@ class LedgerRepository {
           if (notes != null) 'notes': notes,
         })
         .eq('id', transactionId);
-  }
+  });
 }

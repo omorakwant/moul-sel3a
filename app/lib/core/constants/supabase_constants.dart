@@ -1,18 +1,16 @@
 /// Supabase connection constants.
-/// ⚠️ SETUP REQUIRED: Replace these with your actual Supabase project credentials.
-/// 1. Create a project at https://supabase.com/dashboard
-/// 2. Run migrations from supabase/migrations/ against your project
-/// 3. Copy the project URL and anon key from Settings > API
+/// Project: moul-sel3a (hqlmeotqpkgvcnuqslgc)
+/// Region: us-east-1 (East US / North Virginia)
+/// Created: 2026-02-17
 class SupabaseConstants {
   SupabaseConstants._();
 
-  /// Your Supabase project URL — replace with actual value
-  // TODO: Replace with your Supabase project URL
-  static const String url = 'https://YOUR_PROJECT_REF.supabase.co';
+  /// Supabase project URL
+  static const String url = 'https://hqlmeotqpkgvcnuqslgc.supabase.co';
 
-  /// Your Supabase anon/public key (safe for client-side use)
-  // TODO: Replace with your Supabase anon key
-  static const String anonKey = 'YOUR_ANON_KEY';
+  /// Supabase anon/public key (safe for client-side use)
+  static const String anonKey =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxbG1lb3RxcGtndmNudXFzbGdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEzNDU1NTIsImV4cCI6MjA4NjkyMTU1Mn0.YFJzckJJU4QnJYpgK09O1ZVPiwy5EWpv8Hp1czKtbXM';
 
   /// Storage bucket for receipt photos & product images
   static const String storageBucket = 'lcarnet-assets';

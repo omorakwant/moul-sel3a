@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/delivery_bid.dart';
 import '../../../data/models/delivery_job.dart';
@@ -120,7 +121,7 @@ class SupplierBidManagerScreen extends ConsumerWidget {
                       child: CircularProgressIndicator(
                           color: AppColors.accentOrange),
                     ),
-                    error: (e, _) => Text('$e'),
+                    error: (e, _) => ErrorCard(error: e),
                   ),
                 ],
               ),
@@ -130,7 +131,7 @@ class SupplierBidManagerScreen extends ConsumerWidget {
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.accentOrange),
         ),
-        error: (e, _) => Center(child: Text('$e')),
+        error: (e, _) => ErrorCard(error: e),
       ),
     );
   }

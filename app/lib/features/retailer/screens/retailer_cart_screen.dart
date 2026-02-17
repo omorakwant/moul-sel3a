@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/order.dart';
 import '../../../data/repositories/order_repository.dart';
@@ -602,12 +603,7 @@ class _RetailerCartScreenState extends ConsumerState<RetailerCartScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('${l10n.error}: $e'),
-            backgroundColor: AppColors.alertRed,
-          ),
-        );
+        showErrorSnackBar(context, e);
       }
     } finally {
       if (mounted) {

@@ -4,19 +4,20 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/order.dart';
 import '../services/supabase_service.dart';
 import '../../core/constants/supabase_constants.dart';
+import 'base_repository.dart';
 
 /// Repository for Order ("Digital Bon") operations.
 final orderRepositoryProvider = Provider<OrderRepository>((ref) {
   return OrderRepository(ref.watch(supabaseClientProvider));
 });
 
-class OrderRepository {
+class OrderRepository with SupabaseErrorHandler {
   final SupabaseClient _client;
 
   OrderRepository(this._client);
 
   /// Fetch orders for the logged-in retailer.
-  Future<List<Order>> getRetailerOrders({String? status}) async {
+  Future<List<Order>> getRetailerOrders({String? status}) => guard(() async {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) return [];
 
@@ -35,10 +36,10 @@ class OrderRepository {
 
     final response = await query.order('created_at', ascending: false);
     return (response as List).map((e) => Order.fromJson(e)).toList();
-  }
+  });
 
   /// Fetch orders for the logged-in supplier.
-  Future<List<Order>> getSupplierOrders({String? status}) async {
+  Future<List<Order>> getSupplierOrders({String? status}) => guard(() async {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) return [];
 
@@ -57,10 +58,10 @@ class OrderRepository {
 
     final response = await query.order('created_at', ascending: false);
     return (response as List).map((e) => Order.fromJson(e)).toList();
-  }
+  });
 
   /// Get a single order by ID.
-  Future<Order?> getById(String id) async {
+  Future<Order?> getById(String id) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.ordersTable)
         .select('''
@@ -73,10 +74,10 @@ class OrderRepository {
 
     if (response == null) return null;
     return Order.fromJson(response);
-  }
+  });
 
   /// Create a new order (Retailer places order).
-  Future<Order> create(Order order) async {
+  Future<Order> create(Order order) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.ordersTable)
         .insert(order.toJson())
@@ -84,15 +85,15 @@ class OrderRepository {
         .single();
 
     return Order.fromJson(response);
-  }
+  });
 
   /// Update order status (Supplier confirms, ships, etc.).
-  Future<void> updateStatus(String orderId, String newStatus) async {
+  Future<void> updateStatus(String orderId, String newStatus) => guard(() async {
     await _client
         .from(SupabaseConstants.ordersTable)
         .update({'status': newStatus})
         .eq('id', orderId);
-  }
+  });
 
   /// Partial receipt: Retailer adjusts quantities and sets adjusted_total.
   /// This is the critical "Partial Receipt" feature from PROJECT_CONTEXT.md.
@@ -100,7 +101,7 @@ class OrderRepository {
     String orderId, {
     required List<Map<String, dynamic>> adjustedItems,
     required double adjustedTotal,
-  }) async {
+  }) => guard(() async {
     await _client
         .from(SupabaseConstants.ordersTable)
         .update({
@@ -109,10 +110,10 @@ class OrderRepository {
           'status': 'delivered',
         })
         .eq('id', orderId);
-  }
+  });
 
   /// Assign a driver to an order (Supplier action).
-  Future<void> assignDriver(String orderId, String driverName) async {
+  Future<void> assignDriver(String orderId, String driverName) => guard(() async {
     await _client
         .from(SupabaseConstants.ordersTable)
         .update({
@@ -120,5 +121,5 @@ class OrderRepository {
           'delivery_type': 'in_house',
         })
         .eq('id', orderId);
-  }
+  });
 }

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/order.dart';
 import '../../../data/models/supplier_retailer_relation.dart';
@@ -265,20 +266,9 @@ class _OrdersTab extends ConsumerWidget {
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.accentOrange),
         ),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: AppColors.alertRed),
-              const SizedBox(height: 12),
-              Text('${l10n.error}: $e'),
-              const SizedBox(height: 12),
-              TextButton(
-                onPressed: () => ref.invalidate(supplierOrdersProvider),
-                child: Text(l10n.retry),
-              ),
-            ],
-          ),
+        error: (e, _) => ErrorCard(
+          error: e,
+          onRetry: () => ref.invalidate(supplierOrdersProvider),
         ),
         data: (orders) {
           if (orders.isEmpty) {
@@ -335,16 +325,7 @@ class _RetailersTab extends ConsumerWidget {
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.accentOrange),
         ),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: AppColors.alertRed),
-              const SizedBox(height: 12),
-              Text('${l10n.error}: $e'),
-            ],
-          ),
-        ),
+        error: (e, _) => ErrorCard(error: e),
         data: (relations) {
           if (relations.isEmpty) {
             return Center(
@@ -484,7 +465,7 @@ class _PendingOrdersList extends ConsumerWidget {
           child: CircularProgressIndicator(color: AppColors.accentOrange),
         ),
       ),
-      error: (e, _) => Text('${l10n.error}: $e'),
+      error: (e, _) => ErrorCard(error: e),
       data: (orders) {
         if (orders.isEmpty) {
           return Container(
@@ -717,9 +698,7 @@ class _OrderCard extends ConsumerWidget {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${l10n.error}: $e')),
-        );
+        showErrorSnackBar(context, e);
       }
     }
   }
@@ -759,9 +738,7 @@ class _OrderCard extends ConsumerWidget {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${l10n.error}: $e')),
-        );
+        showErrorSnackBar(context, e);
       }
     }
   }
@@ -780,9 +757,7 @@ class _OrderCard extends ConsumerWidget {
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${l10n.error}: $e')),
-        );
+        showErrorSnackBar(context, e);
       }
     }
   }

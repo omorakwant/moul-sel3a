@@ -4,13 +4,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/product.dart';
 import '../services/supabase_service.dart';
 import '../../core/constants/supabase_constants.dart';
+import 'base_repository.dart';
 
 /// Repository for Product catalog operations.
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
   return ProductRepository(ref.watch(supabaseClientProvider));
 });
 
-class ProductRepository {
+class ProductRepository with SupabaseErrorHandler {
   final SupabaseClient _client;
 
   ProductRepository(this._client);
@@ -21,7 +22,7 @@ class ProductRepository {
     String supplierId, {
     String? compatibilityFilter,
     bool newArrivalsOnly = false,
-  }) async {
+  }) => guard(() async {
     var query = _client
         .from(SupabaseConstants.productsTable)
         .select()
@@ -40,13 +41,13 @@ class ProductRepository {
     final response = await query.order('is_new', ascending: false);
 
     return (response as List).map((e) => Product.fromJson(e)).toList();
-  }
+  });
 
   /// Search products by name or compatibility across a supplier's catalog.
   Future<List<Product>> searchProducts(
     String supplierId,
     String searchTerm,
-  ) async {
+  ) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.productsTable)
         .select()
@@ -56,10 +57,10 @@ class ProductRepository {
         .order('is_new', ascending: false);
 
     return (response as List).map((e) => Product.fromJson(e)).toList();
-  }
+  });
 
   /// Get a single product by ID.
-  Future<Product?> getById(String id) async {
+  Future<Product?> getById(String id) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.productsTable)
         .select()
@@ -68,10 +69,10 @@ class ProductRepository {
 
     if (response == null) return null;
     return Product.fromJson(response);
-  }
+  });
 
   /// Create a new product (Supplier only).
-  Future<Product> create(Product product) async {
+  Future<Product> create(Product product) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.productsTable)
         .insert(product.toJson())
@@ -79,19 +80,19 @@ class ProductRepository {
         .single();
 
     return Product.fromJson(response);
-  }
+  });
 
   /// Update a product (Supplier only).
-  Future<void> update(Product product) async {
+  Future<void> update(Product product) => guard(() async {
     await _client
         .from(SupabaseConstants.productsTable)
         .update(product.toJson())
         .eq('id', product.id);
-  }
+  });
 
   /// Bulk update prices for multiple products.
   /// Used by the Supplier Bulk Price Adjustment feature.
-  Future<void> bulkUpdatePrices(Map<String, Map<String, double>> updates) async {
+  Future<void> bulkUpdatePrices(Map<String, Map<String, double>> updates) => guard(() async {
     // updates: { productId: { "1": 15.0, "10": 12.0, "50": 10.0 } }
     for (final entry in updates.entries) {
       await _client
@@ -99,10 +100,10 @@ class ProductRepository {
           .update({'price_tiers': entry.value})
           .eq('id', entry.key);
     }
-  }
+  });
 
   /// Get all distinct brands for a supplier (for filter chips).
-  Future<List<String>> getDistinctBrands(String supplierId) async {
+  Future<List<String>> getDistinctBrands(String supplierId) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.productsTable)
         .select('brand')
@@ -118,5 +119,5 @@ class ProductRepository {
         .toList();
 
     return brands..sort();
-  }
+  });
 }

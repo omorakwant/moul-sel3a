@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/delivery_job.dart';
 import '../providers/driver_providers.dart';
@@ -62,7 +63,7 @@ class _DriverActiveTripScreenState
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.accentOrange),
         ),
-        error: (e, _) => Center(child: Text('$e')),
+        error: (e, _) => ErrorCard(error: e),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/product.dart';
 import '../providers/supplier_inventory_providers.dart';
@@ -83,9 +84,7 @@ class _BulkPriceAdjustmentModalState
       if (mounted) Navigator.pop(context);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${widget.isDarija ? "مشكل" : "Erreur"}: $e')),
-        );
+        showErrorSnackBar(context, e);
       }
     } finally {
       if (mounted) setState(() => _isApplying = false);

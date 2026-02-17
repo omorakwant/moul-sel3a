@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/errors/error_widgets.dart';
 import '../../../data/models/profile.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../providers/profile_providers.dart';
@@ -213,7 +214,7 @@ class _RetailerProfileScreenState extends ConsumerState<RetailerProfileScreen> {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Center(child: Text('$e')),
+          error: (e, _) => ErrorCard(error: e),
         ),
       ),
     );

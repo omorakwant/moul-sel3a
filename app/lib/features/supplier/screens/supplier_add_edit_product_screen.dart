@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/product.dart';
 import '../../../data/repositories/product_repository.dart';
@@ -193,7 +194,7 @@ class _SupplierAddEditProductScreenState
       }
     } catch (e) {
       if (mounted) {
-        _showSnackBar(_isDarija ? 'مشكل: $e' : 'Erreur: $e');
+        showErrorSnackBar(context, e);
       }
     } finally {
       if (mounted) setState(() => _isSubmitting = false);

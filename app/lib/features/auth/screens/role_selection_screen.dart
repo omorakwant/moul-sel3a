@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/errors/error_widgets.dart';
 import '../../../data/services/phone_auth_service.dart';
 import '../providers/auth_providers.dart';
 
@@ -92,10 +93,9 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final appErr = toAppException(e);
         setState(() {
-          _errorMessage = _isDarija
-              ? 'مشكل: $e'
-              : 'Erreur: $e';
+          _errorMessage = appErr.message(_isDarija);
         });
       }
     } finally {

@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/ledger_transaction.dart';
 import '../providers/supplier_verification_providers.dart';
@@ -51,22 +52,9 @@ class SupplierVerificationScreen extends ConsumerWidget {
           loading: () => const Center(
             child: CircularProgressIndicator(color: AppColors.accentOrange),
           ),
-          error: (e, _) => Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.error_outline,
-                    size: 48, color: AppColors.alertRed),
-                const SizedBox(height: 12),
-                Text('${l10n.error}: $e'),
-                const SizedBox(height: 12),
-                TextButton(
-                  onPressed: () =>
-                      ref.invalidate(pendingVerificationsProvider),
-                  child: Text(l10n.retry),
-                ),
-              ],
-            ),
+          error: (e, _) => ErrorCard(
+            error: e,
+            onRetry: () => ref.invalidate(pendingVerificationsProvider),
           ),
           data: (transactions) {
             if (transactions.isEmpty) {
@@ -148,9 +136,7 @@ class _VerificationCardState extends ConsumerState<_VerificationCard> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: $e')),
-        );
+        showErrorSnackBar(context, e);
       }
     } finally {
       if (mounted) setState(() => _isProcessing = false);
@@ -219,9 +205,7 @@ class _VerificationCardState extends ConsumerState<_VerificationCard> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur: $e')),
-        );
+        showErrorSnackBar(context, e);
       }
     } finally {
       if (mounted) setState(() => _isProcessing = false);

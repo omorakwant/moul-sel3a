@@ -5,13 +5,14 @@ import '../models/delivery_job.dart';
 import '../models/delivery_bid.dart';
 import '../services/supabase_service.dart';
 import '../../core/constants/supabase_constants.dart';
+import 'base_repository.dart';
 
 /// Repository for Delivery Jobs & Bids (InDrive-style marketplace).
 final deliveryRepositoryProvider = Provider<DeliveryRepository>((ref) {
   return DeliveryRepository(ref.watch(supabaseClientProvider));
 });
 
-class DeliveryRepository {
+class DeliveryRepository with SupabaseErrorHandler {
   final SupabaseClient _client;
 
   DeliveryRepository(this._client);
@@ -21,7 +22,7 @@ class DeliveryRepository {
   // ══════════════════════════════════════════════════════════════════════════
 
   /// Fetch open delivery jobs (for Driver marketplace).
-  Future<List<DeliveryJob>> getOpenJobs() async {
+  Future<List<DeliveryJob>> getOpenJobs() => guard(() async {
     final response = await _client
         .from(SupabaseConstants.deliveryJobsTable)
         .select('''
@@ -32,10 +33,10 @@ class DeliveryRepository {
         .order('created_at', ascending: false);
 
     return (response as List).map((e) => DeliveryJob.fromJson(e)).toList();
-  }
+  });
 
   /// Fetch jobs assigned to the current driver.
-  Future<List<DeliveryJob>> getDriverJobs() async {
+  Future<List<DeliveryJob>> getDriverJobs() => guard(() async {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) return [];
 
@@ -49,10 +50,10 @@ class DeliveryRepository {
         .order('created_at', ascending: false);
 
     return (response as List).map((e) => DeliveryJob.fromJson(e)).toList();
-  }
+  });
 
   /// Fetch a single delivery job by ID.
-  Future<DeliveryJob?> getJobById(String jobId) async {
+  Future<DeliveryJob?> getJobById(String jobId) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.deliveryJobsTable)
         .select('''
@@ -65,10 +66,10 @@ class DeliveryRepository {
 
     if (response == null) return null;
     return DeliveryJob.fromJson(response);
-  }
+  });
 
   /// Fetch delivery jobs for a supplier.
-  Future<List<DeliveryJob>> getSupplierJobs({String? status}) async {
+  Future<List<DeliveryJob>> getSupplierJobs({String? status}) => guard(() async {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) return [];
 
@@ -87,10 +88,10 @@ class DeliveryRepository {
 
     final response = await query.order('created_at', ascending: false);
     return (response as List).map((e) => DeliveryJob.fromJson(e)).toList();
-  }
+  });
 
   /// Create a new delivery job (Supplier action).
-  Future<DeliveryJob> createJob(DeliveryJob job) async {
+  Future<DeliveryJob> createJob(DeliveryJob job) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.deliveryJobsTable)
         .insert(job.toJson())
@@ -98,18 +99,18 @@ class DeliveryRepository {
         .single();
 
     return DeliveryJob.fromJson(response);
-  }
+  });
 
   /// Update job status.
-  Future<void> updateJobStatus(String jobId, String newStatus) async {
+  Future<void> updateJobStatus(String jobId, String newStatus) => guard(() async {
     await _client
         .from(SupabaseConstants.deliveryJobsTable)
         .update({'status': newStatus})
         .eq('id', jobId);
-  }
+  });
 
   /// Assign a driver to a job (either trusted or bid winner).
-  Future<void> assignDriver(String jobId, String driverId) async {
+  Future<void> assignDriver(String jobId, String driverId) => guard(() async {
     await _client
         .from(SupabaseConstants.deliveryJobsTable)
         .update({
@@ -117,15 +118,15 @@ class DeliveryRepository {
           'status': 'assigned',
         })
         .eq('id', jobId);
-  }
+  });
 
   /// Mark job as in_transit (Driver starts the trip).
-  Future<void> startTrip(String jobId) async {
+  Future<void> startTrip(String jobId) => guard(() async {
     await _client
         .from(SupabaseConstants.deliveryJobsTable)
         .update({'status': 'in_transit'})
         .eq('id', jobId);
-  }
+  });
 
   /// Verify the delivery PIN and complete the handshake.
   ///
@@ -139,7 +140,7 @@ class DeliveryRepository {
   Future<bool> verifyPinAndComplete({
     required String jobId,
     required String pin,
-  }) async {
+  }) => guard(() async {
     // 1. Fetch the job to verify PIN
     final jobResponse = await _client
         .from(SupabaseConstants.deliveryJobsTable)
@@ -186,10 +187,10 @@ class DeliveryRepository {
     }
 
     return true;
-  }
+  });
 
   /// Get the delivery PIN for a job (Retailer sees this to share with driver).
-  Future<String?> getDeliveryPin(String jobId) async {
+  Future<String?> getDeliveryPin(String jobId) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.deliveryJobsTable)
         .select('delivery_pin')
@@ -197,11 +198,11 @@ class DeliveryRepository {
         .maybeSingle();
 
     return response?['delivery_pin'] as String?;
-  }
+  });
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════════════════
   // DELIVERY BIDS
-  // ══════════════════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════════════════
 
   /// Place a bid on a delivery job (Driver action).
   Future<DeliveryBid> placeBid({
@@ -209,7 +210,7 @@ class DeliveryRepository {
     required double bidAmount,
     String? estimatedTime,
     String? message,
-  }) async {
+  }) => guard(() async {
     final userId = _client.auth.currentUser!.id;
 
     final response = await _client
@@ -226,10 +227,10 @@ class DeliveryRepository {
         .single();
 
     return DeliveryBid.fromJson(response);
-  }
+  });
 
   /// Check if the current driver already bid on a job.
-  Future<DeliveryBid?> getMyBidForJob(String jobId) async {
+  Future<DeliveryBid?> getMyBidForJob(String jobId) => guard(() async {
     final userId = _client.auth.currentUser?.id;
     if (userId == null) return null;
 
@@ -242,10 +243,10 @@ class DeliveryRepository {
 
     if (response == null) return null;
     return DeliveryBid.fromJson(response);
-  }
+  });
 
   /// Fetch bids for a specific job (Supplier views bids).
-  Future<List<DeliveryBid>> getJobBids(String jobId) async {
+  Future<List<DeliveryBid>> getJobBids(String jobId) => guard(() async {
     final response = await _client
         .from(SupabaseConstants.deliveryBidsTable)
         .select('''
@@ -256,11 +257,11 @@ class DeliveryRepository {
         .order('bid_amount', ascending: true);
 
     return (response as List).map((e) => DeliveryBid.fromJson(e)).toList();
-  }
+  });
 
   /// Accept a bid (Supplier action).
   /// Updates bid status and assigns driver to the job.
-  Future<void> acceptBid(String bidId, String jobId, String driverId) async {
+  Future<void> acceptBid(String bidId, String jobId, String driverId) => guard(() async {
     // Accept this bid
     await _client
         .from(SupabaseConstants.deliveryBidsTable)
@@ -283,13 +284,13 @@ class DeliveryRepository {
           'status': 'assigned',
         })
         .eq('id', jobId);
-  }
+  });
 
   /// Withdraw a bid (Driver action).
-  Future<void> withdrawBid(String bidId) async {
+  Future<void> withdrawBid(String bidId) => guard(() async {
     await _client
         .from(SupabaseConstants.deliveryBidsTable)
         .update({'status': 'withdrawn'})
         .eq('id', bidId);
-  }
+  });
 }
