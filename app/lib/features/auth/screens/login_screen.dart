@@ -100,7 +100,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         email: email,
         password: password,
       );
-      // Auth state change will trigger router redirect automatically
+      // Invalidate auth-related providers so they re-fetch
+      ref.invalidate(currentProfileProvider);
+      // Wait for the profile to actually load before navigating
+      final profile = await ref.read(currentProfileProvider.future);
+      if (!mounted) return;
+
+      if (profile == null || profile.shopName == 'Nouveau Compte') {
+        context.go('/role-selection');
+      } else {
+        final role = profile.role;
+        switch (role) {
+          case 'supplier':
+            context.go('/supplier/dashboard');
+            break;
+          case 'driver':
+            context.go('/driver/marketplace');
+            break;
+          case 'retailer':
+          default:
+            context.go('/retailer/dashboard');
+            break;
+        }
+      }
     } catch (e) {
       if (mounted) {
         setState(() {
