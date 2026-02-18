@@ -118,6 +118,7 @@ class _RetailerPartialReceiptScreenState
                   l10n: l10n,
                   adjustedTotal: adjustedTotal,
                   adjustmentCount: adjustmentCount,
+                  adjustments: adjustments,
                 ),
               ],
             );
@@ -573,6 +574,7 @@ class _RetailerPartialReceiptScreenState
     required AppLocalizations l10n,
     required double adjustedTotal,
     required int adjustmentCount,
+    required Map<int, int> adjustments,
   }) {
     final diff = adjustedTotal - order.originalTotal;
     final isReviewed = ref.watch(quantitiesReviewedProvider);

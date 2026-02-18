@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/l10n/app_localizations.dart';
-import '../../core/providers/sync_providers.dart';
-import '../../core/theme/app_colors.dart';
-import '../../data/services/sync_service.dart';
+import '../../../core/l10n/app_localizations.dart';
+import '../../../core/providers/sync_providers.dart';
+import '../../../data/services/sync_service.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // OFFLINE STATUS BANNER — shows when actions are queued or device is offline.

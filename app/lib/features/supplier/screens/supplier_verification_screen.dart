@@ -634,7 +634,7 @@ class _ValidationPaneState extends ConsumerState<_ValidationPane> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'CLIENT',
                           style: TextStyle(
                             fontFamily: 'Inter',
@@ -702,7 +702,7 @@ class _ValidationPaneState extends ConsumerState<_ValidationPane> {
                   // Declared amount
                   Text(
                     l10n.isDarija ? 'المبلغ المعلن' : 'MONTANT DÉCLARÉ',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
@@ -738,7 +738,7 @@ class _ValidationPaneState extends ConsumerState<_ValidationPane> {
                   if (tx.referenceCode != null) ...[
                     Text(
                       l10n.isDarija ? 'رقم المرجع' : 'RÉFÉRENCE DU TRANSFERT',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Inter',
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
@@ -908,7 +908,7 @@ class _ValidationPaneState extends ConsumerState<_ValidationPane> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Center(
+                    const Center(
                       child: Text(
                         'صادق على الخلاص',
                         style: TextStyle(

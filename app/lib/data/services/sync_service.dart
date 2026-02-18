@@ -2,13 +2,11 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/constants/supabase_constants.dart';
-import 'supabase_service.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // SYNC SERVICE — Offline-first action queue ("Queue Manager")
@@ -284,7 +282,7 @@ class SyncService {
           );
           await _queueBox.put(action.id, retry.toMap());
           debugPrint(
-            '[SyncService] ⏳ Retry ${newRetry}/$kMaxRetries for '
+            '[SyncService] ⏳ Retry $newRetry/$kMaxRetries for '
             '${action.type.name} (${action.id}): $e',
           );
         }

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../features/auth/providers/auth_providers.dart';
 import '../providers/supplier_verification_providers.dart';
 
 /// Web breakpoint — above this we show the sidebar layout.

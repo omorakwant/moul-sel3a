@@ -37,8 +37,8 @@ class SupplierOrderDetailScreen extends ConsumerWidget {
     ref.listen<OrderActionResult>(supplierOrderActionProvider, (prev, next) {
       if (next.state == OrderActionState.success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Opération réussie ✓'),
+          const SnackBar(
+            content: Text('Opération réussie ✓'),
             backgroundColor: AppColors.successGreen,
           ),
         );
@@ -81,8 +81,8 @@ class SupplierOrderDetailScreen extends ConsumerWidget {
             return _buildContent(context, ref, order, actionState, l10n);
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => AppErrorWidget(
-            message: e.toString(),
+          error: (e, _) => ErrorCard(
+            error: e,
             onRetry: () => ref.invalidate(supplierOrderDetailProvider(orderId)),
           ),
         ),
@@ -329,7 +329,7 @@ class SupplierOrderDetailScreen extends ConsumerWidget {
             return Column(
               children: [
                 if (index > 0)
-                  Divider(
+                  const Divider(
                     height: 1,
                     color: AppColors.borderSubtle,
                     indent: 16,
