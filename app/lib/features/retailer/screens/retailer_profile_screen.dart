@@ -477,7 +477,7 @@ class _RetailerProfileScreenState extends ConsumerState<RetailerProfileScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                color: AppColors.accentOrange.withOpacity(0.12),
+                color: AppColors.accentOrange.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
@@ -576,7 +576,7 @@ class _RetailerProfileScreenState extends ConsumerState<RetailerProfileScreen> {
         width: double.infinity,
         height: 52,
         decoration: BoxDecoration(
-          color: _saving ? AppColors.bgDark.withOpacity(0.6) : AppColors.bgDark,
+          color: _saving ? AppColors.bgDark.withValues(alpha: 0.6) : AppColors.bgDark,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Center(
@@ -614,7 +614,7 @@ class _RetailerProfileScreenState extends ConsumerState<RetailerProfileScreen> {
         height: 52,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.alertRed.withOpacity(0.4), width: 1.5),
+          border: Border.all(color: AppColors.alertRed.withValues(alpha: 0.4), width: 1.5),
         ),
         child: Center(
           child: _signingOut
@@ -648,7 +648,7 @@ class _RetailerProfileScreenState extends ConsumerState<RetailerProfileScreen> {
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontSize: 10,
-                            color: AppColors.alertRed.withOpacity(0.6),
+                            color: AppColors.alertRed.withValues(alpha: 0.6),
                           ),
                         ),
                       ],

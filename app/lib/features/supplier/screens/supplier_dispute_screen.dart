@@ -77,7 +77,7 @@ class _SupplierDisputeScreenState extends ConsumerState<SupplierDisputeScreen> {
         child: txnAsync.when(
           data: (txn) {
             if (txn == null) {
-              return Center(
+              return const Center(
                 child: EmptyState(
                   icon: Icons.receipt_long_outlined,
                   messageFr: 'Transaction introuvable',

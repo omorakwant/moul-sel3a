@@ -169,7 +169,7 @@ class _RouteCard extends StatelessWidget {
         border: Border.all(color: AppColors.borderSubtle),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -236,7 +236,7 @@ class _RouteCard extends StatelessWidget {
                 Row(
                   children: [
                     if (job.estimatedWeightKg != null) ...[
-                      Icon(Icons.scale_outlined,
+                      const Icon(Icons.scale_outlined,
                           size: 16, color: AppColors.textTertiary),
                       const SizedBox(width: 4),
                       Text(
@@ -250,7 +250,7 @@ class _RouteCard extends StatelessWidget {
                       const SizedBox(width: 16),
                     ],
                     if (job.isCOD && job.codAmount != null) ...[
-                      Icon(Icons.payments_outlined,
+                      const Icon(Icons.payments_outlined,
                           size: 16, color: AppColors.accentOrange),
                       const SizedBox(width: 4),
                       Text(
@@ -354,8 +354,8 @@ class _JobTypeBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: isCod
-            ? AppColors.accentOrange.withOpacity(0.1)
-            : AppColors.successGreen.withOpacity(0.1),
+            ? AppColors.accentOrange.withValues(alpha: 0.1)
+            : AppColors.successGreen.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
@@ -428,7 +428,7 @@ class _ActiveTripsBanner extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 13,
-                          color: Colors.white.withOpacity(0.85),
+                          color: Colors.white.withValues(alpha: 0.85),
                         ),
                       ),
                     ],

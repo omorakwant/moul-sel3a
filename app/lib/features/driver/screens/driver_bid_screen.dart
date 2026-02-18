@@ -142,7 +142,7 @@ class _DriverBidScreenState extends ConsumerState<DriverBidScreen> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
-                              color: AppColors.accentOrange.withOpacity(0.08),
+                              color: AppColors.accentOrange.withValues(alpha: 0.08),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Row(
@@ -192,10 +192,10 @@ class _DriverBidScreenState extends ConsumerState<DriverBidScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.successGreen.withOpacity(0.08),
+                        color: AppColors.successGreen.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                            color: AppColors.successGreen.withOpacity(0.3)),
+                            color: AppColors.successGreen.withValues(alpha: 0.3)),
                       ),
                       child: Row(
                         children: [

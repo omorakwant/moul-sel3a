@@ -227,8 +227,8 @@ class _RouteHeader extends StatelessWidget {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8),
+          const Padding(
+            padding: EdgeInsets.only(left: 8),
             child: Icon(Icons.arrow_downward,
                 size: 16, color: AppColors.textTertiary),
           ),
@@ -255,7 +255,7 @@ class _RouteHeader extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.accentOrange.withOpacity(0.08),
+                color: AppColors.accentOrange.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -288,12 +288,12 @@ class _JobStatusCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: isAssigned
-            ? AppColors.successGreen.withOpacity(0.06)
+            ? AppColors.successGreen.withValues(alpha: 0.06)
             : AppColors.bgSurface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isAssigned
-              ? AppColors.successGreen.withOpacity(0.25)
+              ? AppColors.successGreen.withValues(alpha: 0.25)
               : AppColors.borderSubtle,
         ),
       ),
@@ -369,7 +369,7 @@ class _BidCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: bid.isAccepted
-              ? AppColors.successGreen.withOpacity(0.4)
+              ? AppColors.successGreen.withValues(alpha: 0.4)
               : AppColors.borderSubtle,
         ),
       ),
@@ -469,7 +469,7 @@ class _BidCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: statusColor.withOpacity(0.1),
+                    color: statusColor.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
@@ -519,7 +519,7 @@ class _BidCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: statusColor.withOpacity(0.1),
+                color: statusColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Text(

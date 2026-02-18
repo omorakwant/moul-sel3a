@@ -3,21 +3,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/delivery_job.dart';
 import '../../../data/models/delivery_bid.dart';
 import '../../../data/repositories/delivery_repository.dart';
+import '../../../data/services/realtime_service.dart';
+import '../../../data/services/sync_service.dart';
+import '../../../core/providers/sync_providers.dart';
 
 // ══════════════════════════════════════════════════════════════════════════════
 // DRIVER MARKETPLACE — Open jobs feed
 // ══════════════════════════════════════════════════════════════════════════════
 
 /// Fetches all open delivery jobs for the driver marketplace.
+/// Auto-refreshes via Supabase realtime.
 final openJobsFeedProvider =
     FutureProvider.autoDispose<List<DeliveryJob>>((ref) async {
+  ref.watch(deliveryJobsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getOpenJobs();
 });
 
 /// Fetches jobs assigned to the current driver (active trips).
+/// Auto-refreshes via Supabase realtime.
 final myActiveJobsProvider =
     FutureProvider.autoDispose<List<DeliveryJob>>((ref) async {
+  ref.watch(deliveryJobsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   final jobs = await repo.getDriverJobs();
   // Only show assigned + in_transit (active jobs)
@@ -27,8 +34,10 @@ final myActiveJobsProvider =
 });
 
 /// Fetches a single delivery job by ID.
+/// Auto-refreshes via Supabase realtime.
 final deliveryJobByIdProvider =
     FutureProvider.autoDispose.family<DeliveryJob?, String>((ref, jobId) async {
+  ref.watch(deliveryJobsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getJobById(jobId);
 });
@@ -38,8 +47,10 @@ final deliveryJobByIdProvider =
 // ══════════════════════════════════════════════════════════════════════════════
 
 /// Check if current driver already bid on this job.
+/// Auto-refreshes via Supabase realtime.
 final myBidForJobProvider =
     FutureProvider.autoDispose.family<DeliveryBid?, String>((ref, jobId) async {
+  ref.watch(deliveryBidsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getMyBidForJob(jobId);
 });
@@ -85,8 +96,10 @@ final placeBidNotifierProvider =
 /// Start a trip (driver → in_transit).
 class TripActionNotifier extends StateNotifier<AsyncValue<void>> {
   final DeliveryRepository _repo;
+  final SyncService _syncService;
 
-  TripActionNotifier(this._repo) : super(const AsyncValue.data(null));
+  TripActionNotifier(this._repo, this._syncService)
+      : super(const AsyncValue.data(null));
 
   Future<bool> startTrip(String jobId) async {
     state = const AsyncValue.loading();
@@ -100,20 +113,33 @@ class TripActionNotifier extends StateNotifier<AsyncValue<void>> {
     }
   }
 
-  /// Verify PIN and complete delivery.
-  /// Returns true if PIN is correct, false otherwise.
+  /// Verify PIN and queue delivery completion via SyncService.
+  ///
+  /// Flow:
+  ///   1. Online: fetch job + verify PIN (read — requires network).
+  ///   2. If PIN correct → queue the mutations (offline-safe).
+  ///   3. SyncService handles: mark job completed, order delivered, COD ledger.
+  ///
+  /// Returns true if PIN matches, false otherwise.
   Future<bool> verifyPinAndComplete({
     required String jobId,
     required String pin,
   }) async {
     state = const AsyncValue.loading();
     try {
-      final success = await _repo.verifyPinAndComplete(
-        jobId: jobId,
-        pin: pin,
-      );
+      // Step 1: Online PIN verification (read-only)
+      final jobData = await _repo.verifyPinOnly(jobId: jobId, pin: pin);
+      if (jobData == null) {
+        // PIN mismatch
+        state = const AsyncValue.data(null);
+        return false;
+      }
+
+      // Step 2: Queue the mutations via SyncService (offline-safe)
+      await _syncService.addAction(ActionType.verifyDelivery, jobData);
+
       state = const AsyncValue.data(null);
-      return success;
+      return true;
     } catch (e, st) {
       state = AsyncValue.error(e, st);
       return false;
@@ -123,16 +149,20 @@ class TripActionNotifier extends StateNotifier<AsyncValue<void>> {
 
 final tripActionNotifierProvider =
     StateNotifierProvider.autoDispose<TripActionNotifier, AsyncValue<void>>(
-  (ref) => TripActionNotifier(ref.watch(deliveryRepositoryProvider)),
+  (ref) => TripActionNotifier(
+    ref.watch(deliveryRepositoryProvider),
+    ref.watch(syncServiceProvider),
+  ),
 );
 
 // ══════════════════════════════════════════════════════════════════════════════
 // SUPPLIER BID MANAGEMENT
 // ══════════════════════════════════════════════════════════════════════════════
 
-/// Fetches all bids for a supplier's delivery job.
+/// Fetches all bids for a supplier's delivery job.\n/// Auto-refreshes via Supabase realtime.
 final jobBidsProvider =
     FutureProvider.autoDispose.family<List<DeliveryBid>, String>((ref, jobId) async {
+  ref.watch(deliveryBidsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getJobBids(jobId);
 });

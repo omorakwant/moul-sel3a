@@ -37,7 +37,7 @@ class ErrorCard extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: info.color.withOpacity(0.12),
+                color: info.color.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(18),
               ),
               child: Icon(info.icon, size: 32, color: info.color),
@@ -235,7 +235,7 @@ class EmptyState extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
-                    color: AppColors.accentOrange.withOpacity(0.12),
+                    color: AppColors.accentOrange.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -319,7 +319,7 @@ class _SkeletonCardState extends State<_SkeletonCard>
         return Container(
           height: widget.height,
           decoration: BoxDecoration(
-            color: AppColors.bgSurface.withOpacity(opacity),
+            color: AppColors.bgSurface.withValues(alpha: opacity),
             borderRadius: BorderRadius.circular(16),
           ),
         );
@@ -335,25 +335,25 @@ class _SkeletonCardState extends State<_SkeletonCard>
 _ErrorVisuals _errorVisuals(ErrorType type) {
   switch (type) {
     case ErrorType.network:
-      return _ErrorVisuals(Icons.wifi_off, AppColors.alertRed);
+      return const _ErrorVisuals(Icons.wifi_off, AppColors.alertRed);
     case ErrorType.server:
-      return _ErrorVisuals(Icons.cloud_off, AppColors.alertRed);
+      return const _ErrorVisuals(Icons.cloud_off, AppColors.alertRed);
     case ErrorType.auth:
-      return _ErrorVisuals(Icons.lock_outline, AppColors.accentOrange);
+      return const _ErrorVisuals(Icons.lock_outline, AppColors.accentOrange);
     case ErrorType.permission:
-      return _ErrorVisuals(Icons.block, AppColors.alertRed);
+      return const _ErrorVisuals(Icons.block, AppColors.alertRed);
     case ErrorType.notFound:
-      return _ErrorVisuals(Icons.search_off, AppColors.textTertiary);
+      return const _ErrorVisuals(Icons.search_off, AppColors.textTertiary);
     case ErrorType.duplicate:
-      return _ErrorVisuals(Icons.copy, AppColors.accentOrange);
+      return const _ErrorVisuals(Icons.copy, AppColors.accentOrange);
     case ErrorType.validation:
-      return _ErrorVisuals(Icons.warning_amber, AppColors.accentOrange);
+      return const _ErrorVisuals(Icons.warning_amber, AppColors.accentOrange);
     case ErrorType.storage:
-      return _ErrorVisuals(Icons.cloud_upload_outlined, AppColors.alertRed);
+      return const _ErrorVisuals(Icons.cloud_upload_outlined, AppColors.alertRed);
     case ErrorType.rateLimit:
-      return _ErrorVisuals(Icons.timer_off, AppColors.accentOrange);
+      return const _ErrorVisuals(Icons.timer_off, AppColors.accentOrange);
     case ErrorType.unknown:
-      return _ErrorVisuals(Icons.error_outline, AppColors.alertRed);
+      return const _ErrorVisuals(Icons.error_outline, AppColors.alertRed);
   }
 }
 

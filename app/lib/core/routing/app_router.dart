@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/models/product.dart';
+import '../../features/auth/providers/auth_providers.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/otp_verify_screen.dart';
 import '../../features/auth/screens/pending_verification_screen.dart';
@@ -26,14 +28,99 @@ import '../../features/supplier/screens/supplier_delivery_screen.dart';
 import '../../features/supplier/screens/supplier_dispute_screen.dart';
 import '../../features/supplier/screens/supplier_inventory_screen.dart';
 import '../../features/supplier/screens/supplier_profile_screen.dart';
+import '../../features/supplier/screens/supplier_order_detail_screen.dart';
 import '../../features/supplier/screens/supplier_verification_screen.dart';
+
+/// ════════════════════════════════════════════════════════════════════════════
+/// PUBLIC ROUTES — do not require authentication.
+/// ════════════════════════════════════════════════════════════════════════════
+const _publicPaths = <String>{
+  '/splash',
+  '/login',
+};
+
+/// Paths that start with these prefixes are always accessible once we have
+/// a session (even before onboarding is complete).
+bool _isAuthFlowPath(String path) =>
+    path.startsWith('/otp-verify') ||
+    path.startsWith('/role-selection') ||
+    path.startsWith('/pending-verification');
 
 /// Application router using GoRouter.
 /// Routes are organized by user role (Retailer, Driver, Supplier).
+///
+/// **Auth guard**: Every navigation is checked. If the user has no session
+/// they are sent to `/login`; if their profile is incomplete they land on
+/// `/role-selection`. Authenticated users are allowed through, and trying
+/// to visit `/login` while logged-in redirects to the role dashboard.
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/splash',
     debugLogDiagnostics: true,
+
+    // ── Global auth redirect ──────────────────────────────────────────────
+    redirect: (BuildContext context, GoRouterState state) {
+      final path = state.uri.path;
+
+      // Always allow public routes
+      if (_publicPaths.contains(path)) return null;
+
+      final authStatus = ref.read(authGuardProvider);
+
+      switch (authStatus) {
+        case AuthStatus.loading:
+          // Still loading — let splash handle it
+          return path == '/splash' ? null : '/splash';
+
+        case AuthStatus.unauthenticated:
+          // Not logged in — only auth-flow pages and public pages allowed
+          if (_isAuthFlowPath(path)) return null;
+          return '/login';
+
+        case AuthStatus.needsOnboarding:
+          // Session exists but profile is incomplete
+          if (_isAuthFlowPath(path)) return null;
+          return '/role-selection';
+
+        case AuthStatus.authenticated:
+          // Logged-in user visiting /login → send to their dashboard
+          if (path == '/login') {
+            final role = ref.read(currentRoleProvider) ?? 'retailer';
+            return switch (role) {
+              'supplier' => '/supplier/dashboard',
+              'driver' => '/driver/marketplace',
+              _ => '/retailer/dashboard',
+            };
+          }
+          return null; // allow
+      }
+    },
+
+    // ── Error / 404 page ──────────────────────────────────────────────────
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: Colors.red),
+            const SizedBox(height: 16),
+            Text(
+              '404 — Page introuvable',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 8),
+            Text(state.uri.toString(),
+                style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 24),
+            FilledButton(
+              onPressed: () => context.go('/splash'),
+              child: const Text('Retour'),
+            ),
+          ],
+        ),
+      ),
+    ),
+
     routes: [
       // ── Splash / Auth ──
       GoRoute(
@@ -212,6 +299,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         name: 'supplier-dashboard',
         builder: (context, state) =>
             const SupplierDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/supplier/order/:orderId',
+        name: 'supplier-order-detail',
+        builder: (context, state) {
+          final orderId = state.pathParameters['orderId']!;
+          return SupplierOrderDetailScreen(orderId: orderId);
+        },
       ),
       GoRoute(
         path: '/supplier/verification',

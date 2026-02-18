@@ -282,7 +282,7 @@ class _OrdersTab extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.receipt_long_outlined,
+                  const Icon(Icons.receipt_long_outlined,
                       size: 64, color: AppColors.textTertiary),
                   const SizedBox(height: 12),
                   Text(
@@ -338,7 +338,7 @@ class _RetailersTab extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.people_outline,
+                  const Icon(Icons.people_outline,
                       size: 64, color: AppColors.textTertiary),
                   const SizedBox(height: 12),
                   Text(
@@ -536,7 +536,9 @@ class _OrderCard extends ConsumerWidget {
         ? order.id.substring(0, 8).toUpperCase()
         : order.id.toUpperCase();
 
-    return Container(
+    return GestureDetector(
+      onTap: () => context.push('/supplier/order/${order.id}'),
+      child: Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -687,6 +689,7 @@ class _OrderCard extends ConsumerWidget {
           ],
         ],
       ),
+    ),
     );
   }
 

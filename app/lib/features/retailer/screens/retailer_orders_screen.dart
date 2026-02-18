@@ -128,7 +128,7 @@ class _OrdersList extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.receipt_long_outlined,
+            const Icon(Icons.receipt_long_outlined,
                 size: 64, color: AppColors.textTertiary),
             const SizedBox(height: 12),
             Text(

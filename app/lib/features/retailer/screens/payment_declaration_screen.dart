@@ -10,10 +10,10 @@ import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
-import '../../../core/constants/supabase_constants.dart';
 import '../../../data/models/supplier_retailer_relation.dart';
 import '../../../data/repositories/relation_repository.dart';
-import '../../../data/services/supabase_service.dart';
+import '../../../data/services/storage_service.dart';
+import '../../../core/providers/sync_providers.dart';
 import '../providers/payment_providers.dart';
 
 /// Payment Declaration Screen — the money engine UI.
@@ -78,21 +78,8 @@ class _PaymentDeclarationScreenState
 
   Future<String?> _uploadReceipt(File file) async {
     try {
-      final client = ref.read(supabaseClientProvider);
-      final userId = client.auth.currentUser?.id;
-      if (userId == null) return null;
-
-      final ext = file.path.split('.').last;
-      final fileName = '${DateTime.now().millisecondsSinceEpoch}.$ext';
-      final storagePath = '$userId/receipts/$fileName';
-
-      await client.storage
-          .from(SupabaseConstants.storageBucket)
-          .upload(storagePath, file);
-
-      return client.storage
-          .from(SupabaseConstants.storageBucket)
-          .getPublicUrl(storagePath);
+      final storage = ref.read(storageServiceProvider);
+      return await storage.uploadReceipt(file);
     } catch (e) {
       debugPrint('Receipt upload error: $e');
       return null;
@@ -114,7 +101,9 @@ class _PaymentDeclarationScreenState
       final amount = double.parse(_amountController.text.trim());
       final referenceCode = _referenceController.text.trim();
 
-      await ref.read(declarePaymentProvider({
+      // Queue via SyncService — works offline, syncs when connected.
+      // Receipt upload above still requires network; the DB insert is queued.
+      await ref.read(offlineDeclarePaymentProvider({
         'relation_id': widget.relationId,
         'amount': amount,
         'payment_method': _selectedMethod,
@@ -124,6 +113,9 @@ class _PaymentDeclarationScreenState
             ? _notesController.text.trim()
             : null,
       }).future);
+
+      // Invalidate ledger so history refreshes when back online
+      ref.invalidate(relationLedgerProvider(widget.relationId));
 
       if (mounted) {
         _showSuccessDialog(amount, referenceCode);
@@ -151,7 +143,7 @@ class _PaymentDeclarationScreenState
             Container(
               width: 64,
               height: 64,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.badgeDeliveredBg,
                 shape: BoxShape.circle,
               ),
@@ -616,7 +608,7 @@ class _PaymentDeclarationScreenState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.camera_alt_outlined,
+            const Icon(Icons.camera_alt_outlined,
                 size: 40, color: AppColors.textTertiary),
             const SizedBox(height: 8),
             Text(

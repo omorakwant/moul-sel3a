@@ -200,9 +200,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Container(
                         width: 72,
                         height: 56,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: AppColors.bgMuted,
-                          borderRadius: const BorderRadius.only(
+                          borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(14),
                             bottomLeft: Radius.circular(14),
                           ),
@@ -330,7 +330,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 10,
-                                    color: AppColors.onAccent.withOpacity(0.7),
+                                    color: AppColors.onAccent.withValues(alpha: 0.7),
                                   ),
                                 ),
                               ],
@@ -410,7 +410,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     boxShadow: !isDarija
                         ? [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.08),
+                              color: Colors.black.withValues(alpha: 0.08),
                               blurRadius: 4,
                               offset: const Offset(0, 1),
                             ),
@@ -445,7 +445,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     boxShadow: isDarija
                         ? [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.08),
+                              color: Colors.black.withValues(alpha: 0.08),
                               blurRadius: 4,
                               offset: const Offset(0, 1),
                             ),

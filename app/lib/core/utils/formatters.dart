@@ -26,6 +26,39 @@ class Formatters {
     return _dateTimeFormat.format(dt);
   }
 
+  /// Human-readable time-ago string (e.g., "il y a 2h", "il y a 5min").
+  /// Used in Screen G (Verification Desk) receipt header.
+  static String timeAgo(DateTime dt) {
+    final diff = DateTime.now().difference(dt);
+    if (diff.inMinutes < 1) return 'à l\'instant';
+    if (diff.inMinutes < 60) return 'il y a ${diff.inMinutes}min';
+    if (diff.inHours < 24) return 'il y a ${diff.inHours}h';
+    if (diff.inDays < 7) return 'il y a ${diff.inDays}j';
+    return date(dt);
+  }
+
+  /// Compact price for dashboard cards (e.g., "12.5k DH" or "1.2M DH").
+  /// Used in supplier dashboard stat cards.
+  static String compactPrice(double amount) {
+    if (amount >= 1000000) {
+      return '${(amount / 1000000).toStringAsFixed(1)}M ${AppConstants.currencyCode}';
+    } else if (amount >= 1000) {
+      return '${(amount / 1000).toStringAsFixed(1)}k ${AppConstants.currencyCode}';
+    }
+    return price(amount);
+  }
+
+  /// Time-only format: HH:mm (e.g., "14:30").
+  /// Used in verification desk receipt timestamps.
+  static String timeOnly(DateTime dt) {
+    return '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+  }
+
+  /// Short date: DD/MM (without year).
+  static String dateShort(DateTime dt) {
+    return '${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}';
+  }
+
   /// Build a WhatsApp deep link with pre-filled message.
   /// Handles Morocco numbers: 06/07 → +2126/+2127
   static String whatsappLink({required String phone, String? message}) {

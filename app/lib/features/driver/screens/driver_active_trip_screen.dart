@@ -160,10 +160,10 @@ class _DriverActiveTripScreenState
               padding: const EdgeInsets.all(16),
               margin: const EdgeInsets.only(bottom: 16),
               decoration: BoxDecoration(
-                color: AppColors.accentOrange.withOpacity(0.08),
+                color: AppColors.accentOrange.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(14),
                 border:
-                    Border.all(color: AppColors.accentOrange.withOpacity(0.2)),
+                    Border.all(color: AppColors.accentOrange.withValues(alpha: 0.2)),
               ),
               child: Row(
                 children: [
@@ -480,9 +480,9 @@ class _StatusBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.25)),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
       ),
       child: Row(
         children: [
@@ -528,7 +528,7 @@ class _TripRouteStop extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: isActive ? iconColor.withOpacity(0.12) : Colors.transparent,
+            color: isActive ? iconColor.withValues(alpha: 0.12) : Colors.transparent,
             shape: BoxShape.circle,
           ),
           child: Icon(icon, size: 22, color: iconColor),
@@ -587,9 +587,9 @@ class _CompletedBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.successGreen.withOpacity(0.06),
+        color: AppColors.successGreen.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.successGreen.withOpacity(0.25)),
+        border: Border.all(color: AppColors.successGreen.withValues(alpha: 0.25)),
       ),
       child: Column(
         children: [

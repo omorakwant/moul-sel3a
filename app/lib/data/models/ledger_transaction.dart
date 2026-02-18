@@ -24,6 +24,10 @@ class LedgerTransaction extends Equatable {
   final DateTime createdAt;
   final DateTime updatedAt;
 
+  /// Joined field — retailer shop name from relation → retailer.
+  /// Populated via getPendingForSupplier() join query.
+  final String? retailerName;
+
   const LedgerTransaction({
     required this.id,
     required this.relationId,
@@ -39,6 +43,7 @@ class LedgerTransaction extends Equatable {
     this.verifiedBy,
     required this.createdAt,
     required this.updatedAt,
+    this.retailerName,
   });
 
   /// Whether this is an order (debt increase).
@@ -79,6 +84,14 @@ class LedgerTransaction extends Equatable {
   }
 
   factory LedgerTransaction.fromJson(Map<String, dynamic> json) {
+    // Extract retailer name from joined relation data if available
+    String? retailerName;
+    final relation = json['relation'] as Map<String, dynamic>?;
+    if (relation != null) {
+      final retailer = relation['retailer'] as Map<String, dynamic>?;
+      retailerName = retailer?['shop_name'] as String?;
+    }
+
     return LedgerTransaction(
       id: json['id'] as String,
       relationId: json['relation_id'] as String,
@@ -96,6 +109,7 @@ class LedgerTransaction extends Equatable {
       verifiedBy: json['verified_by'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
+      retailerName: retailerName,
     );
   }
 
@@ -126,5 +140,5 @@ class LedgerTransaction extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, transactionType, amount, status];
+  List<Object?> get props => [id, transactionType, amount, status, retailerName];
 }

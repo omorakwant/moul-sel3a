@@ -112,7 +112,7 @@ class AppLocalizations {
   String get routeDetails =>
       isDarija ? 'تفاصيل المسار' : 'Détails du trajet';
   String get startTrip => isDarija ? 'بدا المسار' : 'Démarrer le trajet';
-  String get iArrived => isDarija ? 'وصلت!' : "Je suis arrivé !";
+  String get iArrived => isDarija ? 'وصلت!' : 'Je suis arrivé !';
   String get enterPin => isDarija ? 'دخل الكود' : 'Entrer le code PIN';
   String get askRetailerPin => isDarija
       ? 'طلب الكود من مول الحانوت (4 أرقام)'
@@ -348,7 +348,7 @@ class AppLocalizations {
   String get verifyCode => isDarija ? 'تأكد' : 'Vérifier';
   String get resendCode => isDarija ? 'عاود صيفط الكود' : 'Renvoyer le code';
   String resendCountdown(int seconds) => isDarija
-      ? 'عاود صيفط بعد ${seconds}ث'
+      ? 'عاود صيفط بعد $secondsث'
       : 'Renvoyer dans ${seconds}s';
   String get changeNumber => isDarija ? 'بدل الرقم' : 'Modifier le numéro';
 

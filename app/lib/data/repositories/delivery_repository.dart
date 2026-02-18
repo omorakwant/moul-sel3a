@@ -137,6 +137,9 @@ class DeliveryRepository with SupabaseErrorHandler {
   ///   4. If COD → create verified ledger entry (payment_decrease)
   ///
   /// Returns true if PIN is correct, false otherwise.
+  ///
+  /// ⚠️ DEPRECATED in favor of verifyPinOnly + SyncService queue.
+  /// Kept for backwards compatibility if needed without offline support.
   Future<bool> verifyPinAndComplete({
     required String jobId,
     required String pin,
@@ -187,6 +190,42 @@ class DeliveryRepository with SupabaseErrorHandler {
     }
 
     return true;
+  });
+
+  /// Verify the delivery PIN only (read-only, no mutations).
+  ///
+  /// Returns a payload map suitable for SyncService.addAction(ActionType.verifyDelivery, ...)
+  /// if PIN is correct, or null if PIN mismatch.
+  ///
+  /// This splits the read from the write so mutations can be queued offline.
+  Future<Map<String, dynamic>?> verifyPinOnly({
+    required String jobId,
+    required String pin,
+  }) => guard(() async {
+    final jobResponse = await _client
+        .from(SupabaseConstants.deliveryJobsTable)
+        .select('*, orders!inner(relation_id)')
+        .eq('id', jobId)
+        .single();
+
+    final storedPin = jobResponse['delivery_pin'] as String?;
+    if (storedPin == null || storedPin != pin) {
+      return null; // PIN mismatch
+    }
+
+    // Build the payload for SyncService queue
+    final orderId = jobResponse['order_id'] as String;
+    final jobType = jobResponse['job_type'] as String;
+    final codAmount = jobResponse['cod_amount'] as num?;
+    final relationId = (jobResponse['orders'] as Map<String, dynamic>?)?['relation_id'] as String?;
+
+    return {
+      'job_id': jobId,
+      'order_id': orderId,
+      'job_type': jobType,
+      'cod_amount': codAmount,
+      'relation_id': relationId,
+    };
   });
 
   /// Get the delivery PIN for a job (Retailer sees this to share with driver).

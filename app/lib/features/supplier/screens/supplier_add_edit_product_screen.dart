@@ -10,7 +10,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/errors/error_widgets.dart';
 import '../../../data/models/product.dart';
 import '../../../data/repositories/product_repository.dart';
-import '../../../data/services/supabase_service.dart';
+import '../../../data/services/storage_service.dart';
 import '../../../features/auth/providers/auth_providers.dart';
 import '../providers/supplier_inventory_providers.dart';
 
@@ -144,20 +144,8 @@ class _SupplierAddEditProductScreenState
       // Upload image if picked
       String? imageUrl = _imageUrl;
       if (_pickedImageFile != null) {
-        final client = ref.read(supabaseClientProvider);
-        final userId = client.auth.currentUser!.id;
-        final ext = _pickedImageFile!.path.split('.').last;
-        final fileName =
-            '${DateTime.now().millisecondsSinceEpoch}.$ext';
-        final storagePath = '$userId/products/$fileName';
-
-        await client.storage
-            .from('lcarnet-assets')
-            .upload(storagePath, _pickedImageFile!);
-
-        imageUrl = client.storage
-            .from('lcarnet-assets')
-            .getPublicUrl(storagePath);
+        final storage = ref.read(storageServiceProvider);
+        imageUrl = await storage.uploadProductImage(_pickedImageFile!);
       }
 
       if (_isEditing) {
@@ -702,7 +690,7 @@ class _SupplierAddEditProductScreenState
                   width: 28,
                   height: 28,
                   decoration: BoxDecoration(
-                    color: AppColors.accentOrange.withOpacity(0.12),
+                    color: AppColors.accentOrange.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
@@ -847,7 +835,7 @@ class _SupplierAddEditProductScreenState
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: AppColors.accentOrange.withOpacity(0.4),
+                color: AppColors.accentOrange.withValues(alpha: 0.4),
               ),
             ),
             child: Row(
@@ -889,7 +877,7 @@ class _SupplierAddEditProductScreenState
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppColors.successGreen.withOpacity(0.15),
+              color: AppColors.successGreen.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Center(
@@ -926,7 +914,7 @@ class _SupplierAddEditProductScreenState
           ),
           Switch(
             value: _isNew,
-            activeColor: AppColors.successGreen,
+            activeTrackColor: AppColors.successGreen,
             onChanged: (v) => setState(() => _isNew = v),
           ),
         ],

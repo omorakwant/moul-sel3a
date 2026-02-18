@@ -8,6 +8,7 @@ import '../../../data/repositories/relation_repository.dart';
 import '../../../data/repositories/delivery_repository.dart';
 import '../../../data/repositories/ledger_repository.dart';
 import '../../../data/repositories/profile_repository.dart';
+import '../../../data/services/realtime_service.dart';
 
 // ═════════════════════════════════════════════════════════════════════════════
 // SUPPLIER DASHBOARD PROVIDERS
@@ -20,22 +21,28 @@ import '../../../data/repositories/profile_repository.dart';
 // ═════════════════════════════════════════════════════════════════════════════
 
 /// All orders for this supplier (newest first).
+/// Auto-refreshes via Supabase realtime.
 final supplierOrdersProvider =
     FutureProvider.autoDispose<List<Order>>((ref) async {
+  ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
   return repo.getSupplierOrders();
 });
 
 /// Pending orders waiting for supplier confirmation.
+/// Auto-refreshes via Supabase realtime.
 final supplierPendingOrdersProvider =
     FutureProvider.autoDispose<List<Order>>((ref) async {
+  ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
   return repo.getSupplierOrders(status: 'pending');
 });
 
 /// Confirmed orders (ready to prepare / dispatch).
+/// Auto-refreshes via Supabase realtime.
 final supplierConfirmedOrdersProvider =
     FutureProvider.autoDispose<List<Order>>((ref) async {
+  ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
   return repo.getSupplierOrders(status: 'confirmed');
 });
@@ -48,8 +55,10 @@ final supplierRelationsProvider =
 });
 
 /// Active delivery jobs for this supplier.
+/// Auto-refreshes via Supabase realtime.
 final supplierDeliveryJobsProvider =
     FutureProvider.autoDispose<List<DeliveryJob>>((ref) async {
+  ref.watch(deliveryJobsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getSupplierJobs();
 });

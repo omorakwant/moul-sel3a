@@ -167,12 +167,12 @@ class RetailerHomeScreen extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         // Left: subtitle + title
-        Expanded(
+        const Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Darija subtitle — always Arabic script per UI&UX.pen design
-              const Text(
+              Text(
                 'المالين السلعة ديالي',
                 style: TextStyle(
                   fontFamily: 'Inter',
@@ -180,9 +180,9 @@ class RetailerHomeScreen extends ConsumerWidget {
                   color: AppColors.textSecondary,
                 ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: 4),
               // French title — always French per UI&UX.pen design
-              const Text(
+              Text(
                 'Mes Grossistes',
                 style: TextStyle(
                   fontFamily: 'Manrope',

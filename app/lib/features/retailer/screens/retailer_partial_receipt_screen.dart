@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/order.dart';
+import '../../../core/providers/sync_providers.dart';
 import '../providers/order_providers.dart';
 
 /// Retailer Partial Receipt Screen — "Screen 10 — Partial Receipt" from UI&UX.pen.
@@ -694,8 +695,29 @@ class _RetailerPartialReceiptScreenState
                 ? () async {
                     setState(() => _isSubmitting = true);
                     try {
+                      // Build payload and queue via SyncService
+                      final adjustedItems = <Map<String, dynamic>>[];
+                      var queuedTotal = 0.0;
+                      for (var i = 0; i < order.items.length; i++) {
+                        final item = order.items[i];
+                        final qty = adjustments[i] ?? item.quantity;
+                        final lineTotal = qty * item.unitPrice;
+                        queuedTotal += lineTotal;
+                        adjustedItems.add({
+                          'product_id': item.productId,
+                          'name': item.name,
+                          'qty': item.quantity,
+                          'adjusted_qty': qty,
+                          'unit_price': item.unitPrice,
+                          'line_total': item.lineTotal,
+                        });
+                      }
                       await ref.read(
-                        confirmReceiptProvider(widget.orderId).future,
+                        offlineConfirmReceiptProvider({
+                          'order_id': widget.orderId,
+                          'items': adjustedItems,
+                          'adjusted_total': queuedTotal,
+                        }).future,
                       );
                       if (mounted) {
                         context.pushReplacementNamed(
@@ -776,7 +798,7 @@ class _RetailerPartialReceiptScreenState
                             fontFamily: 'Inter',
                             fontSize: 11,
                             color: canConfirm
-                                ? Colors.white.withOpacity(0.7)
+                                ? Colors.white.withValues(alpha: 0.7)
                                 : AppColors.textTertiary,
                           ),
                         ),

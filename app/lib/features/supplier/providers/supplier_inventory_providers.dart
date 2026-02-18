@@ -5,6 +5,7 @@ import '../../../core/constants/supabase_constants.dart';
 import '../../../data/models/product.dart';
 import '../../../data/repositories/product_repository.dart';
 import '../../../data/services/supabase_service.dart';
+import '../../../data/services/storage_service.dart';
 
 // ═════════════════════════════════════════════════════════════════════════════
 // SUPPLIER INVENTORY PROVIDERS
@@ -94,24 +95,8 @@ const kBrands = <String>[
 /// Returns the public URL.
 final uploadProductImageProvider =
     FutureProvider.family.autoDispose<String, File>((ref, file) async {
-  final client = ref.watch(supabaseClientProvider);
-  final userId = client.auth.currentUser?.id;
-  if (userId == null) throw Exception('Not authenticated');
-
-  final ext = file.path.split('.').last;
-  final fileName =
-      '${DateTime.now().millisecondsSinceEpoch}.$ext';
-  final storagePath = '$userId/products/$fileName';
-
-  await client.storage
-      .from(SupabaseConstants.storageBucket)
-      .upload(storagePath, file);
-
-  final publicUrl = client.storage
-      .from(SupabaseConstants.storageBucket)
-      .getPublicUrl(storagePath);
-
-  return publicUrl;
+  final storage = ref.watch(storageServiceProvider);
+  return storage.uploadProductImage(file);
 });
 
 /// Create a new product.

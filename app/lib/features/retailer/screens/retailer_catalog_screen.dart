@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/l10n/app_localizations.dart';
@@ -52,6 +53,9 @@ class _RetailerCatalogScreenState
     extends ConsumerState<RetailerCatalogScreen> {
   final _searchController = TextEditingController();
   final _searchFocusNode = FocusNode();
+  final stt.SpeechToText _speech = stt.SpeechToText();
+  bool _speechAvailable = false;
+  bool _isListening = false;
 
   @override
   void initState() {
@@ -65,10 +69,26 @@ class _RetailerCatalogScreenState
             widget.relationId;
       }
     });
+    // Initialize speech engine once
+    _initSpeech();
+  }
+
+  Future<void> _initSpeech() async {
+    _speechAvailable = await _speech.initialize(
+      onStatus: (status) {
+        if (status == 'done' || status == 'notListening') {
+          if (mounted) setState(() => _isListening = false);
+        }
+      },
+      onError: (_) {
+        if (mounted) setState(() => _isListening = false);
+      },
+    );
   }
 
   @override
   void dispose() {
+    _speech.stop();
     _searchController.dispose();
     _searchFocusNode.dispose();
     super.dispose();
@@ -77,32 +97,48 @@ class _RetailerCatalogScreenState
   // ═══════════════════════════════════════════════════════════════════════════
   // VOICE SEARCH — Step 3 spec: "use speech_to_text package to capture
   //   Darija/French product names and auto-fill the text search field."
-  // TODO: Add speech_to_text dependency and replace ScaffoldMessenger
-  //       with actual SpeechToText.listen() / stop() calls.
   // ═══════════════════════════════════════════════════════════════════════════
   void _startVoiceSearch() {
-    // TODO: Initialize speech_to_text and start listening
-    // final speechToText = SpeechToText();
-    // speechToText.listen(onResult: (result) {
-    //   _searchController.text = result.recognizedWords;
-    //   ref.read(catalogSearchQueryProvider.notifier).state = result.recognizedWords;
-    // });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          AppLocalizations.of(context).isDarija
-              ? 'كتكلم... هضر بالمنتوج'
-              : 'Écoute en cours... dites le nom du produit',
+    if (!_speechAvailable) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context).isDarija
+                ? 'الميكروفون ماخدامش'
+                : 'Microphone non disponible',
+          ),
+          backgroundColor: AppColors.alertRed,
+          duration: const Duration(seconds: 2),
         ),
-        backgroundColor: AppColors.accentOrange,
-        duration: const Duration(seconds: 2),
+      );
+      return;
+    }
+
+    setState(() => _isListening = true);
+
+    // Prefer French locale; falls back to default if unavailable.
+    // Darija is generally recognised under 'ar' but most devices map it to
+    // 'ar_MA' or generic 'ar'. French ('fr_FR') works well for product names
+    // that are commonly in French/English (e.g. "coque iPhone 15").
+    _speech.listen(
+      onResult: (result) {
+        final words = result.recognizedWords;
+        if (words.isNotEmpty) {
+          _searchController.text = words;
+          ref.read(catalogSearchQueryProvider.notifier).state = words;
+        }
+      },
+      localeId: 'fr_FR',
+      listenOptions: stt.SpeechListenOptions(
+        listenMode: stt.ListenMode.search,
+        cancelOnError: true,
       ),
     );
   }
 
   void _stopVoiceSearch() {
-    // TODO: Stop speech_to_text listening
-    // speechToText.stop();
+    _speech.stop();
+    if (mounted) setState(() => _isListening = false);
   }
 
   /// Opens WhatsApp to send a voice note to the current supplier.
@@ -537,10 +573,12 @@ class _RetailerCatalogScreenState
           GestureDetector(
             onLongPress: _startVoiceSearch,
             onLongPressUp: _stopVoiceSearch,
-            child: const Icon(
-              Icons.mic,
+            child: Icon(
+              _isListening ? Icons.mic : Icons.mic_none,
               size: 20,
-              color: AppColors.accentOrange,
+              color: _isListening
+                  ? AppColors.alertRed
+                  : AppColors.accentOrange,
             ),
           ),
         ],

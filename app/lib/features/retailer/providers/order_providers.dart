@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/order.dart';
 import '../../../data/repositories/order_repository.dart';
 import '../../../data/repositories/profile_repository.dart';
+import '../../../data/services/realtime_service.dart';
 
 /// ══════════════════════════════════════════════════════════════════════════════
 /// ORDER PROVIDERS — State management for Order Detail, Partial Receipt,
@@ -19,15 +20,20 @@ import '../../../data/repositories/profile_repository.dart';
 final selectedOrderIdProvider = StateProvider<String?>((ref) => null);
 
 /// Fetches a single order by ID.
+/// Auto-refreshes when the orders table changes via realtime.
 final orderDetailProvider =
     FutureProvider.family<Order?, String>((ref, orderId) async {
+  // Watch realtime — any orders table change re-triggers this fetch
+  ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
   return repo.getById(orderId);
 });
 
 /// Fetches all orders for the logged-in retailer.
+/// Auto-refreshes when the orders table changes via realtime.
 final retailerOrdersProvider =
     FutureProvider<List<Order>>((ref) async {
+  ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
   return repo.getRetailerOrders();
 });

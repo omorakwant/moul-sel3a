@@ -598,11 +598,11 @@ class RetailerHandshakeScreen extends StatelessWidget {
               final message = l10n.isDarija
                   ? '✅ وصل التسليم\n'
                     '$bonRef\n'
-                    '${itemCount} articles · ${Formatters.price(adjustedTotal)}\n'
+                    '$itemCount articles · ${Formatters.price(adjustedTotal)}\n'
                     '${adjustmentCount > 0 ? '⚠️ $adjustmentCount anomalies' : '✓ Pas d\'anomalies'}'
                   : '✅ Reçu de livraison\n'
                     '$bonRef\n'
-                    '${itemCount} articles · ${Formatters.price(adjustedTotal)}\n'
+                    '$itemCount articles · ${Formatters.price(adjustedTotal)}\n'
                     '${adjustmentCount > 0 ? '⚠️ $adjustmentCount anomalie(s)' : '✓ Aucune anomalie'}';
               final url = Uri.parse(Formatters.whatsappLink(phone: '', message: message));
               try {
@@ -651,7 +651,7 @@ class RetailerHandshakeScreen extends StatelessWidget {
                         l10n.isDarija
                             ? 'Partager · WhatsApp'
                             : 'شارك الوصل · WhatsApp',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 10,
                           color: AppColors.textMutedOnDark,

@@ -7,8 +7,14 @@ import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/product.dart';
 import '../providers/supplier_inventory_providers.dart';
+import 'supplier_web_shell.dart';
 
 /// Bulk Price Adjustment Modal.
+///
+/// **Mobile**: Bottom sheet with DraggableScrollableSheet.
+/// **Web (Screen F.1)**: Centered dialog (560px) with radio mode selection,
+/// input field, full preview table, and action buttons.
+/// See UI&UX.pen node `Aer9e` for design reference.
 ///
 /// PROJECT_CONTEXT.md — Bulk Price Adjustment:
 ///   - Fixed Offset: + / – DH
@@ -25,6 +31,51 @@ class BulkPriceAdjustmentModal extends ConsumerStatefulWidget {
     required this.isDarija,
     required this.onApplied,
   });
+
+  /// Show as a web dialog (Screen F.1 style) or mobile bottom sheet.
+  static void show(
+    BuildContext context, {
+    required List<Product> products,
+    required bool isDarija,
+    required VoidCallback onApplied,
+  }) {
+    if (isWebLayout(context)) {
+      showDialog(
+        context: context,
+        barrierColor: Colors.black54,
+        builder: (ctx) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: 560,
+            constraints: const BoxConstraints(maxHeight: 700),
+            decoration: BoxDecoration(
+              color: AppColors.webCardBg,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: BulkPriceAdjustmentModal(
+              selectedProducts: products,
+              isDarija: isDarija,
+              onApplied: onApplied,
+            ),
+          ),
+        ),
+      );
+    } else {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: AppColors.bgPrimary,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (ctx) => BulkPriceAdjustmentModal(
+          selectedProducts: products,
+          isDarija: isDarija,
+          onApplied: onApplied,
+        ),
+      );
+    }
+  }
 
   @override
   ConsumerState<BulkPriceAdjustmentModal> createState() =>
@@ -125,7 +176,7 @@ class _BulkPriceAdjustmentModalState
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: AppColors.accentOrange.withOpacity(0.12),
+                      color: AppColors.accentOrange.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Center(
@@ -323,7 +374,7 @@ class _BulkPriceAdjustmentModalState
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
           decoration: BoxDecoration(
             color: selected
-                ? AppColors.accentOrange.withOpacity(0.08)
+                ? AppColors.accentOrange.withValues(alpha: 0.08)
                 : AppColors.bgSurface,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
@@ -382,7 +433,7 @@ class _BulkPriceAdjustmentModalState
               height: 44,
               decoration: BoxDecoration(
                 color: _isPositive
-                    ? AppColors.successGreen.withOpacity(0.12)
+                    ? AppColors.successGreen.withValues(alpha: 0.12)
                     : AppColors.bgSurface,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
@@ -415,7 +466,7 @@ class _BulkPriceAdjustmentModalState
               height: 44,
               decoration: BoxDecoration(
                 color: !_isPositive
-                    ? AppColors.alertRed.withOpacity(0.12)
+                    ? AppColors.alertRed.withValues(alpha: 0.12)
                     : AppColors.bgSurface,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
@@ -478,7 +529,7 @@ class _BulkPriceAdjustmentModalState
                   fontFamily: 'Manrope',
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.textTertiary.withOpacity(0.5),
+                  color: AppColors.textTertiary.withValues(alpha: 0.5),
                 ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
@@ -490,7 +541,7 @@ class _BulkPriceAdjustmentModalState
             padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.accentOrange.withOpacity(0.12),
+              color: AppColors.accentOrange.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -519,10 +570,10 @@ class _BulkPriceAdjustmentModalState
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.accentOrange.withOpacity(0.06),
+        color: AppColors.accentOrange.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: AppColors.accentOrange.withOpacity(0.2),
+          color: AppColors.accentOrange.withValues(alpha: 0.2),
         ),
       ),
       child: Row(
@@ -677,7 +728,7 @@ class _BulkPriceAdjustmentModalState
                       color: (priceUp
                               ? AppColors.successGreen
                               : AppColors.alertRed)
-                          .withOpacity(0.1),
+                          .withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(

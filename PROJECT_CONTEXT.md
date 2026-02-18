@@ -61,6 +61,62 @@ C. The Money Engine (The Ledger)
 
     UX: Large grid views, high-contrast text, big buttons (no keyboard entry where a "+" button works).
 
+    ## 4B. OFFLINE STRATEGY (The "Basement" Protocol)
+**Problem:** Connectivity in wholesale markets is unreliable.
+**Requirement:** Critical "Write" actions must never fail due to network loss.
+**Solution:** "Optimistic Command Queue" pattern — implemented as `SyncService`.
+
+### 1. The Queue Mechanism — `data/services/sync_service.dart`
+- **Local Storage:** Hive box `sync_action_queue` persists `QueuedAction` records across app restarts.
+- **Structure (QueuedAction):**
+  - `id`: UUID (generated via `uuid` package).
+  - `type`: ActionType enum — `confirmReceipt`, `declarePayment`, `verifyDelivery`.
+  - `payload`: `Map<String, dynamic>` with all data needed for the Supabase call.
+  - `createdAt`: DateTime.
+  - `status`: ActionStatus enum — `pending`, `processing`, `failed`.
+  - `retryCount`: int (max 5 before dead-letter).
+  - `lastError`: String? (debug info on failure).
+
+### 2. The Sync Logic
+- **UI Behavior (Optimistic Update):**
+  1. User clicks Action (e.g., "Confirm Receipt").
+  2. App queues action via `SyncService.addAction(type, payload)`.
+  3. App *immediately* updates the UI to "Success" (optimistic).
+  4. SyncService listens to `connectivity_plus` for connectivity changes.
+     - **If Online:** `processQueue()` runs immediately — FIFO order.
+     - **If Offline:** Waits for `ConnectivityResult` != `none`.
+
+- **Riverpod Integration (`core/providers/sync_providers.dart`):**
+  - `syncServiceProvider` — singleton service instance.
+  - `queueStatusProvider` — `StreamProvider<QueueStatus>` for reactive UI.
+  - `offlineConfirmReceiptProvider` — replaces direct `confirmReceiptProvider`.
+  - `offlineDeclarePaymentProvider` — replaces direct `declarePaymentProvider`.
+  - `offlineVerifyDeliveryProvider` — replaces direct repo calls.
+
+- **UI Banner (`features/shared/widgets/offline_status_banner.dart`):**
+  - Offline: red banner "Hors connexion • N en attente" / Darija equivalent.
+  - Syncing: amber "Synchronisation en cours...".
+  - Failed: red + "Réessayer" button → `retryFailedActionsProvider`.
+  - Online + empty: hidden (SizedBox.shrink).
+
+### 3. Conflict Resolution & Dead-Letter
+- **Rule:** The Server is the Source of Truth.
+- **Retry Policy:** Up to 5 retries. After max retries → `ActionStatus.failed`.
+- **Driver PIN Special Case:** PIN verification (read) stays online via
+  `DeliveryRepository.verifyPinOnly()`. Only the post-PIN mutations
+  (mark completed, update order, COD ledger) are queued offline-safe.
+- **User Recovery:**
+  1. `OfflineStatusBanner` shows failed count.
+  2. "Réessayer" button calls `SyncService.retryFailed()` — resets all failed → pending.
+  3. Individual dismiss: `SyncService.dismissAction(id)`.
+
+### 4. Integrated Screens
+| Screen | Old Provider | New Provider (Offline-Safe) |
+|---|---|---|
+| `payment_declaration_screen.dart` | `declarePaymentProvider` | `offlineDeclarePaymentProvider` |
+| `retailer_partial_receipt_screen.dart` | `confirmReceiptProvider` | `offlineConfirmReceiptProvider` |
+| `driver_active_trip_screen.dart` | `TripActionNotifier.verifyPinAndComplete` | `verifyPinOnly()` + `SyncService` queue |
+
 5. DATABASE SCHEMA HINTS (For Copilot)
 
     profiles: includes credit_limit and current_balance.
@@ -241,13 +297,34 @@ JSON
 
     Step 5: The Supplier Admin Portal (Web/Tablet)
 
-    "Create a Dashboard for the Supplier (Admin). It needs three key tabs:
+    "Create a Dashboard for the Supplier (Admin). The web portal uses a sidebar navigation layout (1440×900 viewport):
 
-        Inventory (Quick Add): A tabular view to add products rapidly. Inputs: Name, Price tiers (JSON), and Image.
+    **Layout Pattern — All web screens share:**
+    - Dark sidebar (260px, #1C1917): Brand logo (م), nav items (Dashboard, Inventaire, Clients/Carnet, Vérifications, Logistique), quick stats, user profile at bottom.
+    - Active nav item: highlighted background (#292524), orange icon, white text.
+    - Main content area (fill remaining): TopBar (64px, white) + content below.
 
-        Ledger Verification: A list of ledger_transactions where status is 'pending'. Show the 'Evidence Photo' (Wafacash receipt) side-by-side with 'Approve/Reject' buttons. Clicking 'Approve' must trigger the Database Update function.
+    **Screen F — The Command Center (Inventory & Orders):**
+    - TopBar: 'Inventaire' title + product count badge, search bar, filter button, orange 'Ajouter' FAB.
+    - Content: Data table with filter tabs (Tout, Écrans, Accessoires, Chargeurs, Câbles, Protection), header row, product rows with checkbox, product icon+name+ref, brand, stock count, Price T1/T2 columns, status badge.
+    - Multi-select: Checkboxes trigger a floating bulk action bar (indigo #1E1B4B, 500×52) at bottom: '{n} articles sélectionnés' + 'Mise à jour Prix' button + 'Désactiver' button.
+    - Low stock warning: Stock <10 shown in red with amber 'Stock faible' badge.
+    - Selected row state: light indigo background (#EEF2FF), indigo checkbox.
 
-        Delivery Dispatch: A view of 'Ready Orders'. Allow the Supplier to either 'Assign Trusted Driver' (Select from list) or 'Post to Marketplace' (Opens bidding)."
+    **Screen F.1 — Bulk Update Modal (overlay):**
+    - Centered modal (560px): Header 'Modifier les prix pour {n} articles' + Darija subtitle.
+    - Adjustment type: Radio selection — 'Fixe (+DH)' or 'Pourcentage (+%)'.
+    - Input field for adjustment value.
+    - Mandatory preview table: Old Price → New Price (new prices in green) for all selected items.
+    - Footer: 'Annuler' (outline) + 'Appliquer les modifications' (indigo filled).
+
+    **Screen G — The Verification Desk (Payment Matching):**
+    - TopBar: 'Vérifications' title + pending count badge (orange), queue navigation (Précédent/Suivant buttons, '3/8' counter).
+    - 50/50 split view layout:
+      - Left pane (fill, #F5F5F4): Receipt header ('Reçu Wafacash' + time), zoom controls (−/+/100%). Receipt card (white, shadow) showing: Wafacash logo, transfer type, date, beneficiary, reference, large amount (28pt bold), barcode.
+      - Right pane (480px fixed, white): 'Validation du Paiement' header. Client card (avatar + 'Teleboutique Youssef' + history). Declared amount (32pt bold). Reference field with green checkmark match indicator. Balance impact preview card (green #F0FDF4): current balance → payment → new balance. Action buttons: green 'Valider Paiement' + red outline 'Rejeter'. Darija label: 'صادق على الخلاص'.
+
+    See UI&UX.pen for exact node IDs and pixel-perfect measurements."
 
 Feature: Intelligent Bulk Price Adjustment
 
@@ -263,7 +340,9 @@ Feature: Intelligent Bulk Price Adjustment
 
     Tiered Pricing Impact: Bulk updates should apply to the "Level 1" price, and the system should ask if it should auto-calculate Level 2 and Level 3 prices based on the same percentage/offset.
 
-    Safety Rule: A "Preview Change" step is mandatory. The UI must show "Old Price" vs. "New Price" for at least 3 sample items before the supplier confirms the bulk update to prevent catastrophic data errors.
+    Safety Rule: A "Preview Change" step is mandatory. The UI must show "Old Price" vs. "New Price" for ALL selected items (not just samples) before the supplier confirms the bulk update to prevent catastrophic data errors.
+
+    Web Implementation (Screen F.1): The modal uses radio buttons for mode selection (Fixed +DH / Percentage +%), a single numeric input, and a full preview table with green-highlighted new prices. See UI&UX.pen node `Aer9e` for exact layout.
 
     
     1. UI Layout: The "Declaration" Screen

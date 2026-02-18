@@ -92,16 +92,16 @@ class AppTheme {
         ),
 
         // ── Chips (Filter) ──
-        chipTheme: ChipThemeData(
+        chipTheme: const ChipThemeData(
           backgroundColor: AppColors.bgSurface,
           selectedColor: AppColors.bgDark,
-          labelStyle: const TextStyle(
+          labelStyle: TextStyle(
             fontFamily: 'Manrope',
             fontSize: 13,
             fontWeight: FontWeight.w600,
           ),
-          shape: const StadiumBorder(),
-          padding: const EdgeInsets.symmetric(
+          shape: StadiumBorder(),
+          padding: EdgeInsets.symmetric(
             horizontal: 18,
             vertical: 10,
           ),
