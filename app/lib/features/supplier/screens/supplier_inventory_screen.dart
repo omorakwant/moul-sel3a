@@ -1330,11 +1330,19 @@ class _SupplierInventoryScreenState
                 padding: const EdgeInsets.only(left: 8),
                 child: GestureDetector(
                   onTap: () async {
-                    final updated = product.copyWith(
-                        isActive: !product.isActive);
-                    final repo = ref.read(productRepositoryProvider);
-                    await repo.update(updated);
-                    ref.invalidate(supplierProductsProvider);
+                    try {
+                      final updated = product.copyWith(
+                          isActive: !product.isActive);
+                      final repo = ref.read(productRepositoryProvider);
+                      await repo.update(updated);
+                      ref.invalidate(supplierProductsProvider);
+                    } catch (e) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Erreur: $e')),
+                        );
+                      }
+                    }
                   },
                   child: Icon(
                     product.isActive

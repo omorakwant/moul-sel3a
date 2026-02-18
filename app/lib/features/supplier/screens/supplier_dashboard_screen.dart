@@ -79,7 +79,7 @@ class _SupplierDashboardScreenState
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _OverviewTab(),
+                  _OverviewTab(tabController: _tabController),
                   _OrdersTab(),
                   _RetailersTab(),
                 ],
@@ -151,6 +151,9 @@ class _SupplierDashboardScreenState
 // ═════════════════════════════════════════════════════════════════════════════
 
 class _OverviewTab extends ConsumerWidget {
+  final TabController tabController;
+  const _OverviewTab({required this.tabController});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
@@ -185,7 +188,6 @@ class _OverviewTab extends ConsumerWidget {
                     bgColor: AppColors.badgePendingBg,
                     onTap: () {
                       // Switch to orders tab
-                      final tabController = DefaultTabController.of(context);
                       tabController.animateTo(1);
                     },
                   ),

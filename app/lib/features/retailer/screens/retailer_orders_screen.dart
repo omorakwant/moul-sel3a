@@ -114,13 +114,13 @@ class _RetailerOrdersScreenState extends ConsumerState<RetailerOrdersScreen>
   }
 }
 
-class _OrdersList extends StatelessWidget {
+class _OrdersList extends ConsumerWidget {
   final List<Order> orders;
 
   const _OrdersList({required this.orders});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
 
     if (orders.isEmpty) {
@@ -147,7 +147,7 @@ class _OrdersList extends StatelessWidget {
     return RefreshIndicator(
       color: AppColors.accentOrange,
       onRefresh: () async {
-        // Parent will handle refresh
+        ref.invalidate(retailerOrdersProvider);
       },
       child: ListView.separated(
         padding: const EdgeInsets.all(24),

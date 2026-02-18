@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
+import '../../../data/models/product.dart';
 import '../providers/cart_providers.dart';
 import '../providers/catalog_providers.dart';
 import '../widgets/product_card.dart';
@@ -826,7 +827,7 @@ class _RetailerCatalogScreenState
   // PRODUCT GRID — 2-column grid of ProductCards, gap 12
   // ════════════════════════════════════════════════════════════════════════════
   Widget _buildProductGrid(
-    AsyncValue<List<dynamic>> productsAsync,
+    AsyncValue<List<Product>> productsAsync,
     AppLocalizations l10n,
   ) {
     return productsAsync.when(

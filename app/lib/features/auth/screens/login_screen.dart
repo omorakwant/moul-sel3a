@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/errors/error_widgets.dart';
@@ -84,6 +86,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   bool get _isDarija => ref.watch(localeProvider) == 'ar';
+
+  /// Dev-only login bypass using email+password.
+  /// These accounts were created via Admin API with email credentials.
+  Future<void> _devLogin(String email, String password, String label) async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      await Supabase.instance.client.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+      // Auth state change will trigger router redirect automatically
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = 'Dev login failed: $e';
+        });
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -372,9 +399,127 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ],
                   ),
                 ),
+
+                // ══════════════════════════════════════════════
+                // DEV LOGIN PANEL — debug only, quick test accounts
+                // ══════════════════════════════════════════════
+                if (kDebugMode) ...[
+                  const SizedBox(height: 32),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEDE9FE),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: const Color(0xFF8B5CF6),
+                        width: 1,
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(Icons.bug_report,
+                                size: 16, color: Color(0xFF7C3AED)),
+                            SizedBox(width: 8),
+                            Text(
+                              'DEV Quick Login',
+                              style: TextStyle(
+                                fontFamily: 'Manrope',
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFF7C3AED),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        _buildDevLoginButton(
+                          icon: Icons.store,
+                          label: 'Grossiste Alami',
+                          subtitle: 'Supplier',
+                          email: 'supplier@test.com',
+                          color: const Color(0xFF059669),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildDevLoginButton(
+                          icon: Icons.shopping_bag,
+                          label: 'Hanout Brahim',
+                          subtitle: 'Retailer',
+                          email: 'retailer@test.com',
+                          color: const Color(0xFF2563EB),
+                        ),
+                        const SizedBox(height: 8),
+                        _buildDevLoginButton(
+                          icon: Icons.local_shipping,
+                          label: 'Kourtia Youssef',
+                          subtitle: 'Driver',
+                          email: 'driver@test.com',
+                          color: const Color(0xFFD97706),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDevLoginButton({
+    required IconData icon,
+    required String label,
+    required String subtitle,
+    required String email,
+    required Color color,
+  }) {
+    return GestureDetector(
+      onTap: _isLoading
+          ? null
+          : () => _devLogin(email, 'test123456', label),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: color.withValues(alpha: 0.3)),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: color),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontFamily: 'Manrope',
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: color,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 11,
+                      color: AppColors.textTertiary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios,
+                size: 14, color: color.withValues(alpha: 0.5)),
+          ],
         ),
       ),
     );
