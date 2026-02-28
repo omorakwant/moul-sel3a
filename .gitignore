@@ -40,3 +40,6 @@ supabase/.branches/
 
 # Misc
 *.log
+.vercel
+.env*.local
+.flutter-sdk/
