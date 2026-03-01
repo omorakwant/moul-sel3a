@@ -35,6 +35,14 @@
 3. **Database:** `supabase db push` (Ensure project is linked)
 4. **Run:** `flutter run`
 
+## 🌐 Deploy (Vercel)
+The repo has two `vercel.json` setups so the app works whether Vercel’s **Root Directory** is the repo root or `app`:
+
+- **Root = repo root (default):** Use the root `vercel.json`. It sets `buildCommand` and `outputDirectory` to `app/build/web`. You must have Flutter available in the build (e.g. [Flutter Vercel](https://github.com/nicholasess/vercel-flutter) or install Flutter in the build step).
+- **Root = `app`:** In Vercel → Project Settings → General, set **Root Directory** to `app`. Build Command: `flutter build web`, Output Directory: `build/web`. The `app/vercel.json` config is used.
+
+SPA rewrites send unknown paths to `/index.html` so deep links and refresh don’t return 404.
+
 ## 📂 Project Structure
 * `lib/core/` - Constants, L10n, Theme, Routing
 * `lib/data/` - Repositories & Models (Supabase)
