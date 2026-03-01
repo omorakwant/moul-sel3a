@@ -36,9 +36,9 @@
 4. **Run:** `flutter run`
 
 ## 🌐 Deploy (Vercel)
-**Recommended:** Set **Root Directory** to `app` in Vercel → Project Settings → General. Leave **Build Command** and **Install Command** empty so `app/vercel.json` is used — it runs `app/scripts/install-flutter-vercel.sh` (clones Flutter) then `./flutter/bin/flutter build web`. Output is `build/web`.
+Set **Root Directory** to `app` in Vercel → Project Settings → General. Leave **Build Command** and **Install Command** empty.
 
-**Alternative (repo root):** Root Directory empty. The root `vercel.json` runs `scripts/install-flutter-vercel.sh` and builds from `app/`; output `app/build/web`.
+The app uses `@vercel/static-build`: Vercel runs `npm run build`, which runs `app/scripts/build.sh`. That script installs Flutter (clone + precache) then runs `flutter build web`. Output is `build/web`. First deploy may take 5–10 minutes.
 
 SPA rewrites send unknown paths to `/index.html` so deep links and refresh don’t return 404.
 
