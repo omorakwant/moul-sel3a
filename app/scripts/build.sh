@@ -11,8 +11,8 @@ if [ ! -x "$FLUTTER_DIR/bin/flutter" ]; then
   echo "Installing Flutter $FLUTTER_TAG..."
   rm -rf "$FLUTTER_DIR"
   git clone --depth 1 --branch "$FLUTTER_TAG" https://github.com/flutter/flutter.git "$FLUTTER_DIR"
-  # Flutter tool may reference origin/master; shallow tag clone has no master ref
-  (cd "$FLUTTER_DIR" && git fetch origin master --depth 1 2>/dev/null || true)
+  # Flutter tool expects origin/master; tag-only clone has no master ref — create it at current HEAD
+  (cd "$FLUTTER_DIR" && git update-ref refs/remotes/origin/master HEAD)
   "$FLUTTER_DIR/bin/flutter" config --enable-web
   "$FLUTTER_DIR/bin/flutter" precache --web
 fi
