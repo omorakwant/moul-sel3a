@@ -176,7 +176,7 @@ class _BulkPriceAdjustmentModalState
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
-                      color: AppColors.accentOrange.withValues(alpha: 0.12),
+                      color: AppColors.accentOrange.withOpacity(0.12),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Center(
@@ -374,7 +374,7 @@ class _BulkPriceAdjustmentModalState
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
           decoration: BoxDecoration(
             color: selected
-                ? AppColors.accentOrange.withValues(alpha: 0.08)
+                ? AppColors.accentOrange.withOpacity(0.08)
                 : AppColors.bgSurface,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
@@ -433,7 +433,7 @@ class _BulkPriceAdjustmentModalState
               height: 44,
               decoration: BoxDecoration(
                 color: _isPositive
-                    ? AppColors.successGreen.withValues(alpha: 0.12)
+                    ? AppColors.successGreen.withOpacity(0.12)
                     : AppColors.bgSurface,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
@@ -466,7 +466,7 @@ class _BulkPriceAdjustmentModalState
               height: 44,
               decoration: BoxDecoration(
                 color: !_isPositive
-                    ? AppColors.alertRed.withValues(alpha: 0.12)
+                    ? AppColors.alertRed.withOpacity(0.12)
                     : AppColors.bgSurface,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
@@ -529,7 +529,7 @@ class _BulkPriceAdjustmentModalState
                   fontFamily: 'Manrope',
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.textTertiary.withValues(alpha: 0.5),
+                  color: AppColors.textTertiary.withOpacity(0.5),
                 ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
@@ -541,7 +541,7 @@ class _BulkPriceAdjustmentModalState
             padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.accentOrange.withValues(alpha: 0.12),
+              color: AppColors.accentOrange.withOpacity(0.12),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -570,10 +570,10 @@ class _BulkPriceAdjustmentModalState
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.accentOrange.withValues(alpha: 0.06),
+        color: AppColors.accentOrange.withOpacity(0.06),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: AppColors.accentOrange.withValues(alpha: 0.2),
+          color: AppColors.accentOrange.withOpacity(0.2),
         ),
       ),
       child: Row(
@@ -728,7 +728,7 @@ class _BulkPriceAdjustmentModalState
                       color: (priceUp
                               ? AppColors.successGreen
                               : AppColors.alertRed)
-                          .withValues(alpha: 0.1),
+                          .withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(

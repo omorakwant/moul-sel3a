@@ -169,7 +169,7 @@ class _RouteCard extends StatelessWidget {
         border: Border.all(color: AppColors.borderSubtle),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -354,8 +354,8 @@ class _JobTypeBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: isCod
-            ? AppColors.accentOrange.withValues(alpha: 0.1)
-            : AppColors.successGreen.withValues(alpha: 0.1),
+            ? AppColors.accentOrange.withOpacity(0.1)
+            : AppColors.successGreen.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
@@ -428,7 +428,7 @@ class _ActiveTripsBanner extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'Inter',
                           fontSize: 13,
-                          color: Colors.white.withValues(alpha: 0.85),
+                          color: Colors.white.withOpacity(0.85),
                         ),
                       ),
                     ],

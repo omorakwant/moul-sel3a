@@ -518,7 +518,7 @@ class RetailerHomeScreen extends ConsumerWidget {
                               width: 40,
                               height: 40,
                               decoration: BoxDecoration(
-                                color: AppColors.accentOrange.withValues(alpha: 0.1),
+                                color: AppColors.accentOrange.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(

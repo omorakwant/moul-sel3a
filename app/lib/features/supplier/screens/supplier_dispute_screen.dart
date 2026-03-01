@@ -281,7 +281,7 @@ class _SupplierDisputeScreenState extends ConsumerState<SupplierDisputeScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.accentOrange.withValues(alpha: 0.08),
+              color: AppColors.accentOrange.withOpacity(0.08),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(
@@ -356,7 +356,7 @@ class _SupplierDisputeScreenState extends ConsumerState<SupplierDisputeScreen> {
         height: 52,
         decoration: BoxDecoration(
           color: _submitting
-              ? AppColors.alertRed.withValues(alpha: 0.6)
+              ? AppColors.alertRed.withOpacity(0.6)
               : AppColors.alertRed,
           borderRadius: BorderRadius.circular(14),
         ),

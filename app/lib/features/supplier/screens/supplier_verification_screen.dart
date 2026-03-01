@@ -475,7 +475,7 @@ class _ReceiptPane extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.12),
+                              color: Colors.black.withOpacity(0.12),
                               blurRadius: 24,
                               offset: const Offset(0, 4),
                             ),
@@ -1072,7 +1072,7 @@ class _VerificationCardState extends ConsumerState<_VerificationCard> {
         border: Border.all(color: AppColors.borderSubtle),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

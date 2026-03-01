@@ -37,7 +37,7 @@ class ErrorCard extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: info.color.withValues(alpha: 0.12),
+                color: info.color.withOpacity(0.12),
                 borderRadius: BorderRadius.circular(18),
               ),
               child: Icon(info.icon, size: 32, color: info.color),
@@ -235,7 +235,7 @@ class EmptyState extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
-                    color: AppColors.accentOrange.withValues(alpha: 0.12),
+                    color: AppColors.accentOrange.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -319,7 +319,7 @@ class _SkeletonCardState extends State<_SkeletonCard>
         return Container(
           height: widget.height,
           decoration: BoxDecoration(
-            color: AppColors.bgSurface.withValues(alpha: opacity),
+            color: AppColors.bgSurface.withOpacity(opacity),
             borderRadius: BorderRadius.circular(16),
           ),
         );

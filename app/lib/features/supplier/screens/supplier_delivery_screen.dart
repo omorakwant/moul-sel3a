@@ -259,7 +259,7 @@ class _SupplierDeliveryScreenState
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: job.isCOD
-                        ? AppColors.accentOrange.withValues(alpha: 0.12)
+                        ? AppColors.accentOrange.withOpacity(0.12)
                         : AppColors.bgPrimary,
                     borderRadius: BorderRadius.circular(6),
                   ),
@@ -371,7 +371,7 @@ class _SupplierDeliveryScreenState
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: color.withOpacity(0.12),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(

@@ -257,7 +257,7 @@ class SupplierOrderDetailScreen extends ConsumerWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: AppColors.accentOrange.withValues(alpha: 0.1),
+              color: AppColors.accentOrange.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: const Icon(Icons.store_rounded,
@@ -456,7 +456,7 @@ class SupplierOrderDetailScreen extends ConsumerWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: AppColors.accentOrange.withValues(alpha: 0.1),
+                  color: AppColors.accentOrange.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(Icons.local_shipping_rounded,
@@ -738,9 +738,9 @@ class SupplierOrderDetailScreen extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
+        color: color.withOpacity(0.08),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
+        border: Border.all(color: color.withOpacity(0.2)),
       ),
       child: Row(
         children: [
@@ -764,7 +764,7 @@ class SupplierOrderDetailScreen extends ConsumerWidget {
                   subtitle,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontFamily: 'Inter',
-                        color: color.withValues(alpha: 0.7),
+                        color: color.withOpacity(0.7),
                         fontSize: 13,
                       ),
                 ),
@@ -847,9 +847,9 @@ class _StatusBanner extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
+        color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
+        border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Row(
         children: [

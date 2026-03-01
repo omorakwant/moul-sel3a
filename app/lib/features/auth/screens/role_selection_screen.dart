@@ -353,7 +353,7 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
                                       fontFamily: 'Inter',
                                       fontSize: 10,
                                       color:
-                                          AppColors.onAccent.withValues(alpha: 0.7),
+                                          AppColors.onAccent.withOpacity(0.7),
                                     ),
                                   ),
                                 ],
@@ -407,7 +407,7 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
               width: 52,
               height: 52,
               decoration: BoxDecoration(
-                color: isSelected ? color.withValues(alpha: 0.15) : AppColors.bgMuted,
+                color: isSelected ? color.withOpacity(0.15) : AppColors.bgMuted,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Center(

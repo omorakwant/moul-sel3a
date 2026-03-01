@@ -327,11 +327,11 @@ class _RetailerCatalogScreenState
     return Container(
       decoration: BoxDecoration(
         color: isOverLimit
-            ? AppColors.alertRed.withValues(alpha: 0.05)
+            ? AppColors.alertRed.withOpacity(0.05)
             : Colors.white,
         border: Border(
           top: BorderSide(
-            color: isOverLimit ? AppColors.alertRed.withValues(alpha: 0.3) : AppColors.bgSurface,
+            color: isOverLimit ? AppColors.alertRed.withOpacity(0.3) : AppColors.bgSurface,
           ),
         ),
       ),
@@ -343,7 +343,7 @@ class _RetailerCatalogScreenState
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              color: AppColors.alertRed.withValues(alpha: 0.1),
+              color: AppColors.alertRed.withOpacity(0.1),
               child: Row(
                 children: [
                   const Icon(Icons.warning_amber_rounded,

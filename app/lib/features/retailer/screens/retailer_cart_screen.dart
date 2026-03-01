@@ -177,7 +177,7 @@ class _RetailerCartScreenState extends ConsumerState<RetailerCartScreen> {
             width: 32,
             height: 32,
             decoration: BoxDecoration(
-              color: AppColors.accentOrange.withValues(alpha: 0.1),
+              color: AppColors.accentOrange.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: const Icon(Icons.store_rounded,
@@ -726,7 +726,7 @@ class _OrderConfirmationSheet extends StatelessWidget {
                 width: 72,
                 height: 72,
                 decoration: BoxDecoration(
-                  color: AppColors.successGreen.withValues(alpha: 0.1),
+                  color: AppColors.successGreen.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(

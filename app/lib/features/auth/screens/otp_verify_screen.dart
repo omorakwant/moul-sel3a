@@ -383,7 +383,7 @@ class _OtpVerifyScreenState extends ConsumerState<OtpVerifyScreen> {
                                   style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 10,
-                                    color: AppColors.onAccent.withValues(alpha: 0.7),
+                                    color: AppColors.onAccent.withOpacity(0.7),
                                   ),
                                 ),
                               ],

@@ -800,7 +800,7 @@ class _RetailerPartialReceiptScreenState
                             fontFamily: 'Inter',
                             fontSize: 11,
                             color: canConfirm
-                                ? Colors.white.withValues(alpha: 0.7)
+                                ? Colors.white.withOpacity(0.7)
                                 : AppColors.textTertiary,
                           ),
                         ),

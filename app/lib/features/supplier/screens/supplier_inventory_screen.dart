@@ -418,7 +418,7 @@ class _SupplierInventoryScreenState
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
-                  color: isActive ? AppColors.accentOrange.withValues(alpha: 0.1) : Colors.transparent,
+                  color: isActive ? AppColors.accentOrange.withOpacity(0.1) : Colors.transparent,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
@@ -722,7 +722,7 @@ class _SupplierInventoryScreenState
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.25),
+            color: Colors.black.withOpacity(0.25),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -747,7 +747,7 @@ class _SupplierInventoryScreenState
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
+                color: Colors.white.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -770,7 +770,7 @@ class _SupplierInventoryScreenState
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
+                color: Colors.white.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -851,7 +851,7 @@ class _SupplierInventoryScreenState
               height: 40,
               decoration: BoxDecoration(
                 color: _isSelecting
-                    ? AppColors.accentOrange.withValues(alpha: 0.15)
+                    ? AppColors.accentOrange.withOpacity(0.15)
                     : AppColors.bgSurface,
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -982,7 +982,7 @@ class _SupplierInventoryScreenState
       margin: const EdgeInsets.fromLTRB(20, 4, 20, 4),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.accentOrange.withValues(alpha: 0.08),
+        color: AppColors.accentOrange.withOpacity(0.08),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -1105,7 +1105,7 @@ class _SupplierInventoryScreenState
               : Border.all(color: AppColors.borderSubtle, width: 0.5),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
+              color: Colors.black.withOpacity(0.04),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -1189,7 +1189,7 @@ class _SupplierInventoryScreenState
                               horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
                             color:
-                                AppColors.successGreen.withValues(alpha: 0.15),
+                                AppColors.successGreen.withOpacity(0.15),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -1208,7 +1208,7 @@ class _SupplierInventoryScreenState
                           padding: const EdgeInsets.symmetric(
                               horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: AppColors.alertRed.withValues(alpha: 0.12),
+                            color: AppColors.alertRed.withOpacity(0.12),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -1281,7 +1281,7 @@ class _SupplierInventoryScreenState
                               horizontal: 5, vertical: 1),
                           decoration: BoxDecoration(
                             color:
-                                AppColors.accentOrange.withValues(alpha: 0.1),
+                                AppColors.accentOrange.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
@@ -1302,8 +1302,8 @@ class _SupplierInventoryScreenState
                             horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
                           color: product.inStock
-                              ? AppColors.successGreen.withValues(alpha: 0.1)
-                              : AppColors.alertRed.withValues(alpha: 0.1),
+                              ? AppColors.successGreen.withOpacity(0.1)
+                              : AppColors.alertRed.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(

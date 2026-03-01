@@ -5,7 +5,7 @@ set -e
 
 FLUTTER_DIR="${FLUTTER_DIR:-./flutter}"
 # Pin to a stable tag so version is set (shallow clone of branch can yield 0.0.0-unknown)
-FLUTTER_TAG="${FLUTTER_TAG:-3.24.5}"
+FLUTTER_TAG="${FLUTTER_TAG:-3.29.0}"
 
 if [ ! -x "$FLUTTER_DIR/bin/flutter" ]; then
   echo "Installing Flutter $FLUTTER_TAG..."

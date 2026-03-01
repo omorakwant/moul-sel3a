@@ -379,7 +379,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   style: TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 10,
-                                    color: AppColors.onAccent.withValues(alpha: 0.7),
+                                    color: AppColors.onAccent.withOpacity(0.7),
                                   ),
                                 ),
                               ],
@@ -509,7 +509,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
+          border: Border.all(color: color.withOpacity(0.3)),
         ),
         child: Row(
           children: [
@@ -540,7 +540,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
             ),
             Icon(Icons.arrow_forward_ios,
-                size: 14, color: color.withValues(alpha: 0.5)),
+                size: 14, color: color.withOpacity(0.5)),
           ],
         ),
       ),
@@ -577,7 +577,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     boxShadow: !isDarija
                         ? [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.08),
+                              color: Colors.black.withOpacity(0.08),
                               blurRadius: 4,
                               offset: const Offset(0, 1),
                             ),
@@ -612,7 +612,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     boxShadow: isDarija
                         ? [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.08),
+                              color: Colors.black.withOpacity(0.08),
                               blurRadius: 4,
                               offset: const Offset(0, 1),
                             ),

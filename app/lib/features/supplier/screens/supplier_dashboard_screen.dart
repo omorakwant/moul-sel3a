@@ -400,7 +400,7 @@ class _SummaryCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: color.withValues(alpha: 0.2)),
+          border: Border.all(color: color.withOpacity(0.2)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -548,7 +548,7 @@ class _OrderCard extends ConsumerWidget {
         border: Border.all(color: AppColors.borderSubtle),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -854,7 +854,7 @@ class _RetailerCard extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: Colors.black.withOpacity(0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -870,7 +870,7 @@ class _RetailerCard extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: AppColors.accentOrange.withValues(alpha: 0.1),
+                  color: AppColors.accentOrange.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Center(
@@ -1051,7 +1051,7 @@ class _QuickLinkTile extends StatelessWidget {
               width: 36,
               height: 36,
               decoration: BoxDecoration(
-                color: AppColors.accentOrange.withValues(alpha: 0.1),
+                color: AppColors.accentOrange.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, size: 20, color: AppColors.accentOrange),

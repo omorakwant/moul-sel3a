@@ -148,7 +148,7 @@ class _Sidebar extends StatelessWidget {
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 1.2,
-                  color: AppColors.webSidebarText.withValues(alpha: 0.5),
+                  color: AppColors.webSidebarText.withOpacity(0.5),
                 ),
               ),
             ),

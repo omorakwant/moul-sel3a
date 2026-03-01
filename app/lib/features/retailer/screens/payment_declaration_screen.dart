@@ -485,7 +485,7 @@ class _PaymentDeclarationScreenState
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? AppColors.accentOrange.withValues(alpha: 0.1)
+                    ? AppColors.accentOrange.withOpacity(0.1)
                     : Colors.white,
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
