@@ -77,7 +77,8 @@ class AppException implements Exception {
   }
 
   factory AppException.fromAuth(AuthException e) {
-    if (e.statusCode == '429' || e.message.contains('rate')) {
+    final msg = e.message.toLowerCase();
+    if (e.statusCode == '429' || msg.contains('rate')) {
       return AppException(
         type: ErrorType.rateLimit,
         messageFr: 'Trop de tentatives. Attendez un moment.',
@@ -85,11 +86,20 @@ class AppException implements Exception {
         debugInfo: 'Auth: ${e.message}',
       );
     }
-    if (e.message.contains('Invalid') || e.message.contains('invalid')) {
+    // Phone OTP not enabled in Supabase Dashboard → check before generic "phone"
+    if (msg.contains('not enabled') || msg.contains('disabled') || (msg.contains('phone') && msg.contains('sign'))) {
+      return AppException(
+        type: ErrorType.auth,
+        messageFr: 'Connexion par SMS non activée. Contactez le support.',
+        messageDarija: 'الدخول بالـ SMS مامفعلش، تواصل مع الدعم',
+        debugInfo: 'Auth: ${e.message}',
+      );
+    }
+    if (msg.contains('invalid') || msg.contains('phone')) {
       return AppException(
         type: ErrorType.validation,
-        messageFr: 'Données invalides. Vérifiez et réessayez.',
-        messageDarija: 'المعلومات غالطة، صحح وعاود',
+        messageFr: 'Numéro invalide ou format incorrect. Utilisez 06 ou 07.',
+        messageDarija: 'الرقم غالط، خدم ب 06 ولا 07',
         debugInfo: 'Auth: ${e.message}',
       );
     }

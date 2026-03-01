@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../l10n/app_localizations.dart';
 import '../theme/app_colors.dart';
@@ -7,6 +8,9 @@ import 'app_exception.dart';
 /// Converts any error into a user-friendly AppException.
 AppException toAppException(Object error) {
   if (error is AppException) return error;
+  if (error is AuthException) return AppException.fromAuth(error);
+  if (error is PostgrestException) return AppException.fromPostgrest(error);
+  if (error is StorageException) return AppException.fromStorage(error);
   return AppException.unknown(error);
 }
 
