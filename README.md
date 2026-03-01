@@ -36,10 +36,9 @@
 4. **Run:** `flutter run`
 
 ## 🌐 Deploy (Vercel)
-The repo has two `vercel.json` setups so the app works whether Vercel’s **Root Directory** is the repo root or `app`:
+**Recommended:** Set **Root Directory** to `app` in Vercel → Project Settings → General. Leave **Build Command** and **Install Command** empty so `app/vercel.json` is used — it runs `app/scripts/install-flutter-vercel.sh` (clones Flutter) then `./flutter/bin/flutter build web`. Output is `build/web`.
 
-- **Root = repo root (default):** Use the root `vercel.json`. It sets `buildCommand` and `outputDirectory` to `app/build/web`. You must have Flutter available in the build (e.g. [Flutter Vercel](https://github.com/nicholasess/vercel-flutter) or install Flutter in the build step).
-- **Root = `app`:** In Vercel → Project Settings → General, set **Root Directory** to `app`. Build Command: `flutter build web`, Output Directory: `build/web`. The `app/vercel.json` config is used.
+**Alternative (repo root):** Root Directory empty. The root `vercel.json` runs `scripts/install-flutter-vercel.sh` and builds from `app/`; output `app/build/web`.
 
 SPA rewrites send unknown paths to `/index.html` so deep links and refresh don’t return 404.
 

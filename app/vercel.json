@@ -1,5 +1,7 @@
 {
   "version": 2,
+  "installCommand": "bash scripts/install-flutter-vercel.sh",
+  "buildCommand": "./flutter/bin/flutter pub get && ./flutter/bin/flutter build web",
   "builds": [
     {
       "src": "build/web/**",
