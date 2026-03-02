@@ -68,6 +68,22 @@ class DeliveryRepository with SupabaseErrorHandler {
     return DeliveryJob.fromJson(response);
   });
 
+  /// Fetch a single delivery job by order ID (for handshake deep links).
+  Future<DeliveryJob?> getJobByOrderId(String orderId) => guard(() async {
+    final response = await _client
+        .from(SupabaseConstants.deliveryJobsTable)
+        .select('''
+          *,
+          supplier:supplier_id(shop_name),
+          driver:assigned_driver_id(shop_name, phone)
+        ''')
+        .eq('order_id', orderId)
+        .maybeSingle();
+
+    if (response == null) return null;
+    return DeliveryJob.fromJson(response);
+  });
+
   /// Fetch delivery jobs for a supplier.
   Future<List<DeliveryJob>> getSupplierJobs({String? status}) => guard(() async {
     final userId = _client.auth.currentUser?.id;

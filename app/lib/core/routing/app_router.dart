@@ -11,6 +11,7 @@ import '../../features/auth/screens/role_selection_screen.dart';
 import '../../features/auth/screens/splash_screen.dart';
 import '../../features/driver/screens/driver_active_trip_screen.dart';
 import '../../features/driver/screens/driver_bid_screen.dart';
+import '../../features/driver/screens/driver_handshake_redirect_screen.dart';
 import '../../features/driver/screens/driver_marketplace_screen.dart';
 import '../../features/retailer/screens/retailer_cart_screen.dart';
 import '../../features/retailer/screens/retailer_catalog_screen.dart';
@@ -283,11 +284,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/driver/handshake/:orderId',
             name: 'driver-handshake',
-            redirect: (context, state) {
-              // Handshake (PIN verification) is handled inside the active trip screen.
-              // Redirect to active trip with the orderId as jobId.
+            builder: (context, state) {
               final orderId = state.pathParameters['orderId']!;
-              return '/driver/active-trip/$orderId';
+              return DriverHandshakeRedirectScreen(orderId: orderId);
             },
           ),
         ],

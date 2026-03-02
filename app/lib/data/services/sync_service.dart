@@ -186,8 +186,7 @@ class SyncService {
     // Listen for network changes — debounce to avoid lag from flaky connectivity
     _connectivitySub = Connectivity().onConnectivityChanged.listen(
       (results) {
-        final online = results.isNotEmpty &&
-            !results.every((r) => r == ConnectivityResult.none);
+        final online = _interpretConnectivity(results);
         _connectivityDebounce?.cancel();
         _connectivityDebounce = Timer(_connectivityDebounceDuration, () {
           if (_isOnline != online) {
@@ -201,8 +200,7 @@ class SyncService {
 
     // Check initial connectivity
     final initial = await Connectivity().checkConnectivity();
-    _isOnline = initial.isNotEmpty &&
-        !initial.every((r) => r == ConnectivityResult.none);
+    _isOnline = _interpretConnectivity(initial);
 
     _initialized = true;
     _emitStatus();
@@ -368,6 +366,19 @@ class SyncService {
   }
 
   // ── PRIVATE ─────────────────────────────────────────────────────────────
+
+  /// Interprets connectivity results. On web, connectivity_plus is unreliable
+  /// (often reports empty or "none" when the user is online). We treat
+  /// ambiguous/none as online on web to avoid false "Hors connexion" banner.
+  bool _interpretConnectivity(List<ConnectivityResult> results) {
+    final hasRealConnection = results.isNotEmpty &&
+        !results.every((r) => r == ConnectivityResult.none);
+    if (kIsWeb) {
+      // Web: assume online when connectivity is ambiguous to avoid false offline.
+      if (!hasRealConnection) return true;
+    }
+    return hasRealConnection;
+  }
 
   /// Emit current status to the stream (throttled to reduce UI lag).
   void _emitStatus() {

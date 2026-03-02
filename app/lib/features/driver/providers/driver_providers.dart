@@ -42,6 +42,13 @@ final deliveryJobByIdProvider =
   return repo.getJobById(jobId);
 });
 
+/// Fetches a single delivery job by order ID (for handshake deep links).
+final deliveryJobByOrderIdProvider =
+    FutureProvider.autoDispose.family<DeliveryJob?, String>((ref, orderId) async {
+  final repo = ref.watch(deliveryRepositoryProvider);
+  return repo.getJobByOrderId(orderId);
+});
+
 // ══════════════════════════════════════════════════════════════════════════════
 // BIDDING
 // ══════════════════════════════════════════════════════════════════════════════

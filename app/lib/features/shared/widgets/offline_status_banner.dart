@@ -79,7 +79,9 @@ class OfflineStatusBanner extends ConsumerWidget {
       text = l10n.isDarija
           ? '${status.failedCount} ما مشاوش • عاود'
           : '${status.failedCount} actions échouées';
-      action = () => ref.read(retryFailedActionsProvider);
+      action = () {
+        ref.read(syncServiceProvider).retryFailed();
+      };
     } else {
       // ── Pending (online, waiting to sync) ──
       bg = const Color(0xFFFEF3C7);
@@ -115,24 +117,33 @@ class OfflineStatusBanner extends ConsumerWidget {
             ),
             if (action != null) ...[
               const SizedBox(width: 8),
-              GestureDetector(
-                onTap: action,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: fg,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    l10n.isDarija ? 'عاود' : 'Réessayer',
-                    style: const TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+              Semantics(
+                button: true,
+                label: l10n.isDarija ? 'عاود' : 'Réessayer',
+                child: GestureDetector(
+                  onTap: action,
+                  child: Container(
+                    constraints: const BoxConstraints(
+                      minWidth: 44,
+                      minHeight: 44,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: fg,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      l10n.isDarija ? 'عاود' : 'Réessayer',
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
