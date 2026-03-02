@@ -500,6 +500,7 @@ class _RetailerCatalogScreenState
 
         // Back button — cornerRadius 12, fill $bg-surface, 48x48
         GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () => context.pop(),
           child: Container(
             width: 48,
