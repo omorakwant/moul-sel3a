@@ -20,7 +20,23 @@ import '../../../data/services/supabase_service.dart';
 ///   - AuthStatus.unauthenticated → show login
 ///   - AuthStatus.needsOnboarding → show role selection
 ///   - AuthStatus.authenticated   → route to role-based dashboard
+///
+/// Test mode: when [testModeEnabledProvider] is true, login is bypassed and
+/// the app uses a fake retailer profile so you can test the UI without SMS.
 /// ══════════════════════════════════════════════════════════════════════════════
+
+/// When true, skip login and use a fake retailer profile (for testing the app).
+final testModeEnabledProvider = StateProvider<bool>((ref) => false);
+
+/// Fake profile used when [testModeEnabledProvider] is true.
+Profile get _kTestProfile => Profile(
+      id: '00000000-0000-0000-0000-000000000001',
+      shopName: 'Démo',
+      role: 'retailer',
+      preferredLanguage: 'fr',
+      createdAt: DateTime(2024, 1, 1),
+      updatedAt: DateTime(2024, 1, 1),
+    );
 
 /// Auth status enum for routing decisions.
 enum AuthStatus {
@@ -44,8 +60,10 @@ final authStateProvider = StreamProvider<AuthState>((ref) {
 });
 
 /// Current user's profile (from public.profiles).
-/// Refreshes when auth state changes.
+/// When [testModeEnabledProvider] is true, returns a fake retailer profile.
 final currentProfileProvider = FutureProvider<Profile?>((ref) async {
+  if (ref.watch(testModeEnabledProvider)) return _kTestProfile;
+
   // Watch auth state to auto-refresh when user signs in/out
   final authState = ref.watch(authStateProvider);
 
@@ -82,6 +100,8 @@ final isProfileCompleteProvider = Provider<bool>((ref) {
 
 /// Combined auth guard — determines routing based on session + profile state.
 final authGuardProvider = Provider<AuthStatus>((ref) {
+  if (ref.watch(testModeEnabledProvider)) return AuthStatus.authenticated;
+
   final client = ref.watch(supabaseClientProvider);
   final session = client.auth.currentSession;
 

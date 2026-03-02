@@ -385,9 +385,35 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               ],
                             ),
                     ),
+                    ),
+                ),
+                const SizedBox(height: 16),
+
+                // ══════════════════════════════════════════════
+                // SKIP LOGIN — test the app without SMS
+                // ══════════════════════════════════════════════
+                TextButton(
+                  onPressed: _isLoading
+                      ? null
+                      : () {
+                          ref.read(testModeEnabledProvider.notifier).state = true;
+                          ref.invalidate(currentProfileProvider);
+                          ref.invalidate(authGuardProvider);
+                          if (mounted) context.goNamed('retailer-dashboard');
+                        },
+                  child: Text(
+                    isDarija
+                        ? 'دخول بدون كونيكسيون (تجربة)'
+                        : 'Continuer sans connexion (test)',
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 14,
+                      color: AppColors.textTertiary,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 16),
 
                 // ══════════════════════════════════════════════
                 // FOOTER NOTE
