@@ -152,7 +152,7 @@ class RetailerHomeScreen extends ConsumerWidget {
             ),
 
             // ── Sticky footer: FAB + TabBar ──
-            _buildStickyFooter(context, l10n),
+            _buildStickyFooter(context, l10n, ref),
           ],
         ),
       ),
@@ -420,39 +420,55 @@ class RetailerHomeScreen extends ConsumerWidget {
   }
 
   // ════════════════════════════════════════════════════════════════════════════
-  // SUPPLIER PICKER — For "Nouvelle Commande" when multiple suppliers exist
+  // SUPPLIER PICKER — For "Nouvelle Commande" and "Catalogue" when multiple suppliers exist
   // ════════════════════════════════════════════════════════════════════════════
-  void _showSupplierPicker(BuildContext context, AppLocalizations l10n) {
-    final relationsAsync = ProviderScope.containerOf(context).read(retailerRelationsProvider);
-    relationsAsync.whenData((relations) {
-      if (relations.isEmpty) return;
+  void _showSupplierPicker(
+    BuildContext context,
+    AppLocalizations l10n,
+    WidgetRef ref,
+  ) {
+    final relationsAsync = ref.read(retailerRelationsProvider);
+    relationsAsync.when(
+      data: (relations) {
+        if (relations.isEmpty) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.isDarija
+                    ? 'مازال ما عندك حتى مول سلعة'
+                    : 'Aucun fournisseur pour l\'instant'),
+              ),
+            );
+          }
+          return;
+        }
 
-      // If only one supplier, navigate directly
-      if (relations.length == 1) {
-        final r = relations.first;
-        context.pushNamed(
-          'retailer-catalog',
-          pathParameters: {'supplierId': r.supplierId},
-          queryParameters: {
-            if (r.supplierName != null) 'name': r.supplierName!,
-            'relationId': r.id,
-            if (r.supplierPhone != null) 'phone': r.supplierPhone!,
-          },
-        );
-        return;
-      }
+        // If only one supplier, navigate directly to catalog
+        if (relations.length == 1) {
+          final r = relations.first;
+          context.pushNamed(
+            'retailer-catalog',
+            pathParameters: {'supplierId': r.supplierId},
+            queryParameters: {
+              if (r.supplierName != null) 'name': r.supplierName!,
+              'relationId': r.id,
+              if (r.supplierPhone != null) 'phone': r.supplierPhone!,
+            },
+          );
+          return;
+        }
 
-      // Multiple suppliers: show picker bottom sheet
-      showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.transparent,
-        builder: (ctx) => Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          child: SafeArea(
-            child: Padding(
+        // Multiple suppliers: show picker bottom sheet
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.transparent,
+          builder: (ctx) => Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+            ),
+            child: SafeArea(
+              child: Padding(
               padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -557,16 +573,23 @@ class RetailerHomeScreen extends ConsumerWidget {
                 ],
               ),
             ),
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+      loading: () {},
+      error: (_, __) {},
+    );
   }
 
   // ════════════════════════════════════════════════════════════════════════════
   // STICKY FOOTER — FAB + TAB BAR
   // ════════════════════════════════════════════════════════════════════════════
-  Widget _buildStickyFooter(BuildContext context, AppLocalizations l10n) {
+  Widget _buildStickyFooter(
+    BuildContext context,
+    AppLocalizations l10n,
+    WidgetRef ref,
+  ) {
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
       child: Column(
@@ -577,7 +600,7 @@ class RetailerHomeScreen extends ConsumerWidget {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () {
-                _showSupplierPicker(context, l10n);
+                _showSupplierPicker(context, l10n, ref);
               },
               icon: const Icon(Icons.add, size: 20),
               label: Text(
@@ -603,7 +626,7 @@ class RetailerHomeScreen extends ConsumerWidget {
           const SizedBox(height: 12),
 
           // ── Tab Bar ──
-          _buildTabBar(context, l10n),
+          _buildTabBar(context, l10n, ref),
         ],
       ),
     );
@@ -612,7 +635,11 @@ class RetailerHomeScreen extends ConsumerWidget {
   // ════════════════════════════════════════════════════════════════════════════
   // TAB BAR (matches Component/TabBar from UI&UX.pen)
   // ════════════════════════════════════════════════════════════════════════════
-  Widget _buildTabBar(BuildContext context, AppLocalizations l10n) {
+  Widget _buildTabBar(
+    BuildContext context,
+    AppLocalizations l10n,
+    WidgetRef ref,
+  ) {
     return Container(
       height: 62,
       padding: const EdgeInsets.all(4),
@@ -629,12 +656,12 @@ class RetailerHomeScreen extends ConsumerWidget {
             isActive: true,
             onTap: () {},
           ),
-          // Catalogue
+          // Catalogue — open supplier picker then catalog (same as Nouvelle Commande)
           _tabItem(
             icon: Icons.grid_view_rounded,
             label: l10n.isDarija ? 'كاتالوغ' : 'Catalogue',
             isActive: false,
-            onTap: () {},
+            onTap: () => _showSupplierPicker(context, l10n, ref),
           ),
           // Bons (Orders)
           _tabItem(
