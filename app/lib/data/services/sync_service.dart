@@ -158,6 +158,13 @@ class SyncService {
   bool _isSyncing = false;
   bool _isOnline = true;
   StreamSubscription? _connectivitySub;
+  Timer? _connectivityDebounce;
+  static const _connectivityDebounceDuration = Duration(milliseconds: 1500);
+
+  /// Throttle status emissions so UI doesn't rebuild on every tiny change.
+  DateTime? _lastEmitTime;
+  Timer? _pendingEmit;
+  static const _minEmitInterval = Duration(milliseconds: 500);
 
   /// Stream controller for UI reactivity.
   final _statusController = StreamController<QueueStatus>.broadcast();
@@ -176,18 +183,19 @@ class SyncService {
     _supabase = Supabase.instance.client;
     _queueBox = await Hive.openBox(_kBoxName);
 
-    // Listen for network changes
+    // Listen for network changes — debounce to avoid lag from flaky connectivity
     _connectivitySub = Connectivity().onConnectivityChanged.listen(
       (results) {
-        // connectivity_plus v6 passes List<ConnectivityResult>
-        _isOnline = results.isNotEmpty &&
+        final online = results.isNotEmpty &&
             !results.every((r) => r == ConnectivityResult.none);
-
-        _emitStatus();
-
-        if (_isOnline) {
-          processQueue();
-        }
+        _connectivityDebounce?.cancel();
+        _connectivityDebounce = Timer(_connectivityDebounceDuration, () {
+          if (_isOnline != online) {
+            _isOnline = online;
+            _emitStatus();
+            if (_isOnline) processQueue();
+          }
+        });
       },
     );
 
@@ -353,16 +361,37 @@ class SyncService {
 
   /// Clean up resources.
   void dispose() {
+    _connectivityDebounce?.cancel();
+    _pendingEmit?.cancel();
     _connectivitySub?.cancel();
     _statusController.close();
   }
 
   // ── PRIVATE ─────────────────────────────────────────────────────────────
 
-  /// Emit current status to the stream.
+  /// Emit current status to the stream (throttled to reduce UI lag).
   void _emitStatus() {
-    if (!_statusController.isClosed) {
+    if (_statusController.isClosed) return;
+    final now = DateTime.now();
+    final elapsed = _lastEmitTime != null
+        ? now.difference(_lastEmitTime!)
+        : Duration.zero;
+    if (elapsed >= _minEmitInterval) {
+      _lastEmitTime = now;
+      _pendingEmit?.cancel();
       _statusController.add(currentStatus);
+    } else {
+      _pendingEmit?.cancel();
+      _pendingEmit = Timer(
+        _minEmitInterval - elapsed,
+        () {
+          _lastEmitTime = DateTime.now();
+          _pendingEmit = null;
+          if (!_statusController.isClosed) {
+            _statusController.add(currentStatus);
+          }
+        },
+      );
     }
   }
 

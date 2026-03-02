@@ -27,15 +27,15 @@ final syncServiceProvider = Provider<SyncService>((ref) {
 });
 
 /// Reactive queue status stream for UI banners / badges.
-///
-/// Usage:
-///   ref.watch(queueStatusProvider).when(
-///     data: (status) => status.hasWork ? OfflineBanner(...) : SizedBox(),
-///     ...
-///   )
+/// Deduplicated so identical consecutive statuses don't trigger rebuilds.
 final queueStatusProvider = StreamProvider<QueueStatus>((ref) {
   final service = ref.watch(syncServiceProvider);
-  return service.statusStream;
+  return service.statusStream
+      .distinct((a, b) =>
+          a.isOnline == b.isOnline &&
+          a.isSyncing == b.isSyncing &&
+          a.pendingCount == b.pendingCount &&
+          a.failedCount == b.failedCount);
 });
 
 /// Current (synchronous) queue status snapshot.
