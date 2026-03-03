@@ -45,15 +45,13 @@ class _SupplierDashboardScreenState
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
+    // Content only; sidebar is provided by SupplierShell in app_router
     return Scaffold(
       backgroundColor: AppColors.bgPrimary,
       body: SafeArea(
         child: Column(
           children: [
-            // ── Header ──
             _buildHeader(l10n),
-
-            // ── Tab Bar ──
             Container(
               color: AppColors.bgPrimary,
               child: TabBar(
@@ -73,8 +71,6 @@ class _SupplierDashboardScreenState
                 ],
               ),
             ),
-
-            // ── Tab Content ──
             Expanded(
               child: TabBarView(
                 controller: _tabController,

@@ -34,9 +34,8 @@ class SupplierWebShell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // On mobile, just show the child without sidebar
-    if (!isWebLayout(context)) return child;
-
+    // Supplier always uses desktop/sidebar layout (even on narrow viewports)
+    // so the dashboard looks correct; Retailer and Driver keep mobile view.
     final l10n = AppLocalizations.of(context);
     final pendingCount = ref.watch(pendingVerificationsProvider).whenOrNull(
           data: (list) => list.length,

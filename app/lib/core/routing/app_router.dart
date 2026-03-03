@@ -33,6 +33,7 @@ import '../../features/supplier/screens/supplier_inventory_screen.dart';
 import '../../features/supplier/screens/supplier_profile_screen.dart';
 import '../../features/supplier/screens/supplier_order_detail_screen.dart';
 import '../../features/supplier/screens/supplier_verification_screen.dart';
+import '../../features/supplier/screens/supplier_web_shell.dart';
 
 /// ════════════════════════════════════════════════════════════════════════════
 /// PUBLIC ROUTES — do not require authentication.
@@ -294,80 +295,100 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ],
       ),
 
-      // ── Supplier Web/Tablet Routes ──
-      GoRoute(
-        path: '/supplier/dashboard',
-        name: 'supplier-dashboard',
-        builder: (context, state) =>
-            const SupplierDashboardScreen(),
-      ),
-      GoRoute(
-        path: '/supplier/order/:orderId',
-        name: 'supplier-order-detail',
-        builder: (context, state) {
-          final orderId = state.pathParameters['orderId']!;
-          return SupplierOrderDetailScreen(orderId: orderId);
-        },
-      ),
-      GoRoute(
-        path: '/supplier/verification',
-        name: 'supplier-verification',
-        builder: (context, state) =>
-            const SupplierVerificationScreen(),
-      ),
-      GoRoute(
-        path: '/supplier/inventory',
-        name: 'supplier-inventory',
-        builder: (context, state) =>
-            const SupplierInventoryScreen(),
-      ),
-      GoRoute(
-        path: '/supplier/product/add',
-        name: 'supplier-product-add',
-        builder: (context, state) =>
-            const SupplierAddEditProductScreen(),
-      ),
-      GoRoute(
-        path: '/supplier/product/:productId/edit',
-        name: 'supplier-product-edit',
-        builder: (context, state) {
-          final product = state.extra as Product?;
-          return SupplierAddEditProductScreen(
-            existingProduct: product,
-          );
-        },
-      ),
-      GoRoute(
-        path: '/supplier/dispute/:transactionId',
-        name: 'supplier-dispute',
-        builder: (context, state) {
-          final transactionId = state.pathParameters['transactionId']!;
-          return SupplierDisputeScreen(transactionId: transactionId);
-        },
-      ),
-      GoRoute(
-        path: '/supplier/bids/:jobId',
-        name: 'supplier-bid-manager',
-        builder: (context, state) {
-          final jobId = state.pathParameters['jobId']!;
-          return SupplierBidManagerScreen(jobId: jobId);
-        },
-      ),
-      GoRoute(
-        path: '/supplier/deliveries',
-        name: 'supplier-deliveries',
-        builder: (context, state) =>
-            const SupplierDeliveryScreen(),
-      ),
-      GoRoute(
-        path: '/supplier/profile',
-        name: 'supplier-profile',
-        builder: (context, state) =>
-            const SupplierProfileScreen(),
+      // ── Supplier routes: always desktop/sidebar layout (even on narrow viewport) ──
+      ShellRoute(
+        builder: (context, state, child) => _SupplierShell(
+          activeRoute: state.name ?? 'supplier-dashboard',
+          child: child,
+        ),
+        routes: [
+          GoRoute(
+            path: '/supplier/dashboard',
+            name: 'supplier-dashboard',
+            builder: (context, state) =>
+                const SupplierDashboardScreen(),
+          ),
+          GoRoute(
+            path: '/supplier/order/:orderId',
+            name: 'supplier-order-detail',
+            builder: (context, state) {
+              final orderId = state.pathParameters['orderId']!;
+              return SupplierOrderDetailScreen(orderId: orderId);
+            },
+          ),
+          GoRoute(
+            path: '/supplier/verification',
+            name: 'supplier-verification',
+            builder: (context, state) =>
+                const SupplierVerificationScreen(),
+          ),
+          GoRoute(
+            path: '/supplier/inventory',
+            name: 'supplier-inventory',
+            builder: (context, state) =>
+                const SupplierInventoryScreen(),
+          ),
+          GoRoute(
+            path: '/supplier/product/add',
+            name: 'supplier-product-add',
+            builder: (context, state) =>
+                const SupplierAddEditProductScreen(),
+          ),
+          GoRoute(
+            path: '/supplier/product/:productId/edit',
+            name: 'supplier-product-edit',
+            builder: (context, state) {
+              final product = state.extra as Product?;
+              return SupplierAddEditProductScreen(
+                existingProduct: product,
+              );
+            },
+          ),
+          GoRoute(
+            path: '/supplier/dispute/:transactionId',
+            name: 'supplier-dispute',
+            builder: (context, state) {
+              final transactionId = state.pathParameters['transactionId']!;
+              return SupplierDisputeScreen(transactionId: transactionId);
+            },
+          ),
+          GoRoute(
+            path: '/supplier/bids/:jobId',
+            name: 'supplier-bid-manager',
+            builder: (context, state) {
+              final jobId = state.pathParameters['jobId']!;
+              return SupplierBidManagerScreen(jobId: jobId);
+            },
+          ),
+          GoRoute(
+            path: '/supplier/deliveries',
+            name: 'supplier-deliveries',
+            builder: (context, state) =>
+                const SupplierDeliveryScreen(),
+          ),
+          GoRoute(
+            path: '/supplier/profile',
+            name: 'supplier-profile',
+            builder: (context, state) =>
+                const SupplierProfileScreen(),
+          ),
+        ],
       ),
     ],
   );
 });
+
+/// Wraps all supplier routes in the sidebar layout (desktop view).
+class _SupplierShell extends ConsumerWidget {
+  const _SupplierShell({required this.activeRoute, required this.child});
+  final String activeRoute;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SupplierWebShell(activeRoute: activeRoute, child: child);
+  }
+}
 
 /// Wraps retailer routes with an AppBar so "L'Carnet B2B" is visible and triple-tappable for demo.
 /// [automaticallyImplyLeading: false] so back is handled by each screen's in-content back button

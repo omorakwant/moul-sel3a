@@ -8,7 +8,6 @@ import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/ledger_transaction.dart';
 import '../providers/supplier_verification_providers.dart';
-import 'supplier_web_shell.dart';
 
 /// Supplier Verification Desk — approve/reject payment declarations.
 ///
@@ -29,13 +28,11 @@ class SupplierVerificationScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final pendingAsync = ref.watch(pendingVerificationsProvider);
-    final useWeb = isWebLayout(context);
+    // Supplier always uses desktop layout; sidebar is from _SupplierShell in app_router
+    const useWeb = true;
 
     if (useWeb) {
-      return SupplierWebShell(
-        activeRoute: 'supplier-verification',
-        child: _buildWebVerificationDesk(context, ref, l10n, pendingAsync),
-      );
+      return _buildWebVerificationDesk(context, ref, l10n, pendingAsync);
     }
 
     return Scaffold(

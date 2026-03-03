@@ -9,7 +9,6 @@ import '../../../data/repositories/product_repository.dart';
 import '../../../features/auth/providers/auth_providers.dart';
 import '../providers/supplier_inventory_providers.dart';
 import 'bulk_price_adjustment_modal.dart';
-import 'supplier_web_shell.dart';
 
 /// Supplier Inventory List Screen.
 ///
@@ -81,14 +80,11 @@ class _SupplierInventoryScreenState
   Widget build(BuildContext context) {
     final isDarija = _isDarija;
     final productsAsync = ref.watch(supplierProductsProvider);
-    final useWeb = isWebLayout(context);
+    // Supplier always uses desktop layout; sidebar is from _SupplierShell in app_router
+    const useWeb = true;
 
-    // On web, wrap in sidebar shell and use data table layout
     if (useWeb) {
-      return SupplierWebShell(
-        activeRoute: 'supplier-inventory',
-        child: _buildWebLayout(isDarija, productsAsync),
-      );
+      return _buildWebLayout(isDarija, productsAsync);
     }
 
     return Scaffold(
