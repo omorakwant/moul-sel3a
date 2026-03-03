@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
@@ -153,6 +154,42 @@ class _DriverActiveTripScreenState
           ),
 
           const SizedBox(height: 16),
+
+          // ── WhatsApp: contact retailer (prototype: mock phone) ──
+          Consumer(
+            builder: (context, ref, _) {
+              final phoneAsync = ref.watch(retailerPhoneForJobProvider(job.id));
+              return phoneAsync.when(
+                data: (phone) {
+                  if (phone == null || phone.isEmpty) return const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: OutlinedButton.icon(
+                      onPressed: () async {
+                        final message = l10n.isDarija
+                            ? 'السلام عليكم، وصلت للعنوان، واش نقد نوصلك؟'
+                            : 'Bonjour, je suis arrivé à l\'adresse. Pouvez-vous me confirmer ?';
+                        final url = Uri.parse(Formatters.whatsappLink(
+                          phone: phone,
+                          message: message,
+                        ));
+                        await launchUrl(url, mode: LaunchMode.externalApplication);
+                      },
+                      icon: const Icon(Icons.chat_outlined, size: 20),
+                      label: Text(l10n.contactRetailerWhatsApp),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF25D366),
+                        side: const BorderSide(color: Color(0xFF25D366)),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                    ),
+                  );
+                },
+                loading: () => const SizedBox.shrink(),
+                error: (_, __) => const SizedBox.shrink(),
+              );
+            },
+          ),
 
           // ── COD / weight info ──
           if (job.isCOD && job.codAmount != null)

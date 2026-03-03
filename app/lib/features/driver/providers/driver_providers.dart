@@ -71,6 +71,21 @@ final deliveryJobByOrderIdProvider =
   return repo.getJobByOrderId(orderId);
 });
 
+/// Retailer phone for a delivery job (for WhatsApp contact).
+/// On web prototype: resolved from mock order + mock profile.
+final retailerPhoneForJobProvider =
+    FutureProvider.autoDispose.family<String?, String>((ref, jobId) async {
+  if (!kIsWeb) return null;
+  try {
+    final job = mockDeliveryJobs.firstWhere((j) => j.id == jobId);
+    final order = mockOrders.firstWhere((o) => o.id == job.orderId);
+    final profile = mockProfiles.firstWhere((p) => p.id == order.retailerId);
+    return profile.phone;
+  } catch (_) {
+    return null;
+  }
+});
+
 // ══════════════════════════════════════════════════════════════════════════════
 // BIDDING
 // ══════════════════════════════════════════════════════════════════════════════

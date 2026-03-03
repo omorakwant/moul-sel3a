@@ -4,6 +4,7 @@ export 'providers/supplier_dashboard_providers.dart';
 export 'providers/supplier_order_detail_providers.dart';
 export 'providers/supplier_verification_providers.dart';
 export 'screens/supplier_web_shell.dart';
+export 'screens/supplier_clients_screen.dart';
 export 'screens/supplier_inventory_screen.dart';
 export 'screens/supplier_dashboard_screen.dart';
 export 'screens/supplier_order_detail_screen.dart';

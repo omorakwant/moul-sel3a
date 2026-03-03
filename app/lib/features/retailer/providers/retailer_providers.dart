@@ -6,6 +6,21 @@ import '../../../data/models/supplier_retailer_relation.dart';
 import '../../../data/repositories/relation_repository.dart';
 import '../../auth/providers/auth_providers.dart';
 
+/// Fetches a single relation by ID. On web (prototype) returns from mock list.
+final relationByIdProvider =
+    FutureProvider.autoDispose.family<SupplierRetailerRelation?, String>(
+        (ref, relationId) async {
+  if (kIsWeb) {
+    try {
+      return mockRelations.firstWhere((r) => r.id == relationId);
+    } catch (_) {
+      return null;
+    }
+  }
+  final repo = ref.watch(relationRepositoryProvider);
+  return repo.getById(relationId);
+});
+
 /// Fetches all supplier relations for the logged-in retailer.
 /// Each relation = one "Carnet" (rolling debt account with a supplier).
 /// On web (prototype), returns mock relations for the mock retailer.

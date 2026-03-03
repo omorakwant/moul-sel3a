@@ -268,6 +268,29 @@ class AppLocalizations {
       isDarija ? 'صيفط للمولي فواتساب' : 'Notifier le grossiste (WhatsApp)';
   String get receiptPhotoHint =>
       isDarija ? 'خلي الرقم السري بان مزيان' : 'Assurez-vous que le numéro de réf. est visible';
+  String get simulateOcr =>
+      isDarija ? 'سيمولي OCR (ديمو)' : 'Simuler OCR (démo)';
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // SUPPLIER — Clients (Carnet)
+  // ══════════════════════════════════════════════════════════════════════════
+  String get clientsCarnet => isDarija ? 'الزبناء (الكارني)' : 'Clients (Carnet)';
+  String get addRetailer =>
+      isDarija ? 'زيد مول حانوت' : 'Ajouter un détaillant';
+  String get inviteRetailerSubtitle => isDarija
+      ? 'فالإنتاج، غادي يتوصل الدتايلان بالدعوة'
+      : 'En production, le détaillant recevra une invitation par WhatsApp';
+  String get retailerPhone =>
+      isDarija ? 'رقم الدتايلان' : 'Téléphone du détaillant';
+  String get retailerAddedSuccess => isDarija
+      ? 'الدعوة غادي تصيفط (ديمو)'
+      : 'Invitation envoyée (démo)';
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // DRIVER — WhatsApp confirmation
+  // ══════════════════════════════════════════════════════════════════════════
+  String get contactRetailerWhatsApp =>
+      isDarija ? 'تواصل مع الدتايلان · واتساب' : 'Contacter le détaillant · WhatsApp';
 
   // ══════════════════════════════════════════════════════════════════════════
   // RETAILER ORDERS LIST

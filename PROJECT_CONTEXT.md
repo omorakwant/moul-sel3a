@@ -1,6 +1,6 @@
 This is the finalized Project Context & System Prompt. You should save this as a file named PROJECT_CONTEXT.md. This version includes the "Rolling Debt" logic, the bilingual "Handshake" delivery, the "Partial Receipt" feature, and the "Compatibility-First" product discovery.
 
-**Implementation status:** See [PROJECT_STATUS.md](PROJECT_STATUS.md) for what is built vs. still to do (e.g. voice search and WhatsApp notify-after-payment are implemented; receipt OCR, ledger trigger, Supplier/Driver web mock are not).
+**Implementation status:** See [PROJECT_STATUS.md](PROJECT_STATUS.md) for what is built vs. still to do. The **all-features prototype** includes: Supplier Clients (Carnet) screen with "Add retailer" (mock), payment declaration with mock relation on web + "Simulate OCR" demo button, Driver "Contacter le détaillant · WhatsApp" on active trip. Still not in prototype: real receipt OCR, ledger balance trigger, push notifications to supplier on payment declaration.
 
 ---
 

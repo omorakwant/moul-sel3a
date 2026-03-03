@@ -32,6 +32,7 @@ import '../../features/supplier/screens/supplier_dispute_screen.dart';
 import '../../features/supplier/screens/supplier_inventory_screen.dart';
 import '../../features/supplier/screens/supplier_profile_screen.dart';
 import '../../features/supplier/screens/supplier_order_detail_screen.dart';
+import '../../features/supplier/screens/supplier_clients_screen.dart';
 import '../../features/supplier/screens/supplier_verification_screen.dart';
 import '../../features/supplier/screens/supplier_web_shell.dart';
 
@@ -364,6 +365,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               final jobId = state.pathParameters['jobId']!;
               return SupplierBidManagerScreen(jobId: jobId);
             },
+          ),
+          GoRoute(
+            path: '/supplier/clients',
+            name: 'supplier-clients',
+            builder: (context, state) =>
+                const SupplierClientsScreen(),
           ),
           GoRoute(
             path: '/supplier/deliveries',

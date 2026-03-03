@@ -65,7 +65,7 @@
 | **Order detail** | ✅ Done | Items, totals, status, driver name; actions: Partial receipt, WhatsApp, etc. |
 | **Partial receipt** | ✅ Done | Adjust received quantity per line; adjusted total; "J'ai reçu la marchandise" confirm; offline-safe via SyncService when not web. |
 | **Handshake (retailer)** | ✅ Done | Screen showing order summary, PIN entry for driver handshake. |
-| **Payment declaration** | ✅ Done | Select payment method (Wafacash, CashPlus, etc.); photo of receipt; amount + reference code; submit (pending ledger entry); offline-safe when not web. |
+| **Payment declaration** | ✅ Done | Select payment method (Wafacash, CashPlus, etc.); photo of receipt; amount + reference code; submit (pending ledger entry); offline-safe when not web. On web uses mock relation (relationByIdProvider). "Simuler OCR (démo)" fills amount/reference for demo. |
 | **Profile** | ✅ Done | Shop name, city, location, language; logout. |
 | **Web prototype data** | ✅ Done | On web: dashboard, catalog, orders, ledger, relations, and order detail use **mock data** (mock_data.dart). No Supabase. |
 
@@ -83,7 +83,9 @@
 | **Bid manager** | ✅ Done | Per delivery job: list of driver bids; accept bid (generates PIN). |
 | **Deliveries** | ✅ Done | List of delivery jobs; status. |
 | **Profile** | ✅ Done | Supplier profile. |
-| **Web shell** | ✅ Done | Sidebar layout (dark), nav (Dashboard, Inventaire, Vérifications, etc.). |
+| **Web shell** | ✅ Done | Sidebar layout (dark), nav (Dashboard, Inventaire, Clients (Carnet), Vérifications, etc.). |
+| **Clients (Carnet)** | ✅ Done | Dedicated screen listing retailer relations (balance, credit limit); "Ajouter un détaillant" opens form (phone, credit limit). Prototype: success message only; no backend. |
+| **Add retailer (mock)** | ✅ Done | Modal form: retailer phone, credit limit; submit shows "Invitation envoyée (démo)". In production would send WhatsApp invite. |
 | **Web prototype data** | ✅ Done | On web: Supplier flow uses mock data (products, orders, relations, delivery jobs, pending verifications). Role switcher allows viewing as Supplier. |
 
 ### 3.4 Driver flow (mobile)
@@ -94,6 +96,7 @@
 | **Bid screen** | ✅ Done | Place bid (amount, message); submit. |
 | **Active trip** | ✅ Done | Job details; start trip; "I arrived"; enter 4-digit PIN to confirm delivery; COD collection flow. |
 | **Handshake redirect** | ✅ Done | Post-PIN redirect/confirmation. |
+| **WhatsApp contact retailer** | ✅ Done | On active trip: "Contacter le détaillant · WhatsApp" opens pre-filled message (arrival confirmation). Retailer phone resolved from mock order+profile on web. |
 | **Web prototype data** | ✅ Done | On web: Driver flow uses mock data (open jobs, bids). Role switcher allows viewing as Driver. |
 
 ### 3.5 Shared / infrastructure
@@ -141,21 +144,21 @@
 
 | Item | Status | Notes |
 |------|--------|-------|
-| **Receipt OCR** | ❌ Not done | Photo of receipt is stored; no OCR for auto-fill of amount/reference. |
+| **Receipt OCR** | ⚠️ Demo only | "Simuler OCR (démo)" button fills amount 500.00 DH and reference WF123456 for prototype demo. Real OCR (e.g. ML Kit) not implemented. |
 | **WhatsApp pre-fill after payment** | ✅ Done | After payment declaration, success sheet shows "Notifier le grossiste (WhatsApp)" with pre-filled message (amount, reference, method) in FR/Darija. |
 
 ### 4.3 Supplier
 
 | Item | Status | Notes |
 |------|--------|-------|
-| **Create retailer relation** | ⚠️ Partial | `RelationRepository.createRelation` exists (Supplier only). No dedicated Supplier UI screen for adding/inviting retailer found; retailer side has "Add grossiste via WhatsApp" (invite link only). |
-| **Push/WhatsApp on new payment** | ❌ Not done | "Supplier receives Push Notification and WhatsApp" on retailer payment declaration — not implemented. |
+| **Create retailer relation** | ✅ Done | Supplier "Clients (Carnet)" screen with "Ajouter un détaillant" form (phone, credit limit). Prototype shows success only; production would call RelationRepository.createRelation + invite. |
+| **Push/WhatsApp on new payment** | ❌ Not done | "Supplier receives Push Notification and WhatsApp" on retailer payment declaration — not implemented. Retailer can notify supplier via WhatsApp (success sheet button). |
 
 ### 4.4 Driver
 
 | Item | Status | Notes |
 |------|--------|-------|
-| **WhatsApp confirmation** | ⚠️ Partial | Deep link to WhatsApp for driver communication; exact flow not fully documented. |
+| **WhatsApp confirmation** | ✅ Done | Active trip screen: "Contacter le détaillant · WhatsApp" opens WhatsApp with pre-filled arrival message. Retailer phone from mock order+profile on web. |
 
 ### 4.5 Offline & sync
 
@@ -201,9 +204,9 @@ When the app runs **on web** (e.g. https://lcarnetb2b.vercel.app):
 | `app/lib/data/repositories/` | Supabase-backed repos (profile, relation, product, order, ledger, delivery). |
 | `app/lib/data/services/sync_service.dart` | Offline action queue (Hive). |
 | `app/lib/features/auth/` | Splash, login, OTP, role selection, pending verification; auth_providers. |
-| `app/lib/features/retailer/` | Dashboard, catalog, cart, orders, order detail, partial receipt, payment declaration, handshake, profile; providers (with kIsWeb mock branches). |
-| `app/lib/features/supplier/` | Dashboard, inventory, add/edit product, bulk price, verification, order detail, bid manager, deliveries, profile, web shell. |
-| `app/lib/features/driver/` | Marketplace, bid, active trip, handshake redirect. |
+| `app/lib/features/retailer/` | Dashboard, catalog, cart, orders, order detail, partial receipt, payment declaration (mock relation on web, Simulate OCR), handshake, profile; providers (relationByIdProvider, kIsWeb mock branches). |
+| `app/lib/features/supplier/` | Dashboard, inventory, **clients (Carnet)**, add/edit product, bulk price, verification, order detail, bid manager, deliveries, profile, web shell. |
+| `app/lib/features/driver/` | Marketplace, bid, active trip (with WhatsApp contact retailer), handshake redirect. |
 | `app/lib/features/shared/` | OfflineStatusBanner, AppTitleWithOfflineToggle. |
 | `vercel.json` | Build command `./build.sh`, output `app/build/web`, SPA rewrites. |
 | `build.sh` | Clone Flutter, `flutter build web --release` in `app/`. |
@@ -218,4 +221,4 @@ When the app runs **on web** (e.g. https://lcarnetb2b.vercel.app):
 
 ---
 
-*Last updated: Mar 2025 — from codebase review and PROJECT_CONTEXT.md / prototype.md / .cursorrules. Voice search (catalog) and WhatsApp notify-after-payment confirmed implemented.*
+*Last updated: Mar 2025 — All-features prototype: Supplier Clients (Carnet) + Add retailer, payment declaration mock relation + Simulate OCR, Driver WhatsApp contact retailer. See §4 for remaining (backend, real OCR, push notifications).*

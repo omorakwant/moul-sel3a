@@ -11,8 +11,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/supplier_retailer_relation.dart';
-import '../../../data/repositories/relation_repository.dart';
 import '../../../data/services/storage_service.dart';
+import '../providers/retailer_providers.dart';
 import '../../../core/providers/sync_providers.dart';
 import '../providers/payment_providers.dart';
 
@@ -188,10 +188,9 @@ class _PaymentDeclarationScreenState
               width: double.infinity,
               child: FilledButton.icon(
                 onPressed: () async {
-                  // Fetch supplier phone from relation
+                  // Fetch supplier phone from relation (mock on web via relationByIdProvider)
                   final relation = await ref
-                      .read(relationRepositoryProvider)
-                      .getById(widget.relationId);
+                      .read(relationByIdProvider(widget.relationId).future);
                   final phone = relation?.supplierPhone;
                   if (phone != null && phone.isNotEmpty) {
                     final message = l10n.isDarija
@@ -239,12 +238,7 @@ class _PaymentDeclarationScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final relationAsync = ref.watch(
-      FutureProvider.autoDispose<SupplierRetailerRelation?>((ref) async {
-        final repo = ref.watch(relationRepositoryProvider);
-        return repo.getById(widget.relationId);
-      }),
-    );
+    final relationAsync = ref.watch(relationByIdProvider(widget.relationId));
 
     return Scaffold(
       backgroundColor: AppColors.bgPrimary,
@@ -318,9 +312,28 @@ class _PaymentDeclarationScreenState
               const SizedBox(height: 28),
 
               // ── Step 3: Manual Data Entry ──
-              _SectionLabel(
-                label: l10n.isDarija ? 'المعلومات' : 'Informations',
-                icon: Icons.edit_note,
+              Row(
+                children: [
+                  Expanded(
+                    child: _SectionLabel(
+                      label: l10n.isDarija ? 'المعلومات' : 'Informations',
+                      icon: Icons.edit_note,
+                    ),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      _amountController.text = '500.00';
+                      _referenceController.text = 'WF123456';
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.document_scanner_outlined, size: 18),
+                    label: Text(l10n.simulateOcr),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.textSecondary,
+                      side: const BorderSide(color: AppColors.borderSubtle),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
 

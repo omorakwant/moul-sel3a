@@ -187,7 +187,7 @@ class _Sidebar extends StatelessWidget {
             icon: Icons.menu_book_outlined,
             label: l10n.isDarija ? 'الزبناء' : 'Clients (Carnet)',
             isActive: activeRoute == 'supplier-clients',
-            onTap: () => context.goNamed('supplier-dashboard'),
+            onTap: () => context.goNamed('supplier-clients'),
           ),
           _NavItem(
             icon: Icons.verified_user_outlined,
