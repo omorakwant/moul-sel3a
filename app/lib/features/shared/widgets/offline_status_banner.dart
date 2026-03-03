@@ -27,10 +27,19 @@ class OfflineStatusBanner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final statusAsync = ref.watch(queueStatusProvider);
+    final simulatedOffline = ref.watch(simulatedOfflineProvider);
     final l10n = AppLocalizations.of(context);
 
     return statusAsync.when(
-      data: (status) => _buildBanner(context, ref, status, l10n),
+      data: (status) {
+        final effective = QueueStatus(
+          pendingCount: status.pendingCount,
+          failedCount: status.failedCount,
+          isSyncing: status.isSyncing,
+          isOnline: simulatedOffline ? false : status.isOnline,
+        );
+        return _buildBanner(context, ref, effective, l10n);
+      },
       loading: () => const SizedBox.shrink(),
       error: (_, __) => const SizedBox.shrink(),
     );

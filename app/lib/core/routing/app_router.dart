@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/models/product.dart';
+import '../../features/shared/widgets/app_title_offline_toggle.dart';
 import '../../features/auth/providers/auth_providers.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/otp_verify_screen.dart';
@@ -163,7 +164,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       // ── Retailer Routes ──
       ShellRoute(
-        builder: (context, state, child) => child, // Shell with TabBar
+        builder: (context, state, child) => _RetailerShell(child: child),
         routes: [
           GoRoute(
             path: '/retailer/dashboard',
@@ -366,3 +367,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+/// Wraps retailer routes with an AppBar so "L'Carnet B2B" is visible and triple-tappable for demo.
+class _RetailerShell extends ConsumerWidget {
+  const _RetailerShell({required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const AppTitleWithOfflineToggle(),
+        centerTitle: true,
+      ),
+      body: child,
+    );
+  }
+}

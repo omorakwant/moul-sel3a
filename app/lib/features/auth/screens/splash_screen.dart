@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../shared/widgets/app_title_offline_toggle.dart';
 import '../providers/auth_providers.dart';
 
 /// Splash Screen — checks auth state and routes accordingly.
@@ -113,24 +114,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             ),
             const SizedBox(height: 24),
 
-            const Text(
-              "L'Carnet B2B",
-              style: TextStyle(
-                fontFamily: 'Manrope',
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
-                letterSpacing: -0.5,
-              ),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'لكارني B2B',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: 14,
-                color: AppColors.textTertiary,
-              ),
+            const AppTitleWithOfflineToggle(
+              title: _SplashTitle(),
             ),
             const SizedBox(height: 40),
 
@@ -145,6 +130,38 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SplashTitle extends StatelessWidget {
+  const _SplashTitle();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text(
+          "L'Carnet B2B",
+          style: TextStyle(
+            fontFamily: 'Manrope',
+            fontSize: 28,
+            fontWeight: FontWeight.w800,
+            color: AppColors.textPrimary,
+            letterSpacing: -0.5,
+          ),
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          'لكارني B2B',
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 14,
+            color: AppColors.textTertiary,
+          ),
+        ),
+      ],
     );
   }
 }

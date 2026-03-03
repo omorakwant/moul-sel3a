@@ -43,6 +43,10 @@ final queueStatusSnapshotProvider = Provider<QueueStatus>((ref) {
   return ref.watch(syncServiceProvider).currentStatus;
 });
 
+/// Demo toggle: when true, UI shows "Hors connexion" without turning off device internet.
+/// Triple-tap the app title ("L'Carnet B2B") to toggle. Used for investor pitch.
+final simulatedOfflineProvider = StateProvider<bool>((ref) => false);
+
 // ─────────────────────────────────────────────────────────────────────────────
 // OFFLINE-SAFE ACTION PROVIDERS
 //

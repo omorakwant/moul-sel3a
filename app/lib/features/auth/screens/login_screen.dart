@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/errors/error_widgets.dart';
+import '../../shared/widgets/app_title_offline_toggle.dart';
 import '../../../data/services/phone_auth_service.dart';
 import '../providers/auth_providers.dart';
 
@@ -178,14 +179,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                Text(
-                  isDarija ? 'لكارني B2B' : "L'Carnet B2B",
-                  style: const TextStyle(
-                    fontFamily: 'Manrope',
-                    fontSize: 28,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
-                    letterSpacing: -0.5,
+                AppTitleWithOfflineToggle(
+                  title: Text(
+                    isDarija ? 'لكارني B2B' : "L'Carnet B2B",
+                    style: const TextStyle(
+                      fontFamily: 'Manrope',
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.textPrimary,
+                      letterSpacing: -0.5,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 6),

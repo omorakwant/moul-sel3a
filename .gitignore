@@ -38,6 +38,9 @@ app/build/
 supabase/.temp/
 supabase/.branches/
 
+# Next.js prototype (large node_modules; keep local only)
+lcaret-prototype/
+
 # Misc
 *.log
 .vercel
