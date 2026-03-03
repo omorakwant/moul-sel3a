@@ -6,15 +6,6 @@ import 'core/theme/app_theme.dart';
 import 'core/routing/app_router.dart';
 import 'features/auth/providers/auth_providers.dart';
 
-/// Dark gray background for desktop viewport (investor pitch).
-const Color _kDesktopOuterBg = Color(0xFF1C1917);
-
-/// Max width of the "phone" container on wide screens.
-const double _kMaxMobileWidth = 450;
-
-/// Breakpoint above which we show the centered mobile frame.
-const double _kDesktopBreakpoint = 600;
-
 class LCarnetApp extends ConsumerWidget {
   const LCarnetApp({super.key});
 
@@ -37,34 +28,8 @@ class LCarnetApp extends ConsumerWidget {
       routerConfig: router,
     );
 
-    // ── Desktop-as-mobile wrapper for investor pitch ──
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth > _kDesktopBreakpoint) {
-          return Container(
-            color: _kDesktopOuterBg,
-            child: Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: _kMaxMobileWidth),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.25),
-                      blurRadius: 24,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: app,
-              ),
-            ),
-          );
-        }
-        return app;
-      },
-    );
+    // Phone frame is applied per-route in app_router (_DesktopFrameShell)
+    // so Supplier gets full width and Retailer/Driver get the 450px frame on desktop.
+    return app;
   }
 }

@@ -126,6 +126,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ),
 
     routes: [
+      // ── Top-level: phone frame for Retailer/Driver on desktop; full width for Supplier ──
+      ShellRoute(
+        builder: (context, state, child) =>
+            _DesktopFrameShell(state: state, child: child),
+        routes: [
       // ── Splash / Auth ──
       GoRoute(
         path: '/splash',
@@ -374,9 +379,60 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
+        ],
+      ),
     ],
   );
 });
+
+/// Applies 450px phone frame on desktop only for non-Supplier routes.
+/// Supplier gets full width so the sidebar layout displays correctly.
+class _DesktopFrameShell extends StatelessWidget {
+  const _DesktopFrameShell({required this.state, required this.child});
+  final GoRouterState state;
+  final Widget child;
+
+  static const _kDesktopOuterBg = Color(0xFF1C1917);
+  static const _kMaxMobileWidth = 450.0;
+  static const _kDesktopBreakpoint = 600.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final path = state.uri.path;
+        final isSupplier = path.startsWith('/supplier');
+        final usePhoneFrame =
+            !isSupplier && constraints.maxWidth > _kDesktopBreakpoint;
+
+        if (usePhoneFrame) {
+          return Container(
+            color: _kDesktopOuterBg,
+            child: Center(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: _kMaxMobileWidth),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.25),
+                      blurRadius: 24,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: child,
+              ),
+            ),
+          );
+        }
+        return child;
+      },
+    );
+  }
+}
 
 /// Wraps all supplier routes in the sidebar layout (desktop view).
 class _SupplierShell extends ConsumerWidget {
