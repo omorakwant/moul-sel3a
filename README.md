@@ -21,7 +21,7 @@
 **https://lcarnetb2b.vercel.app**
 
 - No login on web: you land as the mock retailer **"Hanout Moulay"**.
-- Dashboard, catalog, orders, ledger, and payment declaration use **mock data**.
+- Use the **role switcher** (Retailer | Supplier | Driver) in the app bar to view Supplier or Driver flow with mock data. All three roles use **mock data** on web.
 - On desktop the app appears in a 450px “phone” frame. Triple-tap the app title to toggle the offline demo banner.
 
 ## Documentation

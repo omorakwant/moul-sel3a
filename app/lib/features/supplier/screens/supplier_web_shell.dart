@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../shared/widgets/prototype_role_switcher.dart';
 import '../providers/supplier_verification_providers.dart';
 
 /// Web breakpoint — above this we show the sidebar layout.
@@ -41,16 +43,30 @@ class SupplierWebShell extends ConsumerWidget {
         ) ?? 0;
 
     return Scaffold(
-      body: Row(
+      body: Column(
         children: [
-          // ── Sidebar ──
-          _Sidebar(
-            activeRoute: activeRoute,
-            pendingVerifications: pendingCount,
-            l10n: l10n,
+          if (kIsWeb)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: const [
+                  PrototypeRoleSwitcher(),
+                ],
+              ),
+            ),
+          Expanded(
+            child: Row(
+              children: [
+                _Sidebar(
+                  activeRoute: activeRoute,
+                  pendingVerifications: pendingCount,
+                  l10n: l10n,
+                ),
+                Expanded(child: child),
+              ],
+            ),
           ),
-          // ── Main Content ──
-          Expanded(child: child),
         ],
       ),
     );

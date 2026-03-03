@@ -6,6 +6,7 @@ import '../../../core/l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/delivery_job.dart';
+import '../../shared/widgets/prototype_role_switcher.dart';
 import '../providers/driver_providers.dart';
 
 /// Driver Marketplace — Feed of open delivery jobs.
@@ -28,6 +29,10 @@ class DriverMarketplaceScreen extends ConsumerWidget {
         title: Text(l10n.driverMarketplace),
         centerTitle: true,
         elevation: 0,
+        actions: const [
+          PrototypeRoleSwitcher(),
+          SizedBox(width: 8),
+        ],
       ),
       body: RefreshIndicator(
         color: AppColors.accentOrange,

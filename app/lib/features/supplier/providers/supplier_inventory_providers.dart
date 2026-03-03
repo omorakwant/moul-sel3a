@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/supabase_constants.dart';
+import '../../../data/mock_data.dart';
 import '../../../data/models/product.dart';
 import '../../../data/repositories/product_repository.dart';
 import '../../../data/services/supabase_service.dart';
@@ -14,8 +16,10 @@ import '../../../data/services/storage_service.dart';
 // ═════════════════════════════════════════════════════════════════════════════
 
 /// Current supplier's full product list (active + inactive).
+/// On web uses mock data.
 final supplierProductsProvider =
     FutureProvider.autoDispose<List<Product>>((ref) async {
+  if (kIsWeb) return mockProducts;
   final client = ref.watch(supabaseClientProvider);
   final userId = client.auth.currentUser?.id;
   if (userId == null) return [];
@@ -30,8 +34,12 @@ final supplierProductsProvider =
 });
 
 /// Distinct brand list for the current supplier (for the brand dropdown).
+/// On web uses mock data.
 final supplierBrandsProvider =
     FutureProvider.autoDispose<List<String>>((ref) async {
+  if (kIsWeb) {
+    return mockProducts.map((p) => p.brand ?? '').where((b) => b.isNotEmpty).toSet().toList()..sort();
+  }
   final repo = ref.watch(productRepositoryProvider);
   final client = ref.watch(supabaseClientProvider);
   final userId = client.auth.currentUser?.id;

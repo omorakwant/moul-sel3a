@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../data/mock_data.dart';
 import '../../../data/models/delivery_job.dart';
 import '../../../data/models/delivery_bid.dart';
 import '../../../data/repositories/delivery_repository.dart';
@@ -12,39 +14,59 @@ import '../../../core/providers/sync_providers.dart';
 // ══════════════════════════════════════════════════════════════════════════════
 
 /// Fetches all open delivery jobs for the driver marketplace.
-/// Auto-refreshes via Supabase realtime.
+/// Auto-refreshes via Supabase realtime. On web uses mock data.
 final openJobsFeedProvider =
     FutureProvider.autoDispose<List<DeliveryJob>>((ref) async {
+  if (kIsWeb) return mockDeliveryJobs.where((j) => j.status == 'open').toList();
   ref.watch(deliveryJobsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getOpenJobs();
 });
 
 /// Fetches jobs assigned to the current driver (active trips).
-/// Auto-refreshes via Supabase realtime.
+/// Auto-refreshes via Supabase realtime. On web uses mock data.
 final myActiveJobsProvider =
     FutureProvider.autoDispose<List<DeliveryJob>>((ref) async {
+  if (kIsWeb) {
+    return mockDeliveryJobs
+        .where((j) => j.status == 'assigned' || j.status == 'in_transit')
+        .toList();
+  }
   ref.watch(deliveryJobsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   final jobs = await repo.getDriverJobs();
-  // Only show assigned + in_transit (active jobs)
   return jobs
       .where((j) => j.status == 'assigned' || j.status == 'in_transit')
       .toList();
 });
 
 /// Fetches a single delivery job by ID.
-/// Auto-refreshes via Supabase realtime.
+/// Auto-refreshes via Supabase realtime. On web uses mock data.
 final deliveryJobByIdProvider =
     FutureProvider.autoDispose.family<DeliveryJob?, String>((ref, jobId) async {
+  if (kIsWeb) {
+    try {
+      return mockDeliveryJobs.firstWhere((j) => j.id == jobId);
+    } catch (_) {
+      return null;
+    }
+  }
   ref.watch(deliveryJobsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getJobById(jobId);
 });
 
 /// Fetches a single delivery job by order ID (for handshake deep links).
+/// On web uses mock data.
 final deliveryJobByOrderIdProvider =
     FutureProvider.autoDispose.family<DeliveryJob?, String>((ref, orderId) async {
+  if (kIsWeb) {
+    try {
+      return mockDeliveryJobs.firstWhere((j) => j.orderId == orderId);
+    } catch (_) {
+      return null;
+    }
+  }
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getJobByOrderId(orderId);
 });
@@ -54,9 +76,18 @@ final deliveryJobByOrderIdProvider =
 // ══════════════════════════════════════════════════════════════════════════════
 
 /// Check if current driver already bid on this job.
-/// Auto-refreshes via Supabase realtime.
+/// Auto-refreshes via Supabase realtime. On web uses mock data.
 final myBidForJobProvider =
     FutureProvider.autoDispose.family<DeliveryBid?, String>((ref, jobId) async {
+  if (kIsWeb) {
+    try {
+      return mockDeliveryBids
+          .where((b) => b.jobId == jobId && b.driverId == 'mock-driver-001')
+          .first;
+    } catch (_) {
+      return null;
+    }
+  }
   ref.watch(deliveryBidsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getMyBidForJob(jobId);
@@ -166,17 +197,21 @@ final tripActionNotifierProvider =
 // SUPPLIER BID MANAGEMENT
 // ══════════════════════════════════════════════════════════════════════════════
 
-/// Fetches all bids for a supplier's delivery job.\n/// Auto-refreshes via Supabase realtime.
+/// Fetches all bids for a supplier's delivery job.
+/// Auto-refreshes via Supabase realtime. On web uses mock data.
 final jobBidsProvider =
     FutureProvider.autoDispose.family<List<DeliveryBid>, String>((ref, jobId) async {
+  if (kIsWeb) return mockDeliveryBids.where((b) => b.jobId == jobId).toList();
   ref.watch(deliveryBidsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getJobBids(jobId);
 });
 
 /// Fetches supplier's delivery jobs (for bid management dashboard).
+/// On web uses mock data (same as supplier_dashboard_providers).
 final supplierDeliveryJobsProvider =
     FutureProvider.autoDispose<List<DeliveryJob>>((ref) async {
+  if (kIsWeb) return mockDeliveryJobs;
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getSupplierJobs();
 });
@@ -210,8 +245,16 @@ final acceptBidNotifierProvider =
 );
 
 /// Delivery PIN for retailer to see (for their order's delivery job).
+/// On web uses mock data.
 final deliveryPinProvider =
     FutureProvider.autoDispose.family<String?, String>((ref, jobId) async {
+  if (kIsWeb) {
+    try {
+      return mockDeliveryJobs.firstWhere((j) => j.id == jobId).deliveryPin;
+    } catch (_) {
+      return null;
+    }
+  }
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getDeliveryPin(jobId);
 });

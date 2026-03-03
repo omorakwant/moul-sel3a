@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../data/models/product.dart';
 import '../../features/shared/widgets/app_title_offline_toggle.dart';
+import '../../features/shared/widgets/prototype_role_switcher.dart';
 import '../../features/auth/providers/auth_providers.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/otp_verify_screen.dart';
@@ -382,6 +383,10 @@ class _RetailerShell extends ConsumerWidget {
         title: const AppTitleWithOfflineToggle(),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        actions: const [
+          PrototypeRoleSwitcher(),
+          SizedBox(width: 8),
+        ],
       ),
       body: child,
     );

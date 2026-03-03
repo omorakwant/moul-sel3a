@@ -84,7 +84,7 @@
 | **Deliveries** | ✅ Done | List of delivery jobs; status. |
 | **Profile** | ✅ Done | Supplier profile. |
 | **Web shell** | ✅ Done | Sidebar layout (dark), nav (Dashboard, Inventaire, Vérifications, etc.). |
-| **Web prototype data** | ❌ Not wired | Supplier flow still uses Supabase. Demo is Retailer-only on web. |
+| **Web prototype data** | ✅ Done | On web: Supplier flow uses mock data (products, orders, relations, delivery jobs, pending verifications). Role switcher allows viewing as Supplier. |
 
 ### 3.4 Driver flow (mobile)
 
@@ -94,7 +94,7 @@
 | **Bid screen** | ✅ Done | Place bid (amount, message); submit. |
 | **Active trip** | ✅ Done | Job details; start trip; "I arrived"; enter 4-digit PIN to confirm delivery; COD collection flow. |
 | **Handshake redirect** | ✅ Done | Post-PIN redirect/confirmation. |
-| **Web prototype data** | ❌ Not wired | Driver flow still uses Supabase. |
+| **Web prototype data** | ✅ Done | On web: Driver flow uses mock data (open jobs, bids). Role switcher allows viewing as Driver. |
 
 ### 3.5 Shared / infrastructure
 
@@ -120,7 +120,10 @@
 | **Mock products** | ✅ Done | 6 phone accessories; `compatibility_list`; `price_tiers` (e.g. 1/10/50). |
 | **Mock ledger** | ✅ Done | 3 transactions (order_increase, payment_decrease) for demo history. |
 | **Mock orders** | ✅ Done | 2 orders for first retailer (delivered + shipped). |
-| **Mock auth** | ✅ Done | `mockCurrentUserProvider` (first retailer); used on web. |
+| **Mock auth** | ✅ Done | `mockCurrentUserProvider` (first retailer); used on web. `prototypeRoleProvider` (Retailer/Supplier/Driver) for web demo. |
+| **Mock delivery jobs** | ✅ Done | Open + assigned jobs for Driver marketplace and Supplier deliveries. |
+| **Mock delivery bids** | ✅ Done | Pending bids for bid manager demo. |
+| **Mock pending ledger** | ✅ Done | Pending transactions for Supplier verification desk demo. |
 
 ---
 
@@ -132,7 +135,7 @@
 |------|--------|-------|
 | **Production backend** | ❌ Not done | Prototype is frontend-only; no Supabase in production for demo. Real app would need migrations, RLS, triggers. |
 | **Ledger balance trigger** | ❌ Not in repo | PROJECT_CONTEXT specifies: `current_balance` updates only when ledger_transaction is `verified`. Not implemented in prototype. |
-| **Supplier/Driver mock on web** | ❌ Not done | Only Retailer flow uses mock data on web. Supplier/Driver would need similar `kIsWeb` branches if demo should show them. |
+| **Supplier/Driver mock on web** | ✅ Done | Supplier and Driver flows use mock data on web; role switcher (Retailer | Supplier | Driver) in app bar for demo. |
 
 ### 4.2 Retailer
 
@@ -179,7 +182,7 @@ When the app runs **on web** (e.g. https://lcarnetb2b.vercel.app):
 2. **Data:** All retailer-facing data comes from `lib/data/mock_data.dart` (relations, products, ledger, orders). No Supabase calls for that flow.
 3. **Layout:** If viewport width &gt; 600px, app is shown in a 450px-wide centered "phone" frame on dark gray (#1C1917).
 4. **Offline demo:** Triple-tap the app bar title to toggle simulated offline; OfflineStatusBanner appears (amber/red).
-5. **Supplier/Driver:** If user could switch role to Supplier/Driver on web, those flows would still call Supabase (and would fail without backend). Demo is intended as **Retailer only**.
+5. **Role switcher:** On web, the app bar shows "Retailer | Supplier | Driver". Switching updates the prototype role and navigates to that dashboard; Supplier and Driver flows use mock data.
 
 ---
 

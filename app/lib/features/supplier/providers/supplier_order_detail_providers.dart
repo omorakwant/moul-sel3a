@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../data/mock_data.dart';
 import '../../../data/models/order.dart';
 import '../../../data/repositories/order_repository.dart';
 import '../../../data/services/realtime_service.dart';
@@ -14,9 +16,16 @@ import 'supplier_dashboard_providers.dart';
 // ═════════════════════════════════════════════════════════════════════════════
 
 /// Single order by ID for the supplier detail view.
-/// Auto-refreshes via orders realtime channel.
+/// Auto-refreshes via orders realtime channel. On web uses mock data.
 final supplierOrderDetailProvider =
     FutureProvider.family.autoDispose<Order?, String>((ref, orderId) async {
+  if (kIsWeb) {
+    try {
+      return mockOrders.firstWhere((o) => o.id == orderId);
+    } catch (_) {
+      return null;
+    }
+  }
   ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
   return repo.getById(orderId);

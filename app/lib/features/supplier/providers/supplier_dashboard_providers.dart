@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../data/mock_data.dart';
 import '../../../data/models/order.dart';
 import '../../../data/models/supplier_retailer_relation.dart';
 import '../../../data/models/delivery_job.dart';
@@ -21,43 +23,49 @@ import '../../../data/services/realtime_service.dart';
 // ═════════════════════════════════════════════════════════════════════════════
 
 /// All orders for this supplier (newest first).
-/// Auto-refreshes via Supabase realtime.
+/// Auto-refreshes via Supabase realtime. On web uses mock data.
 final supplierOrdersProvider =
     FutureProvider.autoDispose<List<Order>>((ref) async {
+  if (kIsWeb) return mockOrders;
   ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
   return repo.getSupplierOrders();
 });
 
 /// Pending orders waiting for supplier confirmation.
-/// Auto-refreshes via Supabase realtime.
+/// Auto-refreshes via Supabase realtime. On web uses mock data (empty for demo).
 final supplierPendingOrdersProvider =
     FutureProvider.autoDispose<List<Order>>((ref) async {
+  if (kIsWeb) return mockOrders.where((o) => o.status == 'pending').toList();
   ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
   return repo.getSupplierOrders(status: 'pending');
 });
 
 /// Confirmed orders (ready to prepare / dispatch).
-/// Auto-refreshes via Supabase realtime.
+/// Auto-refreshes via Supabase realtime. On web uses mock data.
 final supplierConfirmedOrdersProvider =
     FutureProvider.autoDispose<List<Order>>((ref) async {
+  if (kIsWeb) return mockOrders.where((o) => o.status == 'confirmed').toList();
   ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
   return repo.getSupplierOrders(status: 'confirmed');
 });
 
 /// All retailer relations for this supplier ("Le Carnet" list).
+/// On web uses mock data.
 final supplierRelationsProvider =
     FutureProvider.autoDispose<List<SupplierRetailerRelation>>((ref) async {
+  if (kIsWeb) return mockRelations;
   final repo = ref.watch(relationRepositoryProvider);
   return repo.getSupplierRelations();
 });
 
 /// Active delivery jobs for this supplier.
-/// Auto-refreshes via Supabase realtime.
+/// Auto-refreshes via Supabase realtime. On web uses mock data.
 final supplierDeliveryJobsProvider =
     FutureProvider.autoDispose<List<DeliveryJob>>((ref) async {
+  if (kIsWeb) return mockDeliveryJobs;
   ref.watch(deliveryJobsRealtimeProvider);
   final repo = ref.watch(deliveryRepositoryProvider);
   return repo.getSupplierJobs();

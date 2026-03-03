@@ -30,6 +30,10 @@ import '../../../data/services/supabase_service.dart';
 /// When true, skip login and use a fake retailer profile (for testing the app).
 final testModeEnabledProvider = StateProvider<bool>((ref) => false);
 
+/// On web: which role to simulate for the prototype (retailer | supplier | driver).
+/// Used by [currentProfileProvider] to return the matching mock profile.
+final prototypeRoleProvider = StateProvider<String>((ref) => 'retailer');
+
 /// Fake profile used when [testModeEnabledProvider] is true.
 Profile get _kTestProfile => Profile(
       id: '00000000-0000-0000-0000-000000000001',
@@ -62,9 +66,16 @@ final authStateProvider = StreamProvider<AuthState>((ref) {
 });
 
 /// Current user's profile (from public.profiles).
-/// When [testModeEnabledProvider] is true or on web (prototype), returns mock retailer.
+/// When [testModeEnabledProvider] is true or on web (prototype), returns mock profile.
+/// On web, [prototypeRoleProvider] selects retailer, supplier, or driver.
 final currentProfileProvider = FutureProvider<Profile?>((ref) async {
-  if (kIsWeb) return ref.read(mockCurrentUserProvider);
+  if (kIsWeb) {
+    final role = ref.watch(prototypeRoleProvider);
+    return mockProfiles.firstWhere(
+      (p) => p.role == role,
+      orElse: () => mockProfiles.firstWhere((p) => p.role == 'retailer'),
+    );
+  }
   if (ref.watch(testModeEnabledProvider)) return _kTestProfile;
 
   // Watch auth state to auto-refresh when user signs in/out

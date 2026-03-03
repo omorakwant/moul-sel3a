@@ -11,13 +11,14 @@ import 'models/models.dart';
 const String _supplierId = 'mock-supplier-001';
 const String _retailer1Id = 'mock-retailer-001';
 const String _retailer2Id = 'mock-retailer-002';
+const String _driverId = 'mock-driver-001';
 const String _relation1Id = 'mock-relation-001';
 const String _relation2Id = 'mock-relation-002';
 
 final _created = DateTime(2024, 6, 1);
 final _updated = DateTime(2025, 2, 15);
 
-// ── Mock Profiles: 1 Supplier, 2 Retailers ──
+// ── Mock Profiles: 1 Supplier, 2 Retailers, 1 Driver ──
 final List<Profile> mockProfiles = [
   Profile(
     id: _supplierId,
@@ -49,6 +50,17 @@ final List<Profile> mockProfiles = [
     city: 'Fès',
     locationName: 'Médina',
     preferredLanguage: 'ar',
+    createdAt: _created,
+    updatedAt: _updated,
+  ),
+  Profile(
+    id: _driverId,
+    shopName: 'Kourtia Hassan',
+    role: 'driver',
+    phone: '+212 6 98 00 00 01',
+    city: 'Casablanca',
+    locationName: 'Livraisons Casablanca–Rabat',
+    preferredLanguage: 'fr',
     createdAt: _created,
     updatedAt: _updated,
   ),
@@ -215,10 +227,113 @@ final List<LedgerTransaction> mockLedger = [
   ),
 ];
 
-// ── Mock Orders (for retailer "Mes commandes" and order detail) ──
+/// Pending ledger transactions for Supplier verification desk (web prototype).
+final List<LedgerTransaction> mockPendingVerifications = [
+  LedgerTransaction(
+    id: 'mock-ledger-pending-001',
+    relationId: _relation1Id,
+    orderId: null,
+    transactionType: 'payment_decrease',
+    amount: 750.0,
+    paymentMethod: 'wafacash',
+    referenceCode: 'WF-20250301-456',
+    status: 'pending',
+    verifiedAt: null,
+    verifiedBy: null,
+    createdAt: DateTime(2025, 3, 1, 14, 30),
+    updatedAt: DateTime(2025, 3, 1, 14, 30),
+  ),
+  LedgerTransaction(
+    id: 'mock-ledger-pending-002',
+    relationId: _relation2Id,
+    orderId: null,
+    transactionType: 'payment_decrease',
+    amount: 300.0,
+    paymentMethod: 'cashplus',
+    referenceCode: 'CP-20250302-789',
+    status: 'pending',
+    verifiedAt: null,
+    verifiedBy: null,
+    createdAt: DateTime(2025, 3, 2, 10, 0),
+    updatedAt: DateTime(2025, 3, 2, 10, 0),
+  ),
+];
+
+// ── Mock Delivery Jobs (Supplier deliveries + Driver marketplace) ──
+const String _mockJobOpenId = 'mock-job-open-001';
+const String _mockJobAssignedId = 'mock-job-assigned-002';
 const String _mockOrder1Id = 'mock-order-001';
 const String _mockOrder2Id = 'mock-order-002';
 
+final List<DeliveryJob> mockDeliveryJobs = [
+  DeliveryJob(
+    id: _mockJobOpenId,
+    orderId: _mockOrder2Id,
+    supplierId: _supplierId,
+    assignedDriverId: null,
+    pickupCity: 'Casablanca',
+    pickupLocationName: 'Derb Omar, Entrepôt n°12',
+    dropoffCity: 'Rabat',
+    dropoffLocationName: 'Souk Al Had',
+    jobType: 'delivery_only',
+    status: 'open',
+    deliveryPin: null,
+    createdAt: DateTime(2025, 2, 12, 9, 0),
+    updatedAt: DateTime(2025, 2, 12, 9, 0),
+    supplierName: 'Accessoires Pro Casablanca',
+    bidCount: 2,
+  ),
+  DeliveryJob(
+    id: _mockJobAssignedId,
+    orderId: _mockOrder1Id,
+    supplierId: _supplierId,
+    assignedDriverId: _driverId,
+    pickupCity: 'Casablanca',
+    pickupLocationName: 'Derb Omar, Entrepôt n°12',
+    dropoffCity: 'Rabat',
+    dropoffLocationName: 'Hanout Moulay',
+    jobType: 'delivery_only',
+    status: 'in_transit',
+    deliveryPin: '4829',
+    createdAt: DateTime(2025, 2, 10, 8, 0),
+    updatedAt: DateTime(2025, 2, 10, 11, 0),
+    supplierName: 'Accessoires Pro Casablanca',
+    driverName: 'Kourtia Hassan',
+    bidCount: 1,
+  ),
+];
+
+// ── Mock Delivery Bids (for open job, bid manager demo) ──
+final List<DeliveryBid> mockDeliveryBids = [
+  DeliveryBid(
+    id: 'mock-bid-001',
+    jobId: _mockJobOpenId,
+    driverId: _driverId,
+    bidAmount: 85.0,
+    estimatedTime: '2 heures',
+    message: 'Dispo maintenant',
+    status: 'pending',
+    createdAt: DateTime(2025, 2, 12, 9, 30),
+    driverName: 'Kourtia Hassan',
+    driverPhone: '+212 6 98 00 00 01',
+    driverCity: 'Casablanca',
+  ),
+  DeliveryBid(
+    id: 'mock-bid-002',
+    jobId: _mockJobOpenId,
+    driverId: 'mock-driver-002',
+    bidAmount: 95.0,
+    estimatedTime: '3 heures',
+    message: null,
+    status: 'pending',
+    createdAt: DateTime(2025, 2, 12, 10, 0),
+    driverName: 'Livreur Omar',
+    driverPhone: '+212 6 98 00 00 02',
+    driverCity: 'Casablanca',
+  ),
+];
+
+// ── Mock Orders (for retailer "Mes commandes" and order detail) ──
 final List<Order> mockOrders = [
   Order(
     id: _mockOrder1Id,
