@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../data/mock_data.dart';
 import '../../../data/models/product.dart';
 import '../../../data/models/supplier_retailer_relation.dart';
 import '../../../data/repositories/product_repository.dart';
@@ -43,6 +45,16 @@ final catalogBrandsProvider = FutureProvider<List<String>>((ref) async {
   final supplierId = ref.watch(catalogSupplierIdProvider);
   if (supplierId.isEmpty) return [];
 
+  if (kIsWeb) {
+    final brands = mockProducts
+        .map((p) => p.brand)
+        .where((b) => b != null && b!.isNotEmpty)
+        .cast<String>()
+        .toSet()
+        .toList();
+    brands.sort();
+    return brands;
+  }
   final repo = ref.watch(productRepositoryProvider);
   return repo.getDistinctBrands(supplierId);
 });
@@ -61,6 +73,37 @@ final catalogProductsProvider = FutureProvider<List<Product>>((ref) async {
   final supplierId = ref.watch(catalogSupplierIdProvider);
   if (supplierId.isEmpty) return [];
 
+  if (kIsWeb) {
+    List<Product> products = mockProducts
+        .where((p) => p.supplierId == supplierId && p.isActive)
+        .toList();
+    final searchQuery = ref.watch(catalogSearchQueryProvider);
+    final selectedBrand = ref.watch(selectedBrandProvider);
+    final selectedModel = ref.watch(selectedModelProvider);
+    if (searchQuery.isNotEmpty) {
+      final q = searchQuery.toLowerCase();
+      products = products
+          .where((p) =>
+              p.name.toLowerCase().contains(q) ||
+              p.compatibilityList.any(
+                  (c) => c.toLowerCase().contains(q)))
+          .toList();
+    }
+    if (selectedModel != null && selectedModel.isNotEmpty) {
+      products = products
+          .where((p) => p.compatibilityList.any((c) =>
+              c.toLowerCase().contains(selectedModel.toLowerCase())))
+          .toList();
+    }
+    if (selectedBrand != null) {
+      products = products
+          .where((p) =>
+              p.brand?.toLowerCase() == selectedBrand.toLowerCase())
+          .toList();
+    }
+    return products;
+  }
+
   final repo = ref.watch(productRepositoryProvider);
   final searchQuery = ref.watch(catalogSearchQueryProvider);
   final selectedBrand = ref.watch(selectedBrandProvider);
@@ -69,17 +112,14 @@ final catalogProductsProvider = FutureProvider<List<Product>>((ref) async {
   List<Product> products;
 
   if (searchQuery.isNotEmpty) {
-    // Full-text search by name or compatibility
     products = await repo.searchProducts(supplierId, searchQuery);
   } else {
-    // Standard fetch with optional compatibility filter
     products = await repo.getSupplierProducts(
       supplierId,
       compatibilityFilter: selectedModel,
     );
   }
 
-  // Client-side brand filter (server already handles compatibility)
   if (selectedBrand != null) {
     products = products
         .where((p) =>
@@ -100,14 +140,20 @@ final catalogModelsProvider = FutureProvider<List<String>>((ref) async {
   final supplierId = ref.watch(catalogSupplierIdProvider);
   if (supplierId.isEmpty) return [];
 
+  if (kIsWeb) {
+    final models = <String>{};
+    for (final p in mockProducts.where((e) => e.supplierId == supplierId)) {
+      models.addAll(p.compatibilityList);
+    }
+    final sorted = models.toList()..sort();
+    return sorted;
+  }
   final repo = ref.watch(productRepositoryProvider);
   final allProducts = await repo.getSupplierProducts(supplierId);
-
   final models = <String>{};
   for (final product in allProducts) {
     models.addAll(product.compatibilityList);
   }
-
   final sorted = models.toList()..sort();
   return sorted;
 });
@@ -126,6 +172,13 @@ final catalogRelationProvider =
   final relationId = ref.watch(catalogRelationIdProvider);
   if (relationId == null || relationId.isEmpty) return null;
 
+  if (kIsWeb) {
+    try {
+      return mockRelations.firstWhere((r) => r.id == relationId);
+    } catch (_) {
+      return null;
+    }
+  }
   final repo = ref.watch(relationRepositoryProvider);
   return repo.getById(relationId);
 });

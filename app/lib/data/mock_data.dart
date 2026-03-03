@@ -215,6 +215,77 @@ final List<LedgerTransaction> mockLedger = [
   ),
 ];
 
+// ── Mock Orders (for retailer "Mes commandes" and order detail) ──
+const String _mockOrder1Id = 'mock-order-001';
+const String _mockOrder2Id = 'mock-order-002';
+
+final List<Order> mockOrders = [
+  Order(
+    id: _mockOrder1Id,
+    supplierId: _supplierId,
+    retailerId: _retailer1Id,
+    relationId: _relation1Id,
+    items: [
+      OrderItem(
+        productId: 'mock-product-001',
+        name: 'Coque Silicone iPhone 13/14',
+        quantity: 10,
+        unitPrice: 12.0,
+        lineTotal: 120.0,
+      ),
+      OrderItem(
+        productId: 'mock-product-004',
+        name: 'Câble Data USB-C vers Lightning',
+        quantity: 5,
+        unitPrice: 18.0,
+        lineTotal: 90.0,
+      ),
+    ],
+    originalTotal: 210.0,
+    adjustedTotal: null,
+    driverName: 'Mohammed',
+    status: 'delivered',
+    deliveryType: 'bid_driver',
+    notes: null,
+    createdAt: DateTime(2025, 2, 1, 9, 0),
+    updatedAt: DateTime(2025, 2, 1, 10, 0),
+    supplierName: 'Accessoires Pro Casablanca',
+    retailerName: 'Hanout Moulay',
+  ),
+  Order(
+    id: _mockOrder2Id,
+    supplierId: _supplierId,
+    retailerId: _retailer1Id,
+    relationId: _relation1Id,
+    items: [
+      OrderItem(
+        productId: 'mock-product-002',
+        name: 'Verre Trempé Samsung A54',
+        quantity: 20,
+        unitPrice: 20.0,
+        lineTotal: 400.0,
+      ),
+      OrderItem(
+        productId: 'mock-product-003',
+        name: 'Chargeur Rapide USB-C 20W',
+        quantity: 15,
+        unitPrice: 38.0,
+        lineTotal: 570.0,
+      ),
+    ],
+    originalTotal: 2900.75,
+    adjustedTotal: null,
+    driverName: 'Hassan',
+    status: 'shipped',
+    deliveryType: 'bid_driver',
+    notes: null,
+    createdAt: DateTime(2025, 2, 10, 10, 0),
+    updatedAt: DateTime(2025, 2, 10, 11, 0),
+    supplierName: 'Accessoires Pro Casablanca',
+    retailerName: 'Hanout Moulay',
+  ),
+];
+
 // ── Riverpod: simulate logged-in user (one of the Retailers) ──
 
 /// Current user when using mock data: simulates being logged in as the first Retailer.

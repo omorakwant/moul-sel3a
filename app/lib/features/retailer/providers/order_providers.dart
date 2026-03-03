@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../data/mock_data.dart';
 import '../../../data/models/order.dart';
 import '../../../data/repositories/order_repository.dart';
 import '../../../data/repositories/profile_repository.dart';
 import '../../../data/services/realtime_service.dart';
+import '../../auth/providers/auth_providers.dart';
 
 /// ══════════════════════════════════════════════════════════════════════════════
 /// ORDER PROVIDERS — State management for Order Detail, Partial Receipt,
@@ -23,7 +26,15 @@ final selectedOrderIdProvider = StateProvider<String?>((ref) => null);
 /// Auto-refreshes when the orders table changes via realtime.
 final orderDetailProvider =
     FutureProvider.family<Order?, String>((ref, orderId) async {
-  // Watch realtime — any orders table change re-triggers this fetch
+  if (kIsWeb) {
+    final mockUser = ref.read(mockCurrentUserProvider);
+    try {
+      return mockOrders.firstWhere((o) =>
+          o.id == orderId && o.retailerId == mockUser.id);
+    } catch (_) {
+      return null;
+    }
+  }
   ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
   return repo.getById(orderId);
@@ -33,6 +44,14 @@ final orderDetailProvider =
 /// Auto-refreshes when the orders table changes via realtime.
 final retailerOrdersProvider =
     FutureProvider<List<Order>>((ref) async {
+  if (kIsWeb) {
+    final mockUser = ref.read(mockCurrentUserProvider);
+    final list = mockOrders
+        .where((o) => o.retailerId == mockUser.id)
+        .toList();
+    list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return list;
+  }
   ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
   return repo.getRetailerOrders();

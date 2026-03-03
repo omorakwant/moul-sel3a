@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../../data/mock_data.dart';
 import '../../../data/models/profile.dart';
 import '../../../data/services/phone_auth_service.dart';
 import '../../../data/services/supabase_service.dart';
@@ -60,8 +62,9 @@ final authStateProvider = StreamProvider<AuthState>((ref) {
 });
 
 /// Current user's profile (from public.profiles).
-/// When [testModeEnabledProvider] is true, returns a fake retailer profile.
+/// When [testModeEnabledProvider] is true or on web (prototype), returns mock retailer.
 final currentProfileProvider = FutureProvider<Profile?>((ref) async {
+  if (kIsWeb) return ref.read(mockCurrentUserProvider);
   if (ref.watch(testModeEnabledProvider)) return _kTestProfile;
 
   // Watch auth state to auto-refresh when user signs in/out
@@ -87,6 +90,7 @@ final currentProfileProvider = FutureProvider<Profile?>((ref) async {
 /// Whether the current user's profile has been properly set up.
 /// A profile created by the trigger defaults to shop_name = "Nouveau Compte".
 final isProfileCompleteProvider = Provider<bool>((ref) {
+  if (kIsWeb) return true;
   final profileAsync = ref.watch(currentProfileProvider);
   return profileAsync.when(
     data: (profile) {
@@ -99,7 +103,9 @@ final isProfileCompleteProvider = Provider<bool>((ref) {
 });
 
 /// Combined auth guard — determines routing based on session + profile state.
+/// On web (deployed prototype), skip login and go straight to retailer dashboard.
 final authGuardProvider = Provider<AuthStatus>((ref) {
+  if (kIsWeb) return AuthStatus.authenticated;
   if (ref.watch(testModeEnabledProvider)) return AuthStatus.authenticated;
 
   final client = ref.watch(supabaseClientProvider);

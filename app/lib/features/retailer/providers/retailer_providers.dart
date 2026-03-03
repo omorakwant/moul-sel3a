@@ -1,12 +1,22 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../data/mock_data.dart';
 import '../../../data/models/supplier_retailer_relation.dart';
 import '../../../data/repositories/relation_repository.dart';
+import '../../auth/providers/auth_providers.dart';
 
 /// Fetches all supplier relations for the logged-in retailer.
 /// Each relation = one "Carnet" (rolling debt account with a supplier).
+/// On web (prototype), returns mock relations for the mock retailer.
 final retailerRelationsProvider =
     FutureProvider<List<SupplierRetailerRelation>>((ref) async {
+  if (kIsWeb) {
+    final mockUser = ref.read(mockCurrentUserProvider);
+    return mockRelations
+        .where((r) => r.retailerId == mockUser.id)
+        .toList();
+  }
   final repo = ref.watch(relationRepositoryProvider);
   return repo.getRetailerRelations();
 });

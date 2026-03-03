@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../data/mock_data.dart';
 import '../../../data/models/ledger_transaction.dart';
 import '../../../data/repositories/ledger_repository.dart';
 
@@ -17,6 +19,12 @@ import '../../../data/repositories/ledger_repository.dart';
 final relationLedgerProvider =
     FutureProvider.family.autoDispose<List<LedgerTransaction>, String>(
         (ref, relationId) async {
+  if (kIsWeb) {
+    return mockLedger
+        .where((t) => t.relationId == relationId)
+        .toList()
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  }
   final repo = ref.watch(ledgerRepositoryProvider);
   return repo.getByRelation(relationId);
 });
