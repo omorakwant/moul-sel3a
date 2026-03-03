@@ -254,7 +254,11 @@ class _PaymentDeclarationScreenState
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            if (!context.pop()) context.go('/retailer/dashboard');
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/retailer/dashboard');
+            }
           },
         ),
         title: Column(

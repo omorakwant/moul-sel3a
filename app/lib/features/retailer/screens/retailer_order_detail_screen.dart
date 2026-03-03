@@ -219,7 +219,11 @@ class _RetailerOrderDetailScreenState
         // Close button — cornerRadius 12, fill $bg-surface, 48x48
         GestureDetector(
           onTap: () {
-            if (!context.pop()) context.go('/retailer/dashboard');
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/retailer/dashboard');
+            }
           },
           child: Container(
             width: 48,
