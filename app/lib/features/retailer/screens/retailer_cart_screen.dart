@@ -111,7 +111,9 @@ class _RetailerCartScreenState extends ConsumerState<RetailerCartScreen> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => context.pop(),
+            onPressed: () {
+              if (!context.pop()) context.go('/retailer/dashboard');
+            },
             icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
             color: AppColors.textPrimary,
           ),
@@ -534,7 +536,9 @@ class _RetailerCartScreenState extends ConsumerState<RetailerCartScreen> {
           ),
           const SizedBox(height: 24),
           TextButton.icon(
-            onPressed: () => context.pop(),
+            onPressed: () {
+              if (!context.pop()) context.go('/retailer/dashboard');
+            },
             icon: const Icon(Icons.arrow_back_rounded, size: 18),
             label: Text(l10n.backToCatalog),
             style: TextButton.styleFrom(

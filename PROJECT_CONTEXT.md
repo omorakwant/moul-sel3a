@@ -1,4 +1,9 @@
 This is the finalized Project Context & System Prompt. You should save this as a file named PROJECT_CONTEXT.md. This version includes the "Rolling Debt" logic, the bilingual "Handshake" delivery, the "Partial Receipt" feature, and the "Compatibility-First" product discovery.
+
+**Implementation status:** See [PROJECT_STATUS.md](PROJECT_STATUS.md) for what is built vs. still to do (e.g. voice search and WhatsApp notify-after-payment are implemented; receipt OCR, ledger trigger, Supplier/Driver web mock are not).
+
+---
+
 PROJECT CONTEXT: Morocco B2B Phone Accessory Ledger
 1. VISION & CORE LOGIC
 

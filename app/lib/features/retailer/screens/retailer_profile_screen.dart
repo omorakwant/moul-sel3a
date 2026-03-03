@@ -227,7 +227,9 @@ class _RetailerProfileScreenState extends ConsumerState<RetailerProfileScreen> {
     return Row(
       children: [
         GestureDetector(
-          onTap: () => context.pop(),
+          onTap: () {
+            if (!context.pop()) context.go('/retailer/dashboard');
+          },
           child: Container(
             width: 40,
             height: 40,

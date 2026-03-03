@@ -369,6 +369,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 });
 
 /// Wraps retailer routes with an AppBar so "L'Carnet B2B" is visible and triple-tappable for demo.
+/// [automaticallyImplyLeading: false] so back is handled by each screen's in-content back button
+/// and works correctly with GoRouter (avoids shell AppBar stealing the pop).
 class _RetailerShell extends ConsumerWidget {
   const _RetailerShell({required this.child});
   final Widget child;
@@ -379,6 +381,7 @@ class _RetailerShell extends ConsumerWidget {
       appBar: AppBar(
         title: const AppTitleWithOfflineToggle(),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: child,
     );

@@ -58,7 +58,9 @@ class _RetailerOrdersScreenState extends ConsumerState<RetailerOrdersScreen>
         surfaceTintColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (!context.pop()) context.go('/retailer/dashboard');
+          },
         ),
         title: Text(
           l10n.isDarija ? 'الطلبيات ديالي' : 'Mes Commandes',

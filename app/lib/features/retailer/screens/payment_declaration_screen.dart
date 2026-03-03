@@ -253,7 +253,9 @@ class _PaymentDeclarationScreenState
         surfaceTintColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (!context.pop()) context.go('/retailer/dashboard');
+          },
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

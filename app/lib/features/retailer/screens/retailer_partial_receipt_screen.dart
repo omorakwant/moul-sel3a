@@ -175,7 +175,9 @@ class _RetailerPartialReceiptScreenState
                 children: [
                   // Back button — 32x32, cornerRadius 8, fill $bg-surface
                   GestureDetector(
-                    onTap: () => context.pop(),
+                    onTap: () {
+                      if (!context.pop()) context.go('/retailer/dashboard');
+                    },
                     child: Container(
                       width: 32,
                       height: 32,

@@ -197,37 +197,56 @@ class RetailerHomeScreen extends ConsumerWidget {
           ),
         ),
 
-        // Right: notification bell
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: AppColors.bgSurface,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Stack(
-            children: [
-              const Center(
-                child: Icon(
-                  Icons.notifications_outlined,
-                  size: 22,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              // Red dot
-              Positioned(
-                top: 6,
-                right: 6,
-                child: Container(
-                  width: 10,
-                  height: 10,
-                  decoration: const BoxDecoration(
-                    color: AppColors.alertRed,
-                    shape: BoxShape.circle,
+        // Right: notification bell (tappable; placeholder until notifications feature)
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    l10n.isDarija
+                        ? 'الإشعارات غادي يجيو'
+                        : 'Notifications (à venir)',
                   ),
+                  behavior: SnackBarBehavior.floating,
+                  duration: const Duration(seconds: 2),
                 ),
+              );
+            },
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.bgSurface,
+                borderRadius: BorderRadius.circular(12),
               ),
-            ],
+              child: Stack(
+                children: [
+                  const Center(
+                    child: Icon(
+                      Icons.notifications_outlined,
+                      size: 22,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  // Red dot
+                  Positioned(
+                    top: 6,
+                    right: 6,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: const BoxDecoration(
+                        color: AppColors.alertRed,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ],
