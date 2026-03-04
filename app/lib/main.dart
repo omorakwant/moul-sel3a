@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -11,11 +12,11 @@ import 'data/services/sync_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ── Initialize Hive for offline caching ──
-  await Hive.initFlutter();
-
-  // ── Offline read cache (catalog + orders); no-op on web ──
-  await OfflineReadCache.init();
+  // ── Initialize Hive for offline caching (skip on web to avoid white screen) ──
+  if (!kIsWeb) {
+    await Hive.initFlutter();
+    await OfflineReadCache.init();
+  }
 
   // ── Initialize Supabase with PKCE auth ──
   await Supabase.initialize(
@@ -26,7 +27,7 @@ void main() async {
     ),
   );
 
-  // ── Initialize offline action queue ──
+  // ── Initialize offline action queue (no-op on web; web uses mock data) ──
   await SyncService().init();
 
   runApp(

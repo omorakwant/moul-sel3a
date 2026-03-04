@@ -154,7 +154,8 @@ class SyncService {
   factory SyncService() => _instance;
 
   late final SupabaseClient _supabase;
-  late Box _queueBox;
+  /// Null on web (no Hive); queue operations are no-ops.
+  Box? _queueBox;
   bool _isSyncing = false;
   bool _isOnline = true;
   StreamSubscription? _connectivitySub;
@@ -176,11 +177,18 @@ class SyncService {
   // ── PUBLIC API ──────────────────────────────────────────────────────────
 
   /// Initialize the service. Call once during app startup (after Hive.initFlutter).
-  /// Hive is already initialized in main.dart, so we only open the box.
+  /// On web: no Hive/connectivity (avoids white screen); queue is no-op.
   Future<void> init() async {
     if (_initialized) return;
 
     _supabase = Supabase.instance.client;
+
+    if (kIsWeb) {
+      _initialized = true;
+      _emitStatus();
+      return;
+    }
+
     _queueBox = await Hive.openBox(_kBoxName);
 
     // Listen for network changes — debounce to avoid lag from flaky connectivity
@@ -225,7 +233,12 @@ class SyncService {
       createdAt: DateTime.now(),
     );
 
-    await _queueBox.put(action.id, action.toMap());
+    if (_queueBox == null) {
+      _emitStatus();
+      return action.id;
+    }
+
+    await _queueBox!.put(action.id, action.toMap());
     _emitStatus();
 
     // Try to sync immediately
@@ -236,7 +249,7 @@ class SyncService {
 
   /// Process all pending actions in FIFO order (oldest first).
   Future<void> processQueue() async {
-    if (_isSyncing || _queueBox.isEmpty) return;
+    if (_queueBox == null || _isSyncing || _queueBox!.isEmpty) return;
 
     // Check connectivity before starting
     if (!_isOnline) return;
@@ -245,7 +258,7 @@ class SyncService {
     _emitStatus();
 
     // Sort by creation time — FIFO ordering
-    final actions = _queueBox
+    final actions = _queueBox!
         .toMap()
         .entries
         .map((e) => QueuedAction.fromMap(e.value as Map))
@@ -256,13 +269,13 @@ class SyncService {
     for (final action in actions) {
       // Mark as processing
       final processing = action.copyWith(status: ActionStatus.processing);
-      await _queueBox.put(action.id, processing.toMap());
+      await _queueBox!.put(action.id, processing.toMap());
 
       try {
         await _executeAction(action);
 
         // Success → remove from queue
-        await _queueBox.delete(action.id);
+        await _queueBox!.delete(action.id);
         debugPrint('[SyncService] ✅ Synced ${action.type.name} (${action.id})');
       } catch (e) {
         final newRetry = action.retryCount + 1;
@@ -274,7 +287,7 @@ class SyncService {
             retryCount: newRetry,
             lastError: e.toString(),
           );
-          await _queueBox.put(action.id, failed.toMap());
+          await _queueBox!.put(action.id, failed.toMap());
           debugPrint(
             '[SyncService] ❌ Failed permanently ${action.type.name} '
             '(${action.id}) after $kMaxRetries retries: $e',
@@ -286,7 +299,7 @@ class SyncService {
             retryCount: newRetry,
             lastError: e.toString(),
           );
-          await _queueBox.put(action.id, retry.toMap());
+          await _queueBox!.put(action.id, retry.toMap());
           debugPrint(
             '[SyncService] ⏳ Retry $newRetry/$kMaxRetries for '
             '${action.type.name} (${action.id}): $e',
@@ -305,7 +318,8 @@ class SyncService {
 
   /// Retry all failed actions (user-initiated from a UI button).
   Future<void> retryFailed() async {
-    final failed = _queueBox
+    if (_queueBox == null) return;
+    final failed = _queueBox!
         .toMap()
         .entries
         .map((e) => QueuedAction.fromMap(e.value as Map))
@@ -318,7 +332,7 @@ class SyncService {
         retryCount: 0,
         lastError: null,
       );
-      await _queueBox.put(action.id, reset.toMap());
+      await _queueBox!.put(action.id, reset.toMap());
     }
 
     _emitStatus();
@@ -327,16 +341,20 @@ class SyncService {
 
   /// Clear a specific failed action (user dismisses it).
   Future<void> dismissAction(String actionId) async {
-    await _queueBox.delete(actionId);
+    if (_queueBox == null) return;
+    await _queueBox!.delete(actionId);
     _emitStatus();
   }
 
   /// Current queue status snapshot.
   QueueStatus get currentStatus {
+    if (_queueBox == null) {
+      return const QueueStatus(pendingCount: 0, failedCount: 0, isSyncing: false, isOnline: true);
+    }
     int pending = 0;
     int failed = 0;
 
-    for (final raw in _queueBox.values) {
+    for (final raw in _queueBox!.values) {
       final action = QueuedAction.fromMap(raw as Map);
       switch (action.status) {
         case ActionStatus.pending:
