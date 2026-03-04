@@ -12,23 +12,29 @@ import 'data/services/sync_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ── Initialize Hive for offline caching (skip on web to avoid white screen) ──
-  if (!kIsWeb) {
-    await Hive.initFlutter();
-    await OfflineReadCache.init();
+  try {
+    // ── Initialize Hive for offline caching (skip on web to avoid white screen) ──
+    if (!kIsWeb) {
+      await Hive.initFlutter();
+      await OfflineReadCache.init();
+    }
+
+    // ── Initialize Supabase with PKCE auth ──
+    await Supabase.initialize(
+      url: SupabaseConstants.url,
+      anonKey: SupabaseConstants.anonKey,
+      authOptions: const FlutterAuthClientOptions(
+        authFlowType: AuthFlowType.pkce,
+      ),
+    );
+
+    // ── Initialize offline action queue (no-op on web; web uses mock data) ──
+    await SyncService().init();
+  } catch (e, st) {
+    debugPrint('LCarnet init error: $e');
+    debugPrintStack(stackTrace: st);
+    // Continue to runApp so user sees UI; Supabase may still work for web mock flow
   }
-
-  // ── Initialize Supabase with PKCE auth ──
-  await Supabase.initialize(
-    url: SupabaseConstants.url,
-    anonKey: SupabaseConstants.anonKey,
-    authOptions: const FlutterAuthClientOptions(
-      authFlowType: AuthFlowType.pkce,
-    ),
-  );
-
-  // ── Initialize offline action queue (no-op on web; web uses mock data) ──
-  await SyncService().init();
 
   runApp(
     const ProviderScope(
