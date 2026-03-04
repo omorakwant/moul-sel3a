@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/errors/error_widgets.dart';
 import '../../../data/services/phone_auth_service.dart';
 import '../providers/auth_providers.dart';
+import '../widgets/language_toggle_pill.dart';
 
 /// Role Selection Screen — first-login onboarding.
 ///
@@ -116,6 +117,11 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // ══════════════════════════════════════════════
+                // LANGUAGE TOGGLE — FR / AR (switch back to French when in Darija)
+                // ══════════════════════════════════════════════
+                const Center(child: LanguageTogglePill()),
+                const SizedBox(height: 24),
                 // ══════════════════════════════════════════════
                 // HEADER
                 // ══════════════════════════════════════════════

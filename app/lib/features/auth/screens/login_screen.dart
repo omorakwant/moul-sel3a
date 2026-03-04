@@ -10,6 +10,7 @@ import '../../../core/errors/error_widgets.dart';
 import '../../shared/widgets/app_title_offline_toggle.dart';
 import '../../../data/services/phone_auth_service.dart';
 import '../providers/auth_providers.dart';
+import '../widgets/language_toggle_pill.dart';
 
 /// Login Screen — Phone Auth with FR/AR toggle.
 ///
@@ -152,7 +153,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 // ══════════════════════════════════════════════
                 // LANGUAGE TOGGLE — FR / AR at top
                 // ══════════════════════════════════════════════
-                _buildLanguageToggle(isDarija),
+                const LanguageTogglePill(),
                 const SizedBox(height: 48),
 
                 // ══════════════════════════════════════════════
@@ -576,97 +577,4 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  // ════════════════════════════════════════════════════════════════════════════
-  // LANGUAGE TOGGLE — FR / AR pill switcher
-  // ════════════════════════════════════════════════════════════════════════════
-  Widget _buildLanguageToggle(bool isDarija) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          height: 38,
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            color: AppColors.bgSurface,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // FR button
-              GestureDetector(
-                onTap: () => ref.read(localeProvider.notifier).state = 'fr',
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 56,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: !isDarija ? Colors.white : Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: !isDarija
-                        ? [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.08),
-                              blurRadius: 4,
-                              offset: const Offset(0, 1),
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: Center(
-                    child: Text(
-                      'FR',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: !isDarija
-                            ? AppColors.textPrimary
-                            : AppColors.textTertiary,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // AR button
-              GestureDetector(
-                onTap: () => ref.read(localeProvider.notifier).state = 'ar',
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 56,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: isDarija ? Colors.white : Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: isDarija
-                        ? [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.08),
-                              blurRadius: 4,
-                              offset: const Offset(0, 1),
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: Center(
-                    child: Text(
-                      'ع',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: isDarija
-                            ? AppColors.textPrimary
-                            : AppColors.textTertiary,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }

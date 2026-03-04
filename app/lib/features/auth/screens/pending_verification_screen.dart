@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/repositories/profile_repository.dart';
 import '../providers/auth_providers.dart';
+import '../widgets/language_toggle_pill.dart';
 
 /// Fetch supplier phone for WhatsApp contact on pending verification.
 final _supplierPhoneProvider =
@@ -48,24 +49,27 @@ class PendingVerificationScreen extends ConsumerWidget {
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
           child: Column(
             children: [
-              // ── Back button ──
-              Align(
-                alignment: Alignment.centerLeft,
-                child: GestureDetector(
-                  onTap: () => context.pop(),
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: AppColors.bgSurface,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                      child: Icon(Icons.arrow_back,
-                          size: 20, color: AppColors.textPrimary),
+              // ── Back button + Language toggle ──
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => context.pop(),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.bgSurface,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Center(
+                        child: Icon(Icons.arrow_back,
+                            size: 20, color: AppColors.textPrimary),
+                      ),
                     ),
                   ),
-                ),
+                  const Spacer(),
+                  const LanguageTogglePill(),
+                ],
               ),
 
               // ── Centered content ──
