@@ -13,22 +13,25 @@ class LanguageTogglePill extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isDarija = ref.watch(localeProvider) == 'ar';
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          height: 38,
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            color: AppColors.bgSurface,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // FR button
-              GestureDetector(
-                onTap: () => ref.read(localeProvider.notifier).state = 'fr',
+    // Always use LTR so [ FR | ع ] order is fixed and FR is always tappable to switch back to French
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: 38,
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              color: AppColors.bgSurface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // FR button — always on the left so users can switch back to French
+                GestureDetector(
+                  onTap: () => ref.read(localeProvider.notifier).state = 'fr',
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   width: 56,
@@ -100,6 +103,7 @@ class LanguageTogglePill extends ConsumerWidget {
           ),
         ),
       ],
-    );
+    ),
+  );
   }
 }
