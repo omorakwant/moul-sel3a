@@ -285,6 +285,9 @@ class AppLocalizations {
   String get retailerAddedSuccess => isDarija
       ? 'الدعوة غادي تصيفط (ديمو)'
       : 'Invitation envoyée (démo)';
+  String get newPaymentsDeclaredBanner => isDarija
+      ? 'خلصات جديدة وصولات — شوف اللستة تحت'
+      : 'Nouveau(x) paiement(s) déclaré(s) — Consultez la liste ci-dessous';
 
   // ══════════════════════════════════════════════════════════════════════════
   // DRIVER — WhatsApp confirmation

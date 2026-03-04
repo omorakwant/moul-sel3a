@@ -37,6 +37,8 @@ dependencies:
 
   # ── Camera / Image ──
   image_picker: ^1.0.0
+  # Receipt OCR (mobile only; not used on web)
+  google_mlkit_text_recognition: ^0.13.0
 
   # ── WhatsApp Deep Links ──
   url_launcher: ^6.2.0
@@ -54,6 +56,8 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
   flutter_lints: ^3.0.0
   build_runner: ^2.4.0

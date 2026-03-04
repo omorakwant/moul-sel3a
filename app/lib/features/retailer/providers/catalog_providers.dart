@@ -6,6 +6,7 @@ import '../../../data/models/product.dart';
 import '../../../data/models/supplier_retailer_relation.dart';
 import '../../../data/repositories/product_repository.dart';
 import '../../../data/repositories/relation_repository.dart';
+import '../../../data/services/offline_read_cache.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // STATE: Which supplier catalog we're viewing
@@ -110,14 +111,23 @@ final catalogProductsProvider = FutureProvider<List<Product>>((ref) async {
   final selectedModel = ref.watch(selectedModelProvider);
 
   List<Product> products;
-
-  if (searchQuery.isNotEmpty) {
-    products = await repo.searchProducts(supplierId, searchQuery);
-  } else {
-    products = await repo.getSupplierProducts(
-      supplierId,
-      compatibilityFilter: selectedModel,
-    );
+  try {
+    if (searchQuery.isNotEmpty) {
+      products = await repo.searchProducts(supplierId, searchQuery);
+    } else {
+      products = await repo.getSupplierProducts(
+        supplierId,
+        compatibilityFilter: selectedModel,
+      );
+    }
+    await OfflineReadCache.saveCatalog(supplierId, products);
+  } catch (_) {
+    final cached = OfflineReadCache.getCatalog(supplierId);
+    if (cached != null && cached.isNotEmpty) {
+      products = cached;
+    } else {
+      rethrow;
+    }
   }
 
   if (selectedBrand != null) {

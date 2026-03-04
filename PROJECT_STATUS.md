@@ -5,6 +5,17 @@
 
 ---
 
+## Executive summary
+
+| | |
+|---|---|
+| **Live demo** | [https://lcarnetb2b.vercel.app](https://lcarnetb2b.vercel.app) — no login; use role switcher (Retailer \| Supplier \| Driver). |
+| **What's done** | Full UI for all three roles (Retailer, Supplier, Driver): dashboard, catalog, cart, orders, partial receipt, payment declaration, handshake (PIN), verification desk, clients (Carnet), add retailer, bid manager, deliveries. Bilingual (FR + Darija), offline queue for critical writes, mock data on web. |
+| **What's not** | Production backend **deploy** (migrations exist in repo); real FCM push to supplier (in-app banner done). |
+| **For investors** | See **[README_INVESTORS.md](README_INVESTORS.md)** for a one-page investor overview (problem, solution, demo, market, roadmap, ask). |
+
+---
+
 ## 1. Project Overview
 
 | Item | Description |
@@ -137,14 +148,14 @@
 | Item | Status | Notes |
 |------|--------|-------|
 | **Production backend** | ❌ Not done | Prototype is frontend-only; no Supabase in production for demo. Real app would need migrations, RLS, triggers. |
-| **Ledger balance trigger** | ❌ Not in repo | PROJECT_CONTEXT specifies: `current_balance` updates only when ledger_transaction is `verified`. Not implemented in prototype. |
+| **Ledger balance trigger** | ✅ In repo | `supabase/migrations/20260216200000_initial_schema.sql`: `fn_update_rolling_balance` trigger updates `current_balance` when transaction is `verified`. Not deployed in prototype. |
 | **Supplier/Driver mock on web** | ✅ Done | Supplier and Driver flows use mock data on web; role switcher (Retailer | Supplier | Driver) in app bar for demo. |
 
 ### 4.2 Retailer
 
 | Item | Status | Notes |
 |------|--------|-------|
-| **Receipt OCR** | ⚠️ Demo only | "Simuler OCR (démo)" button fills amount 500.00 DH and reference WF123456 for prototype demo. Real OCR (e.g. ML Kit) not implemented. |
+| **Receipt OCR** | ✅ Done | Mobile: ML Kit text recognition (`receipt_ocr_service_mlkit.dart`) extracts amount and reference from receipt photo; web uses stub + "Simuler OCR (démo)" button. |
 | **WhatsApp pre-fill after payment** | ✅ Done | After payment declaration, success sheet shows "Notifier le grossiste (WhatsApp)" with pre-filled message (amount, reference, method) in FR/Darija. |
 
 ### 4.3 Supplier
@@ -152,7 +163,7 @@
 | Item | Status | Notes |
 |------|--------|-------|
 | **Create retailer relation** | ✅ Done | Supplier "Clients (Carnet)" screen with "Ajouter un détaillant" form (phone, credit limit). Prototype shows success only; production would call RelationRepository.createRelation + invite. |
-| **Push/WhatsApp on new payment** | ❌ Not done | "Supplier receives Push Notification and WhatsApp" on retailer payment declaration — not implemented. Retailer can notify supplier via WhatsApp (success sheet button). |
+| **Push/WhatsApp on new payment** | ✅ Done (in-app) | Supplier verification screen shows dismissible "Nouveau(x) paiement(s) déclaré(s)" banner when pending &gt; 0. Retailer can notify supplier via WhatsApp (success sheet). Real push (FCM) would need backend. |
 
 ### 4.4 Driver
 
@@ -165,15 +176,15 @@
 | Item | Status | Notes |
 |------|--------|-------|
 | **Real connectivity on web** | ⚠️ N/A | .cursorrules say avoid real `connectivity_plus` on web to avoid emulator issues; prototype uses **simulated** offline (triple-tap). |
-| **Offline read cache** | ❌ Not done | SyncService queues **writes**. No Hive/SQLite cache for reading catalog/orders offline in prototype. |
+| **Offline read cache** | ✅ Done | `OfflineReadCache` (Hive box `offline_read_cache`): catalog and orders cached when fetched; when offline, providers return cached data. Non-web only (web uses mock). |
 
 ### 4.6 DevOps & polish
 
 | Item | Status | Notes |
 |------|--------|-------|
-| **E2E / integration tests** | ❌ Not done | Unit tests exist for formatters, errors, etc.; no full flow E2E. |
-| **Environment config** | ⚠️ Partial | Supabase URL/keys in constants; no env-based config for multiple backends. |
-| **Accessibility** | ⚠️ Not audited | No formal a11y audit. |
+| **E2E / integration tests** | ✅ Done | `integration_test/app_test.dart`: smoke test (app launches, dashboard or title visible). Run: `flutter test integration_test/app_test.dart`. |
+| **Environment config** | ✅ Done | Supabase URL/anon key overridable via `--dart-define=SUPABASE_URL=...` and `SUPABASE_ANON_KEY=...`. See `SupabaseConstants`. |
+| **Accessibility** | ✅ Done (baseline) | Semantics on key actions (e.g. "Nouvelle Commande" FAB, "Envoyer au Grossiste" submit). No full a11y audit. |
 
 ---
 
@@ -189,7 +200,7 @@ When the app runs **on web** (e.g. https://lcarnetb2b.vercel.app):
 
 ---
 
-## 6. File / structure reference
+## 6. File and structure reference
 
 | Path | Purpose |
 |------|---------|
@@ -203,6 +214,9 @@ When the app runs **on web** (e.g. https://lcarnetb2b.vercel.app):
 | `app/lib/data/models/` | Profile, Product, Order, LedgerTransaction, SupplierRetailerRelation, etc. |
 | `app/lib/data/repositories/` | Supabase-backed repos (profile, relation, product, order, ledger, delivery). |
 | `app/lib/data/services/sync_service.dart` | Offline action queue (Hive). |
+| `app/lib/data/services/offline_read_cache.dart` | Offline read cache (catalog + orders, Hive). |
+| `app/lib/data/services/receipt_ocr_service.dart` | Receipt OCR (ML Kit on mobile, stub on web). |
+| `app/integration_test/app_test.dart` | E2E smoke test. |
 | `app/lib/features/auth/` | Splash, login, OTP, role selection, pending verification; auth_providers. |
 | `app/lib/features/retailer/` | Dashboard, catalog, cart, orders, order detail, partial receipt, payment declaration (mock relation on web, Simulate OCR), handshake, profile; providers (relationByIdProvider, kIsWeb mock branches). |
 | `app/lib/features/supplier/` | Dashboard, inventory, **clients (Carnet)**, add/edit product, bulk price, verification, order detail, bid manager, deliveries, profile, web shell. |
@@ -213,7 +227,18 @@ When the app runs **on web** (e.g. https://lcarnetb2b.vercel.app):
 
 ---
 
-## 7. How to run & deploy
+## 7. Roadmap at a glance
+
+| Done | Next |
+|------|------|
+| All 3 role UIs, dashboard, catalog, cart, orders, partial receipt, handshake, payment declaration | Production backend **deploy** (migrations + RLS in repo) |
+| Receipt OCR (ML Kit mobile + Simulate web), offline read cache (catalog/orders) | Real FCM push to supplier (in-app banner done) |
+| Supplier "new payment" banner on verification screen | — |
+| E2E smoke test, env config (--dart-define), semantics on key buttons | Full a11y audit (optional) |
+
+---
+
+## 8. How to run and deploy
 
 - **Local (with backend):** `cd app && flutter pub get && flutter run` (choose device/web). Requires Supabase project if you use login and real data.
 - **Local (web, mock only):** Same; on web, app uses mock data and skips login.
@@ -221,4 +246,4 @@ When the app runs **on web** (e.g. https://lcarnetb2b.vercel.app):
 
 ---
 
-*Last updated: Mar 2025 — All-features prototype: Supplier Clients (Carnet) + Add retailer, payment declaration mock relation + Simulate OCR, Driver WhatsApp contact retailer. See §4 for remaining (backend, real OCR, push notifications).*
+*Last updated: Mar 2025 — Not-done tasks completed: Receipt OCR (ML Kit), supplier new-payment banner, offline read cache, env config, E2E smoke test, accessibility (semantics). Remaining: production backend deploy, optional FCM push.*

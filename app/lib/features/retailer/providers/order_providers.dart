@@ -5,7 +5,9 @@ import '../../../data/mock_data.dart';
 import '../../../data/models/order.dart';
 import '../../../data/repositories/order_repository.dart';
 import '../../../data/repositories/profile_repository.dart';
+import '../../../data/services/offline_read_cache.dart';
 import '../../../data/services/realtime_service.dart';
+import '../../../data/services/supabase_service.dart';
 import '../../auth/providers/auth_providers.dart';
 
 /// ══════════════════════════════════════════════════════════════════════════════
@@ -42,6 +44,7 @@ final orderDetailProvider =
 
 /// Fetches all orders for the logged-in retailer.
 /// Auto-refreshes when the orders table changes via realtime.
+/// When offline, returns cached orders from OfflineReadCache if available.
 final retailerOrdersProvider =
     FutureProvider<List<Order>>((ref) async {
   if (kIsWeb) {
@@ -54,7 +57,22 @@ final retailerOrdersProvider =
   }
   ref.watch(ordersRealtimeProvider);
   final repo = ref.watch(orderRepositoryProvider);
-  return repo.getRetailerOrders();
+  final userId = ref.read(supabaseClientProvider).auth.currentUser?.id;
+  try {
+    final orders = await repo.getRetailerOrders();
+    if (userId != null) await OfflineReadCache.saveOrders(userId, orders);
+    return orders;
+  } catch (_) {
+    if (userId != null) {
+      final cached = OfflineReadCache.getOrders(userId);
+      if (cached != null && cached.isNotEmpty) {
+        final list = List<Order>.from(cached)
+          ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        return list;
+      }
+    }
+    rethrow;
+  }
 });
 
 /// ══════════════════════════════════════════════════════════════════════════════

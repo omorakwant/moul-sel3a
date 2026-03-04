@@ -615,15 +615,18 @@ class RetailerHomeScreen extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // ── "Nouvelle Commande" FAB ──
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                _showSupplierPicker(context, l10n, ref);
-              },
-              icon: const Icon(Icons.add, size: 20),
-              label: Text(
-                l10n.newOrder,
+          Semantics(
+            label: l10n.newOrder,
+            button: true,
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  _showSupplierPicker(context, l10n, ref);
+                },
+                icon: const Icon(Icons.add, size: 20),
+                label: Text(
+                  l10n.newOrder,
                 style: const TextStyle(
                   fontFamily: 'Manrope',
                   fontSize: 15,
@@ -639,6 +642,7 @@ class RetailerHomeScreen extends ConsumerWidget {
                 ),
                 elevation: 0,
               ),
+            ),
             ),
           ),
 

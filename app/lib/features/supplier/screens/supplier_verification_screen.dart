@@ -236,6 +236,7 @@ class _WebVerificationDesk extends ConsumerStatefulWidget {
 
 class _WebVerificationDeskState extends ConsumerState<_WebVerificationDesk> {
   int _currentIndex = 0;
+  bool _bannerDismissed = false;
 
   LedgerTransaction get _current => widget.transactions[_currentIndex];
 
@@ -258,6 +259,40 @@ class _WebVerificationDeskState extends ConsumerState<_WebVerificationDesk> {
 
     return Column(
       children: [
+        // ── New payment(s) declared banner (in-app notification for supplier) ──
+        if (!_bannerDismissed && total > 0)
+          Material(
+            color: AppColors.accentOrange.withOpacity(0.12),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child: Row(
+                children: [
+                  const Icon(Icons.notifications_active_outlined,
+                      color: AppColors.accentOrange, size: 22),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      l10n.newPaymentsDeclaredBanner,
+                      style: const TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, size: 20),
+                    onPressed: () => setState(() => _bannerDismissed = true),
+                    style: IconButton.styleFrom(
+                      foregroundColor: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         // ── TopBar with queue navigation ──
         Container(
           height: 64,

@@ -28,6 +28,7 @@
 
 | Document | Purpose |
 |----------|---------|
+| **[README_INVESTORS.md](README_INVESTORS.md)** | **One-page overview for investors** (problem, solution, demo, market, roadmap, ask). |
 | **[PROJECT_STATUS.md](PROJECT_STATUS.md)** | **Full feature list: what’s done and what’s not.** Use this for scope and handoffs. |
 | [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) | Vision, user roles, specs, offline strategy, DB hints, bilingual map. |
 | [prototype.md](prototype.md) | Prototype scope and core features to mock. |

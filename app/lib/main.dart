@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'app.dart';
 import 'core/constants/supabase_constants.dart';
+import 'data/services/offline_read_cache.dart';
 import 'data/services/sync_service.dart';
 
 void main() async {
@@ -12,6 +13,9 @@ void main() async {
 
   // ── Initialize Hive for offline caching ──
   await Hive.initFlutter();
+
+  // ── Offline read cache (catalog + orders); no-op on web ──
+  await OfflineReadCache.init();
 
   // ── Initialize Supabase with PKCE auth ──
   await Supabase.initialize(

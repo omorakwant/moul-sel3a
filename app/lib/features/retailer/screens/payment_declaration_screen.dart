@@ -11,6 +11,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/errors/error_widgets.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../data/models/supplier_retailer_relation.dart';
+import '../../../data/services/receipt_ocr_service.dart';
 import '../../../data/services/storage_service.dart';
 import '../providers/retailer_providers.dart';
 import '../../../core/providers/sync_providers.dart';
@@ -73,6 +74,16 @@ class _PaymentDeclarationScreenState
     );
     if (picked != null) {
       setState(() => _receiptPhoto = File(picked.path));
+      // Run receipt OCR (mobile: ML Kit; web: stub returns null)
+      final result = await extractFromReceiptImage(picked.path);
+      if (mounted && (result.amount != null || result.reference != null)) {
+        setState(() {
+          if (result.amount != null) _amountController.text = result.amount!.toStringAsFixed(2);
+          if (result.reference != null && result.reference!.isNotEmpty) {
+            _referenceController.text = result.reference!;
+          }
+        });
+      }
     }
   }
 
@@ -428,12 +439,15 @@ class _PaymentDeclarationScreenState
               const SizedBox(height: 32),
 
               // ── Step 4: Submit Button ──
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: FilledButton.icon(
-                  onPressed: _isSubmitting ? null : _submit,
-                  icon: _isSubmitting
+              Semantics(
+                label: l10n.sendToSupplier,
+                button: true,
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: FilledButton.icon(
+                    onPressed: _isSubmitting ? null : _submit,
+                    icon: _isSubmitting
                       ? const SizedBox(
                           width: 18,
                           height: 18,
@@ -460,6 +474,7 @@ class _PaymentDeclarationScreenState
                     ),
                   ),
                 ),
+              ),
               ),
               const SizedBox(height: 8),
               Center(
