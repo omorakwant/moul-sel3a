@@ -1,6 +1,26 @@
 # Deploy L'Carnet B2B to Vercel
 
-Your repo is already pushed to GitHub. Deploy from the Vercel dashboard:
+This monorepo has **two** web targets:
+
+| App | Folder | What Vercel builds |
+|-----|--------|--------------------|
+| **Flutter** (supplier/retailer web) | `app/` | Root `vercel.json` → `./build.sh` → `app/build/web` |
+| **Marketing / Next.js landing** | `lcarnet-b2b-landing/` | Next.js (`npm run build`) |
+
+If **`lcarnetb2b.vercel.app`** (or any URL) still shows the **old Flutter app**, the Vercel project is almost certainly using **root** `vercel.json` (Flutter). Point that project at the Next.js folder instead (below).
+
+### Marketing site only (`lcarnet-b2b-landing`)
+
+In Vercel: **Project → Settings → General**:
+
+1. **Root Directory** → set to **`lcarnet-b2b-landing`** (not `.`).
+2. **Framework Preset** → **Next.js** (or leave “Other” cleared so Vercel auto-detects from `package.json`).
+3. Remove any **override** for Build / Output that still says `./build.sh` or `app/build/web` (use the defaults Next.js suggests, usually **Build Command** `next build` and **Output** `.next`).
+4. **Save**, then **Deployments → … → Redeploy** the latest commit.
+
+To keep **both** Flutter and Next.js live, use **two Vercel projects** importing the **same GitHub repo**: one with Root Directory `.` for Flutter, one with `lcarnet-b2b-landing` for the landing page; assign **lcarnetb2b.vercel.app** to the Next.js project.
+
+---
 
 ## 1. Connect GitHub to Vercel
 
