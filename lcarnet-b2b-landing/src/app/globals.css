@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #fafafa;
-  --accent: #6366f1;
-  --accent-glow: rgba(99, 102, 241, 0.45);
+  --background: #000000;
+  --foreground: #ffffff;
+  --brand: #ff6b00;
+  --brand-glow: rgba(255, 107, 0, 0.45);
   --surface: rgba(255, 255, 255, 0.04);
-  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.12);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
+  --color-brand: var(--brand);
   --color-surface: var(--surface);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

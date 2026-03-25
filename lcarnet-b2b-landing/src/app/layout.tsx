@@ -5,6 +5,7 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const geistMono = Geist_Mono({
@@ -13,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "L'Carnet B2B — Enterprise B2B Commerce",
+  title: "L'Carnet B2B — Marché & logistique pour pros au Maroc",
   description:
-    "Real-time analytics, automated invoicing, and seamless integrations for modern B2B teams.",
+    "Connectez fournisseurs et détaillants. Marketplace transparente, logistique suivie, carnet digital pour le commerce B2B marocain.",
 };
 
 export default function RootLayout({
@@ -25,10 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="fr"
       className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#0A0A0A] text-zinc-100">
+      <body className="min-h-full flex flex-col bg-black text-white font-sans">
         {children}
       </body>
     </html>
