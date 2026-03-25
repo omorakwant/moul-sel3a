@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/prototype/:path*",
-      "destination": "https://your-flutter-app.vercel.app/:path*"
+      "destination": "https://moul-sel3a.vercel.app/:path*"
     }
   ]
 }
