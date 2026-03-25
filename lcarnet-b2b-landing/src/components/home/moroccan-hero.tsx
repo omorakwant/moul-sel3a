@@ -27,9 +27,10 @@ export function MoroccanHero() {
             <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
           <Link
-            href="/app"
+            href="/prototype"
             target="_blank"
-            className="inline-flex h-12 min-w-[200px] items-center justify-center rounded-full border-2 border-[#FF6B00] bg-transparent px-8 text-sm font-bold text-white transition hover:bg-[#FF6B00] hover:text-black"
+            rel="noopener noreferrer"
+            className="inline-flex h-12 min-w-[200px] items-center justify-center rounded-full border-2 border-white bg-transparent px-8 text-sm font-bold text-white transition hover:bg-white hover:text-black"
           >
             View Prototype
           </Link>

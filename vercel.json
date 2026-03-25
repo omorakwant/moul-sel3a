@@ -1,19 +1,8 @@
 {
-  "buildCommand": "./build.sh",
-  "outputDirectory": "public",
-  "framework": null,
-  "cleanUrls": true,
-  "routes": [
+  "rewrites": [
     {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/app/(.*)",
-      "dest": "/app/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/404.html"
+      "source": "/prototype/:path*",
+      "destination": "/app/:path*"
     }
   ]
 }
