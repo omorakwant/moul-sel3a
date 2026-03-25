@@ -29,7 +29,8 @@ export function SiteHeader() {
             </Link>
           ))}
           <Link
-            href="/prototype"
+            href="/app"
+            target="_blank"
             className="text-sm font-semibold text-white/70 transition hover:text-white"
           >
             Prototype
@@ -63,7 +64,8 @@ export function SiteHeader() {
                 </Link>
               ))}
               <Link
-                href="/prototype"
+                href="/app"
+                target="_blank"
                 className="px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/5"
               >
                 Prototype

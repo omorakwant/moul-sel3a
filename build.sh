@@ -28,7 +28,18 @@ echo "==> Building (app/)..."
 cd "$REPO_ROOT/app"
 "$FLUTTER_BIN" clean
 "$FLUTTER_BIN" pub get
-"$FLUTTER_BIN" build web --release
+"$FLUTTER_BIN" build web --release --base-href /app/
 
-echo "==> Build complete. Output in app/build/web"
-ls -la build/web/
+echo "==> Building Next.js landing..."
+cd "$REPO_ROOT/lcarnet-b2b-landing"
+npm install
+npm run build
+
+echo "==> Assembling final output in 'public' directory..."
+cd "$REPO_ROOT"
+mkdir -p public
+cp -r lcarnet-b2b-landing/out/* public/
+mkdir -p public/app
+cp -r app/build/web/* public/app/
+
+echo "==> Build complete. Output in public/"

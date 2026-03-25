@@ -1,14 +1,19 @@
 {
   "buildCommand": "./build.sh",
-  "outputDirectory": "app/build/web",
+  "outputDirectory": "public",
   "framework": null,
+  "cleanUrls": true,
   "routes": [
     {
       "handle": "filesystem"
     },
     {
+      "src": "/app/(.*)",
+      "dest": "/app/index.html"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/404.html"
     }
   ]
 }

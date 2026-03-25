@@ -16,24 +16,22 @@ export function MoroccanHero() {
           Connecting Moroccan Suppliers with Local Retailers.
         </h1>
         <p className="mx-auto mt-6 max-w-3xl text-base font-medium leading-relaxed text-white/85 sm:text-lg">
-          We bridge the gap in the Moroccan market. L&apos;Carnet B2B provides a
-          free, transparent marketplace for supply chain and logistics, helping
-          suppliers and retailers grow their businesses together through digital
-          trust.
+          We provide a free market for supply chain and logistics to help suppliers and retailers grow together.
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-4">
           <Link
             href="/register"
             className="inline-flex h-12 min-w-[200px] items-center justify-center gap-2 rounded-full bg-[#FF6B00] px-8 text-sm font-bold text-black shadow-[0_0_40px_-4px_rgba(255,107,0,0.65),0_10px_40px_-12px_rgba(255,107,0,0.35)] transition hover:bg-[#ff8533] hover:shadow-[0_0_48px_-2px_rgba(255,107,0,0.5)]"
           >
-            Explore the Marketplace
+            Get Started
             <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
           <Link
-            href="/prototype"
-            className="inline-flex h-12 min-w-[200px] items-center justify-center rounded-full border-2 border-white bg-transparent px-8 text-sm font-bold text-white transition hover:bg-white hover:text-black"
+            href="/app"
+            target="_blank"
+            className="inline-flex h-12 min-w-[200px] items-center justify-center rounded-full border-2 border-[#FF6B00] bg-transparent px-8 text-sm font-bold text-white transition hover:bg-[#FF6B00] hover:text-black"
           >
-            View Live Prototype
+            View Prototype
           </Link>
         </div>
       </div>
