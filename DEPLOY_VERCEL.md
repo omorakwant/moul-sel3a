@@ -20,6 +20,16 @@ In Vercel: **Project → Settings → General**:
 
 To keep **both** Flutter and Next.js live, use **two Vercel projects** importing the **same GitHub repo**: one with Root Directory `.` for Flutter, one with `lcarnet-b2b-landing` for the landing page; assign **lcarnetb2b.vercel.app** to the Next.js project.
 
+### « View Live Prototype » (`/prototype`) → Flutter réel
+
+La démo fonctionnelle (Hanout, switch Retailer / Supplier / Driver, données mock) est le **build Flutter Web** dans `app/`, pas du React dans `lcarnet-b2b-landing`.
+
+1. Déployez (ou réutilisez) le projet Vercel avec **Root Directory** **`.`** et le `vercel.json` racine (`./build.sh` → `app/build/web`). Notez son URL (ex. `https://votre-flutter.vercel.app`).
+2. Sur le projet **landing** (`lcarnet-b2b-landing`) : **Settings → Environment Variables** → ajoutez **`NEXT_PUBLIC_FLUTTER_APP_URL`** = cette URL.
+3. **Redéployez** le landing : `next.config.ts` enregistre une redirection **`/prototype` → votre app Flutter**.
+
+Sans cette variable, `/prototype` affiche une page d’aide (pas de redirection). Voir aussi `lcarnet-b2b-landing/.env.example`.
+
 ---
 
 ## 1. Connect GitHub to Vercel
