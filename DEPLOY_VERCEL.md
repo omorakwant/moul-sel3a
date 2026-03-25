@@ -15,7 +15,7 @@ In Vercel: **Project → Settings → General**:
 
 1. **Root Directory** → set to **`lcarnet-b2b-landing`** (not `.`).
 2. **Framework Preset** → **Next.js** (or leave “Other” cleared so Vercel auto-detects from `package.json`).
-3. Remove any **override** for Build / Output that still says `./build.sh` or `app/build/web` (use the defaults Next.js suggests, usually **Build Command** `next build` and **Output** `.next`).
+3. Remove any **override** for Build / Output that still says `./build.sh` or `app/build/web`. If the dashboard shows **Build Command** `./build.sh`, turn the override **off** so `lcarnet-b2b-landing/vercel.json` can apply (`npm run build` for Next.js). The repo includes that `vercel.json` so clones get the right build even when the root has Flutter’s `./build.sh`.
 4. **Save**, then **Deployments → … → Redeploy** the latest commit.
 
 To keep **both** Flutter and Next.js live, use **two Vercel projects** importing the **same GitHub repo**: one with Root Directory `.` for Flutter, one with `lcarnet-b2b-landing` for the landing page; assign **lcarnetb2b.vercel.app** to the Next.js project.
