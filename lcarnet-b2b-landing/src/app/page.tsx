@@ -5,6 +5,7 @@ import {
   MoroccanPricing,
   MoroccanSolutions,
   SiteHeader,
+  MoroccanContact,
 } from "@/components/home";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
         <MoroccanMarquee />
         <MoroccanSolutions />
         <MoroccanPricing />
+        <MoroccanContact />
       </main>
       <MoroccanFooter />
     </div>
