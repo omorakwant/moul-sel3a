@@ -15,8 +15,8 @@ export function MoroccanContact() {
     const data = new FormData(form);
 
     try {
-      // Replace YOUR_FORM_ID with the actual Formspree ID
-      const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
+      // Formspree endpoint for L'Carnet B2B
+      const response = await fetch("https://formspree.io/f/xjgpvqre", {
         method: "POST",
         body: data,
         headers: {
