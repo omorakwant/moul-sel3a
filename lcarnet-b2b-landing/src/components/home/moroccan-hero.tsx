@@ -20,7 +20,7 @@ export function MoroccanHero() {
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-4">
           <Link
-            href="/register"
+            href="#contact"
             className="inline-flex h-12 min-w-[200px] items-center justify-center gap-2 rounded-full bg-[#FF6B00] px-8 text-sm font-bold text-black shadow-[0_0_40px_-4px_rgba(255,107,0,0.65),0_10px_40px_-12px_rgba(255,107,0,0.35)] transition hover:bg-[#ff8533] hover:shadow-[0_0_48px_-2px_rgba(255,107,0,0.5)]"
           >
             Get Started

@@ -6,6 +6,7 @@ const nav = [
   { href: "/#logistique", label: "Logistique" },
   { href: "/#carnet", label: "L'Carnet" },
   { href: "/#tarifs", label: "Tarifs" },
+  { href: "#contact", label: "Contact Us" },
 ];
 
 export function SiteHeader() {
