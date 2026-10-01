@@ -1,0 +1,6 @@
+# Cloudflare Pages Redirects
+# Docs: https://developers.cloudflare.com/pages/configuration/redirects/
+#
+# Once your custom domain is active, you can redirect /prototype to your Flutter app subdomain:
+# /prototype https://app.yourdomain.com 302
+# /prototype/* https://app.yourdomain.com/:splat 302
