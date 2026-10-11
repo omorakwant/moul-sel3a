@@ -52,6 +52,26 @@ interface CartItem {
   priceTiers: Record<string, number>;
 }
 
+interface OrderItem {
+  name: string;
+  nameAr?: string;
+  ordered: number;
+  received: number;
+  price: number;
+}
+
+interface Order {
+  id: string;
+  date: string;
+  dateAr: string;
+  total: number;
+  status: string;
+  driverName: string;
+  driverNameAr: string;
+  pin: string;
+  items: OrderItem[];
+}
+
 // ── Translations Dictionary (French & Moroccan Darija) ──
 const t: Record<LangType, Record<string, string>> = {
   fr: {
@@ -563,7 +583,7 @@ export function PrototypeApp() {
   ]);
 
   // Orders State
-  const [orders, setOrders] = useState([
+  const [orders, setOrders] = useState<Order[]>([
     {
       id: "CMD-2026-84",
       date: "Aujourd'hui, 09:30",
@@ -1236,7 +1256,7 @@ export function PrototypeApp() {
 
                       <button
                         onClick={() => {
-                          const newOrder = {
+                          const newOrder: Order = {
                             id: `CMD-2026-${Math.floor(100 + Math.random() * 900)}`,
                             date: "À l'instant",
                             dateAr: "دابا",
@@ -1247,7 +1267,7 @@ export function PrototypeApp() {
                             pin: "7492",
                             items: cart.map((c) => ({
                               name: c.name,
-                              nameAr: c.nameAr,
+                              nameAr: c.nameAr || c.name,
                               ordered: c.quantity,
                               received: c.quantity,
                               price: getItemUnitPrice(c),
