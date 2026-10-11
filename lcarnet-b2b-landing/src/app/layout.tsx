@@ -19,6 +19,13 @@ export const metadata: Metadata = {
   title: "L'Carnet B2B — Marché & logistique pour pros au Maroc",
   description:
     "Connectez fournisseurs et détaillants. Marketplace transparente, logistique suivie, carnet digital pour le commerce B2B marocain.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({
