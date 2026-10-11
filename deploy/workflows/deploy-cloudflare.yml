@@ -1,27 +1,24 @@
-name: Deploy Flutter Web App to Cloudflare Pages
+name: Deploy Unified Site (Landing + Prototype) to Cloudflare Pages
 
 on:
   push:
     branches:
       - main
-    paths:
-      - 'app/**'
-      - '.github/workflows/deploy-cloudflare.yml'
   workflow_dispatch:
 
 concurrency:
-  group: cloudflare-app-deploy
+  group: cloudflare-unified-deploy
   cancel-in-progress: true
 
 jobs:
   build-and-deploy:
-    name: Build Flutter Web & Deploy to Cloudflare Pages
+    name: Build & Deploy Unified Monorepo to Cloudflare Pages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # ── 1. Set Up Flutter SDK ──
+      # ── 1. Set Up Flutter SDK & Cache ──
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -32,18 +29,41 @@ jobs:
       - name: Verify Flutter Installation
         run: flutter --version
 
-      # ── 2. Build Flutter Web ──
+      # ── 2. Build Flutter Web Prototype ──
       - name: Build Flutter Web App
         working-directory: ./app
         run: |
           flutter config --enable-web
           flutter pub get
-          flutter build web --release
+          flutter build web --release --base-href /prototype/
 
-      # ── 3. Deploy to Cloudflare Pages via Wrangler ──
-      - name: Deploy to Cloudflare Pages
+      # ── 3. Merge Flutter Build into Next.js Public Directory ──
+      - name: Merge Flutter into Next.js Public Prototype
+        run: |
+          mkdir -p lcarnet-b2b-landing/public/prototype
+          cp -r app/build/web/* lcarnet-b2b-landing/public/prototype/
+          echo "Merged Flutter assets into public/prototype/:"
+          ls -la lcarnet-b2b-landing/public/prototype/
+
+      # ── 4. Set Up Node.js ──
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: lcarnet-b2b-landing/package-lock.json
+
+      # ── 5. Build Next.js Static Export ──
+      - name: Build Next.js Landing Site
+        working-directory: ./lcarnet-b2b-landing
+        run: |
+          npm ci
+          npm run build
+
+      # ── 6. Deploy Unified Bundle to Cloudflare Pages ──
+      - name: Deploy Unified Output to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy app/build/web --project-name=lcarnet-app --commit-dirty=true
+          command: pages deploy lcarnet-b2b-landing/out --project-name=lcarnet-b2b --commit-dirty=true

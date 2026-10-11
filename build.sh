@@ -37,4 +37,11 @@ echo "==> Syncing Flutter build to landing public/prototype directory..."
 mkdir -p "$REPO_ROOT/lcarnet-b2b-landing/public/prototype"
 cp -r build/web/* "$REPO_ROOT/lcarnet-b2b-landing/public/prototype/"
 
-echo "==> Unified assets synced successfully!"
+echo "==> Building Next.js Landing (lcarnet-b2b-landing)..."
+cd "$REPO_ROOT/lcarnet-b2b-landing"
+npm ci || npm install
+npm run build
+
+echo "==> SUCCESS: Unified site ready in lcarnet-b2b-landing/out!"
+echo "    - Root (/): Next.js Marketing Landing"
+echo "    - /prototype/: Flutter Web App (Hanout, Supplier, Driver)"
