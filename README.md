@@ -114,12 +114,13 @@ flutter run -d chrome
 ```
 
 ### 3. Unified Local Build
-To compile the complete unified bundle locally:
+To compile the complete application locally:
 ```bash
-# From repository root
-bash build.sh
+cd lcarnet-b2b-landing
+npm install
+npm run build
 ```
-This builds Flutter Web into `lcarnet-b2b-landing/public/prototype/` and exports the unified Next.js static site to `lcarnet-b2b-landing/out`.
+This builds and verifies the complete Next.js marketing landing and interactive prototype.
 
 ---
 
