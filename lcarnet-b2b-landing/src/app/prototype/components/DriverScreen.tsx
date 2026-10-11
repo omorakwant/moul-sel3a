@@ -91,16 +91,16 @@ export function DriverScreen({
 
             {/* Steps timeline */}
             <div className="rounded-2xl border border-white/10 bg-black/40 p-4 space-y-3 text-xs">
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-emerald-400" />
-                <span className="text-white/50">{cur.pickupDerbOmar}</span>
+              <div className="flex items-center gap-3">
+                <div className="h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-400 ring-4 ring-emerald-400/20" />
+                <span className="text-white/70 font-medium">{cur.pickupDerbOmar}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-[#FF6B00] animate-pulse" />
+              <div className="flex items-center gap-3">
+                <div className="h-2.5 w-2.5 shrink-0 rounded-full bg-[#FF6B00] animate-pulse ring-4 ring-[#FF6B00]/20" />
                 <span className="font-bold text-white">{cur.deliverySoukAlHad}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-white/20" />
+              <div className="flex items-center gap-3">
+                <div className="h-2.5 w-2.5 shrink-0 rounded-full bg-white/20" />
                 <span className="text-white/40">{cur.handshakePinStep}</span>
               </div>
             </div>
@@ -137,7 +137,7 @@ export function DriverScreen({
                     {cur.bidSubmittedSuccess}
                   </div>
                 ) : (
-                  <div className="pt-2 border-t border-white/5 flex gap-2">
+                  <div className="pt-2 border-t border-white/5 flex gap-2 items-center">
                     <input
                       type="number"
                       placeholder={cur.yourRatePlaceholder}
@@ -145,7 +145,7 @@ export function DriverScreen({
                       onChange={(e) =>
                         setDriverBidInput({ ...driverBidInput, [job.id]: e.target.value })
                       }
-                      className="h-8 w-24 rounded-lg border border-white/15 bg-white/5 px-2 text-center font-bold text-white text-xs"
+                      className="h-9 w-28 rounded-xl border border-white/15 bg-white/5 px-2.5 text-center font-bold text-white text-xs outline-none focus:border-[#FF6B00]"
                     />
                     <button
                       onClick={() => {
@@ -154,7 +154,7 @@ export function DriverScreen({
                           setDriverBidSuccess(job.id);
                         }
                       }}
-                      className="flex-1 rounded-lg bg-[#FF6B00] py-1.5 font-bold text-black text-xs hover:bg-[#ff8533]"
+                      className="flex-1 rounded-xl bg-[#FF6B00] py-2 px-3 font-bold text-black text-xs hover:bg-[#ff8533] transition whitespace-nowrap shadow-[0_0_12px_rgba(255,107,0,0.3)]"
                     >
                       {cur.submitBidBtn}
                     </button>
@@ -200,27 +200,33 @@ export function DriverScreen({
       </div>
 
       {/* Driver Navigation */}
-      <div className="border-t border-white/10 pt-2 grid grid-cols-3 gap-1 text-[11px] font-bold text-center">
+      <div className="border-t border-white/10 pt-2 grid grid-cols-3 gap-1.5 text-xs font-bold text-center">
         <button
           onClick={() => setDriverTab("active")}
-          className={`py-2 rounded-lg ${
-            driverTab === "active" ? "bg-[#FF6B00] text-black" : "text-white/60 hover:text-white"
+          className={`py-2 rounded-xl transition ${
+            driverTab === "active"
+              ? "bg-[#FF6B00] text-black font-extrabold shadow-[0_0_12px_rgba(255,107,0,0.4)]"
+              : "text-white/60 hover:bg-white/5 hover:text-white"
           }`}
         >
           {cur.navActiveTrip}
         </button>
         <button
           onClick={() => setDriverTab("marketplace")}
-          className={`py-2 rounded-lg ${
-            driverTab === "marketplace" ? "bg-[#FF6B00] text-black" : "text-white/60 hover:text-white"
+          className={`py-2 rounded-xl transition ${
+            driverTab === "marketplace"
+              ? "bg-[#FF6B00] text-black font-extrabold shadow-[0_0_12px_rgba(255,107,0,0.4)]"
+              : "text-white/60 hover:bg-white/5 hover:text-white"
           }`}
         >
           {cur.navMarketplace}
         </button>
         <button
           onClick={() => setDriverTab("profile")}
-          className={`py-2 rounded-lg ${
-            driverTab === "profile" ? "bg-[#FF6B00] text-black" : "text-white/60 hover:text-white"
+          className={`py-2 rounded-xl transition ${
+            driverTab === "profile"
+              ? "bg-[#FF6B00] text-black font-extrabold shadow-[0_0_12px_rgba(255,107,0,0.4)]"
+              : "text-white/60 hover:bg-white/5 hover:text-white"
           }`}
         >
           {cur.navDriverProfile}
