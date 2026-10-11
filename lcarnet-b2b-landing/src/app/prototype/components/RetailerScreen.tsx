@@ -45,7 +45,9 @@ interface RetailerScreenProps {
   filteredProducts: Product[];
   setShowPaymentModal: (show: boolean) => void;
   setSelectedOrderForReceipt: (order: Order | null) => void;
+  setReceivedQtys: React.Dispatch<React.SetStateAction<Record<string, number>>>;
   setHandshakeModalOrder: (order: Order | null) => void;
+  setHandshakeSuccess: (success: boolean) => void;
   setLang: (lang: LangType) => void;
   lang: LangType;
   cur: Record<string, string>;
@@ -76,7 +78,9 @@ export function RetailerScreen({
   filteredProducts,
   setShowPaymentModal,
   setSelectedOrderForReceipt,
+  setReceivedQtys,
   setHandshakeModalOrder,
+  setHandshakeSuccess,
   setLang,
   lang,
   cur,

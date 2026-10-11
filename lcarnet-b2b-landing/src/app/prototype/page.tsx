@@ -180,7 +180,9 @@ export function PrototypeApp() {
             filteredProducts={filteredProducts}
             setShowPaymentModal={setShowPaymentModal}
             setSelectedOrderForReceipt={setSelectedOrderForReceipt}
+            setReceivedQtys={setReceivedQtys}
             setHandshakeModalOrder={setHandshakeModalOrder}
+            setHandshakeSuccess={setHandshakeSuccess}
             setLang={setLang}
             lang={lang}
             cur={cur}
