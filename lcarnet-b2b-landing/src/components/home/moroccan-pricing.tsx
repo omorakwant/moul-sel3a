@@ -14,7 +14,8 @@ const TIERS = [
       "Suivi basique des commandes",
       "Notification livraison",
     ],
-    cta: "Créer un compte",
+    cta: "Tester le carnet Hanout",
+    href: "/prototype?role=retailer",
     highlighted: false,
   },
   {
@@ -30,7 +31,8 @@ const TIERS = [
       "Support prioritaire (FR / Darija)",
       "Exports pour la compta",
     ],
-    cta: "Essayer ce plan",
+    cta: "Explorer vue Grossiste",
+    href: "/prototype?role=supplier",
     highlighted: true,
   },
   {
@@ -46,6 +48,7 @@ const TIERS = [
       "Facturation centralisée",
     ],
     cta: "Nous contacter",
+    href: "#contact",
     highlighted: false,
   },
 ];
@@ -103,7 +106,7 @@ export function MoroccanPricing() {
                 ))}
               </ul>
               <Link
-                href="/register"
+                href={tier.href}
                 className={`mt-8 inline-flex h-11 items-center justify-center rounded-full text-sm font-bold transition ${
                   tier.highlighted
                     ? "bg-[#FF6B00] text-black hover:bg-[#ff8533]"

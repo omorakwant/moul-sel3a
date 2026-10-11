@@ -32,3 +32,9 @@ cd "$REPO_ROOT/app"
 
 echo "==> Build complete. Output in app/build/web"
 ls -la build/web/
+
+echo "==> Syncing Flutter build to landing public/prototype directory..."
+mkdir -p "$REPO_ROOT/lcarnet-b2b-landing/public/prototype"
+cp -r build/web/* "$REPO_ROOT/lcarnet-b2b-landing/public/prototype/"
+
+echo "==> Unified assets synced successfully!"

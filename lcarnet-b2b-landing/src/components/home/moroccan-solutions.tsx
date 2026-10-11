@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { BookOpen, Store, Truck } from "lucide-react";
 
@@ -88,6 +89,24 @@ export function MoroccanSolutions() {
                 </h3>
                 <div className="mt-4 text-base font-medium leading-relaxed text-white/70">
                   {s.body}
+                </div>
+                <div className="mt-6">
+                  <Link
+                    href={
+                      s.id === "marche"
+                        ? "/prototype?role=supplier"
+                        : s.id === "logistique"
+                        ? "/prototype?role=driver"
+                        : "/prototype?role=retailer"
+                    }
+                    className="inline-flex items-center gap-2 rounded-full border border-[#FF6B00]/40 bg-[#FF6B00]/10 px-4 py-2 text-xs font-bold text-[#FF6B00] transition hover:bg-[#FF6B00] hover:text-black"
+                  >
+                    {s.id === "marche"
+                      ? "Tester l'espace Fournisseur / Grossiste →"
+                      : s.id === "logistique"
+                      ? "Tester l'espace Chauffeur / Transporteur →"
+                      : "Explorer le Carnet Détaillant (Hanout) →"}
+                  </Link>
                 </div>
               </div>
               <div

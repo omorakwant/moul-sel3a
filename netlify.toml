@@ -1,0 +1,28 @@
+# Netlify Configuration for L'Carnet B2B
+[build]
+  base = "lcarnet-b2b-landing"
+  publish = "out"
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Flutter SPA routing under /prototype/
+[[redirects]]
+  from = "/prototype/*"
+  to = "/prototype/index.html"
+  status = 200
+
+# Next.js SPA catch-all fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Security and Performance Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

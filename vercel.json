@@ -1,8 +1,10 @@
 {
+  "buildCommand": "./build.sh",
+  "outputDirectory": "app/build/web",
   "rewrites": [
     {
-      "source": "/prototype/:path*",
-      "destination": "https://moul-sel3a.vercel.app/:path*"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

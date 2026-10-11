@@ -2,11 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "npm install",
-  "buildCommand": "npm run build",
-  "rewrites": [
-    {
-      "source": "/prototype/:path*",
-      "destination": "https://moul-sel3a.vercel.app/:path*"
-    }
-  ]
+  "buildCommand": "npm run build"
 }

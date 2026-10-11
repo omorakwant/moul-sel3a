@@ -59,6 +59,18 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
       case AuthStatus.authenticated:
         if (mounted) {
+          // ── Check for URL query parameter (e.g. ?role=supplier or ?role=driver) ──
+          try {
+            final uri = GoRouterState.of(context).uri;
+            final roleParam = uri.queryParameters['role']?.toLowerCase();
+            if (roleParam != null &&
+                (roleParam == 'supplier' ||
+                    roleParam == 'driver' ||
+                    roleParam == 'retailer')) {
+              ref.read(prototypeRoleProvider.notifier).state = roleParam;
+            }
+          } catch (_) {}
+
           // ── Restore saved language preference ──
           final profile = ref.read(currentProfileProvider).valueOrNull;
           if (profile != null) {

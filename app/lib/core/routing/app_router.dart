@@ -266,7 +266,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       // ── Driver Routes ──
       ShellRoute(
-        builder: (context, state, child) => child,
+        builder: (context, state, child) => _DriverShell(child: child),
         routes: [
           GoRoute(
             path: '/driver/marketplace',
@@ -458,6 +458,28 @@ class _SupplierShell extends ConsumerWidget {
 /// and works correctly with GoRouter (avoids shell AppBar stealing the pop).
 class _RetailerShell extends ConsumerWidget {
   const _RetailerShell({required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const AppTitleWithOfflineToggle(),
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: const [
+          PrototypeRoleSwitcher(),
+          SizedBox(width: 8),
+        ],
+      ),
+      body: child,
+    );
+  }
+}
+
+/// Wraps driver routes with an AppBar so the prototype switcher and title are visible.
+class _DriverShell extends ConsumerWidget {
+  const _DriverShell({required this.child});
   final Widget child;
 
   @override
