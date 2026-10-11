@@ -53,7 +53,7 @@ interface CartItem {
 }
 
 // ── Translations Dictionary (French & Moroccan Darija) ──
-const t = {
+const t: Record<LangType, Record<string, string>> = {
   fr: {
     backToSite: "Retour au site",
     versionBadge: "Live Prototype v1.0",
@@ -72,7 +72,9 @@ const t = {
     // Retailer Screen
     retailerStatus: "Détaillant connecté",
     retailerName: "Hanout Moulay — Rabat",
+    hanoutName: "Hanout Moulay — Rabat",
     retailerAddress: "Souk Al Had • +212 6 61 00 00 01",
+    hanoutAddress: "Souk Al Had • +212 6 61 00 00 01",
     carnetBalance: "Solde Carnet (Rolling Debt)",
     activeDebt: "Dette active",
     creditLimitPrefix: "Plafond autorisé :",
@@ -83,6 +85,7 @@ const t = {
     supplierProAddress: "Derb Omar • +212 5 22 00 00 00",
     viewCatalogBtn: "Voir catalogue",
     ledgerHistory: "Historique du Carnet (Derniers mouvements)",
+    carnetHistory: "Historique du Carnet (Derniers mouvements)",
     orderItemLabel: "Commande CMD-2026-84",
     orderItemSub: "10 févr. • Kourtia Hassan",
     paymentWafacashLabel: "Versement Wafacash",
@@ -104,10 +107,12 @@ const t = {
     cartTitle: "Panier en cours (Paliers calculés au volume)",
     cartEmpty: "Votre panier est vide. Visitez le catalogue pour ajouter des accessoires.",
     unitActiveTier: "DH / unité (Palier actif)",
+    tierActiveUnit: "DH / unité (Palier actif)",
     subtotalArticles: "Sous-total articles :",
     kourtiaDeliveryFee: "Estimation Kourtia (Livraison) :",
     totalAddedCarnet: "Total ajouté au Carnet :",
     confirmOrderAction: "Valider la Commande (Ajouter au Carnet)",
+    checkoutBtn: "Valider la Commande (Ajouter au Carnet)",
 
     // Orders
     ordersTitle: "Suivi des commandes & Réception",
@@ -296,7 +301,9 @@ const t = {
     // Retailer Screen
     retailerStatus: "الحانوت النشط",
     retailerName: "حانوت مولاي — الرباط",
+    hanoutName: "حانوت مولاي — الرباط",
     retailerAddress: "سوق الأحد • +212 6 61 00 00 01",
+    hanoutAddress: "سوق الأحد • +212 6 61 00 00 01",
     carnetBalance: "كارني السلعة (الكريدي)",
     activeDebt: "واجب الأداء",
     creditLimitPrefix: "بلافو مسموح به :",
@@ -307,6 +314,7 @@ const t = {
     supplierProAddress: "درب عمر • +212 5 22 00 00 00",
     viewCatalogBtn: "شوف الكاطالوج",
     ledgerHistory: "تاريخ الكارني (آخر الحركات)",
+    carnetHistory: "تاريخ الكارني (آخر الحركات)",
     orderItemLabel: "طلبية CMD-2026-84",
     orderItemSub: "10 فبرا • كورتي حسن",
     paymentWafacashLabel: "خلصة وفاكاش",
@@ -327,10 +335,12 @@ const t = {
     // Cart
     cartTitle: "لياني دالسلعة (حساب الجملة تلقائي)",
     cartEmpty: "لياني خاوي. دور ف الكاطالوج باش تزيد السلعة.",
+    unitActiveTier: "درهم / حبة (بالية نشطة)",
     tierActiveUnit: "درهم / حبة (بالية نشطة)",
     subtotalArticles: "مجموع السلعة :",
     kourtiaDeliveryFee: "تقدير التوصيل (الكورتي) :",
     totalAddedCarnet: "المجموع لي كيتزاد فالكارني :",
+    confirmOrderAction: "كونفرمي الطلبية (تسجيل فالكارني)",
     checkoutBtn: "كونفرمي الطلبية (تسجيل فالكارني)",
 
     // Orders
@@ -516,7 +526,7 @@ export function PrototypeApp() {
   const [lang, setLang] = useState<LangType>(urlLang === "ar" ? "ar" : "fr");
   const [offlineSimulated, setOfflineSimulated] = useState(false);
 
-  const cur = t[lang];
+  const cur: Record<string, string> = t[lang];
 
   // ── Retailer State ──
   const [retailerTab, setRetailerTab] = useState<RetailerTab>("ledger");
